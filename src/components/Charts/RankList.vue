@@ -47,7 +47,7 @@ export default {
           line-height: 22px;
 
           &:first-child {
-            background-color: #f5f5f5;
+            background-color: #F0F2F5;
             border-radius: 20px;
             display: inline-block;
             font-size: 12px;
@@ -59,7 +59,7 @@ export default {
             text-align: center;
           }
           &.active {
-            background-color: #314659;
+            background-color:#1890FF;
             color: #fff;
           }
           &:last-child {

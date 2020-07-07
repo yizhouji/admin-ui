@@ -33,7 +33,7 @@ export const asyncRouterMap = [
             path: '/goods/goodsManage',
             name: 'GoodsManage',
             component: () => import('@/views/goods/goodsManage'),
-            meta: { title: '货物管理', keepAlive: true, permission: ['form'] }
+            meta: { title: '货物管理 ', keepAlive: true, permission: ['form'] }
           },
           {
             path: '/goods/importGoods',

@@ -1,7 +1,26 @@
 <template>
   <div :class="wrpCls">
+    <div class="part">
+      <a href="#" class="buy">VIP购买/低至每月8元 </a>
+    </div>
+    <div class="part" @click="backHome">
+      <div class="link">
+        <a-icon type="home" :style="{ fontSize: '18px' }" />
+      </div>
+    </div>
+    <div class="part">
+      <a-badge
+        :numberStyle="{'font-size':'10px','height':'12px','line-height':'12px','padding':'0 3px'}"
+        :count="99"
+        :overflow-count="9"
+      >
+        <div class="link">
+          <a-icon type="bell" :style="{ fontSize: '18px' }" />
+        </div>
+      </a-badge>
+    </div>
     <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
-    <select-lang :class="prefixCls" />
+    <!-- <select-lang :class="prefixCls" /> -->
   </div>
 </template>
 
@@ -43,7 +62,7 @@ export default {
     wrpCls () {
       return {
         'ant-pro-global-header-index-right': true,
-        [`ant-pro-global-header-index-${(this.isMobile || !this.topMenu) ? 'light' : this.theme}`]: true
+        [`ant-pro-global-header-index-${this.isMobile || !this.topMenu ? 'light' : this.theme}`]: true
       }
     }
   },
@@ -53,6 +72,42 @@ export default {
         name: 'Serati Ma'
       }
     }, 1500)
+  },
+  methods: {
+    backHome () {
+        this.$router.push({
+          path: '/dashboard/index'
+        })
+    }
   }
 }
 </script>
+
+<style lang="less" scoped>
+.part {
+  height: 100%;
+  display: inline-block;
+  padding: 0 5px;
+  .link {
+    color: #595959;
+    cursor: pointer;
+  }
+  .buy{
+    color: #FF7300;
+    font-size: 14px;
+    padding:0 15px;
+  }
+  .ant-badge {
+    height: 100%;
+  }
+  .ant-badge {
+    .link {
+      display: inline-block;
+      padding: 0 10px;
+    }
+  }
+}
+.part:last-child {
+  margin-right: 10px;
+}
+</style>
