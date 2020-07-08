@@ -61,9 +61,27 @@
           :data-source="list"
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         >
-          <a slot="name" slot-scope="text">{{ text }}</a>
+          <template slot="note" slot-scope="text, record">
+            <a @click="showDialog(record.id)">{{ text }}</a>
+          </template>
         </a-table>
       </a-card>
+      <a-modal v-model="visible" width="400" footer centered destroyOnClose>
+        <div slot="title" class="modal-title text-center">备注</div>
+        <a-list
+          item-layout="horizontal"
+          :data-source="noteList"
+          :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 10, total: 50}"
+        >
+          <a-list-item slot="renderItem" slot-scope="item">
+            <div class="text" style="color:#000000;">{{ item.text }}</div>
+            <div
+              class="date"
+              style="padding-left:30px;color:#666666;font-size:12px;"
+            >2020-07-30 12:00:00</div>
+          </a-list-item>
+        </a-list>
+      </a-modal>
     </div>
   </page-header-wrapper>
 </template>
@@ -72,10 +90,10 @@
 export default {
   name: 'GoodManage',
   components: {
-    // STable
   },
   data () {
     return {
+      visible: false,
       columns: [
         {
           title: '货物类型',
@@ -108,7 +126,8 @@ export default {
         {
           title: '备注',
           dataIndex: 'note',
-          ellipsis: true
+          ellipsis: true,
+           scopedSlots: { customRender: 'note' }
         }
       ],
       list: [
@@ -193,19 +212,38 @@ export default {
         keyword: '',
         ctime: '',
         total: ''
-      }
+      },
+      noteList: [
+        {
+          text:
+            'Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1'
+        },
+        {
+          text: 'Ant Design Title 2'
+        },
+        {
+          text: 'Ant Design Title 3'
+        },
+        {
+          text: 'Ant Design Title 4'
+        }
+      ]
     }
   },
   computed: {
-    count () {
-      return this.expand ? 11 : 7
-    }
+
   },
   created () {
-    // this.tableOption()
-    // getRoleList({ t: new Date() })
+
   },
   methods: {
+    handleOk () {
+      this.visible = false
+    },
+    showDialog (id) {
+      console.log('id:', id)
+      this.visible = true
+    },
     updated () {
       console.log('updated')
     },

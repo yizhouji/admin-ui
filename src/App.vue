@@ -26,6 +26,14 @@ export default {
 }
 </script>
 <style lang="less">
+.text-center{
+  text-align: center;
+}
+.modal-title{
+  font-size: 16px;
+  color: #000000;
+  font-weight: bold;
+}
 #search-form {
   /* padding: 24px; */
   margin-bottom: 24px;
@@ -39,9 +47,12 @@ export default {
     align-items: center;
     justify-content: space-between;
     .text {
-      font-weight: bold;
+      font-size: 16px;
+      font-weight: bolder
     }
     .operation {
+      font-size: 14px;
+      color: #666666;
       .item {
         margin-left: 48px;
       }
