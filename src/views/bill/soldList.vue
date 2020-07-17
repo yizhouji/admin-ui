@@ -15,14 +15,14 @@
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="开票人">
-              <a-input name="id" v-model="form.id" placeholder="请输入开票人" allowClear/>
+            <a-form-model-item label="开票时间">
+              <a-input name="id" v-model="form.id" placeholder="请选择开票时间" allowClear/>
             </a-form-model-item>
           </a-col>
 
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="开票人联系方式">
-              <a-input placeholder="请输入开票人联系方式" v-model="form.date" allowClear/>
+            <a-form-model-item label="数量">
+              <a-input placeholder="请输入数量" v-model="form.date" allowClear/>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -74,8 +74,8 @@
           :data-source="list"
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         >
-          <template slot="note" slot-scope="text">
-            <a>{{ text }}</a>
+          <template slot="visitd">
+            <a>查看</a>
           </template>
         </a-table>
       </a-card>
@@ -93,78 +93,80 @@ name: 'GoodManage',
       visible: false,
       columns: [
         {
-          title: '类型',
-          dataIndex: 'type'
-        },
-        {
-          title: '货名',
+          title: '客户名字',
           dataIndex: 'name'
         },
         {
+          title: '客户联系方式',
+          dataIndex: 'phone'
+        },
+        {
           title: '单位',
-          dataIndex: 'unit',
-          width: 100
+          dataIndex: 'unit'
         },
         {
           title: '数量',
           dataIndex: 'count',
-          width: 100,
           scopedSlots: { customRender: 'sold' }
         },
         {
-          title: '单价',
-          dataIndex: 'price',
-          width: 100,
+          title: '是否已付款',
+          dataIndex: 'hasPay',
           scopedSlots: { customRender: 'amount' }
         },
         {
-          title: '金额',
-          dataIndex: 'amount'
+          title: '开票时间',
+          dataIndex: 'time',
+          width: 200,
+          ellipsis: true
         },
         {
-          title: '备注',
-          dataIndex: 'note',
-          ellipsis: true,
-          scopedSlots: { customRender: 'note' }
+          title: '查看',
+          dataIndex: 'visitd',
+          scopedSlots: { customRender: 'visitd' }
         }
       ],
       list: [
         {
           id: 1,
-          type: 'John Brown',
           name: '灯具',
+          phone: '18000000000',
           unit: '个',
           count: '20',
-          price: '100',
-          amount: 2000,
-          note: 'hhhhhh'
+          hasPay: 1,
+          time: '20220-07-15 12:00:000'
         }, {
           id: 2,
-          type: 'John Brown',
           name: '灯具',
+          phone: '18000000000',
           unit: '个',
           count: '20',
-          price: '100',
-          amount: 2000,
-          note: 'hhhhhh'
+          hasPay: 1,
+          time: '20220-07-15 12:00:000'
         }, {
           id: 3,
-          type: 'John Brown',
           name: '灯具',
+          phone: '18000000000',
           unit: '个',
           count: '20',
-          price: '100',
-          amount: 2000,
-          note: 'hhhhhh'
+          hasPay: 1,
+          time: '20220-07-15 12:00:000'
         }, {
           id: 4,
-          type: 'John Brown',
           name: '灯具',
+          phone: '18000000000',
           unit: '个',
           count: '20',
-          price: '100',
-          amount: 2000,
-          note: 'hhhhhh'
+          hasPay: 1,
+          time: '20220-07-15 12:00:000'
+        }, {
+          id: 5,
+          name: '灯具',
+          phone: '18000000000',
+          unit: '个',
+          count: '20',
+          hasPay: 1,
+          time: '20220-07-15 12:00:000'
         }
       ],
       labelCol: {
