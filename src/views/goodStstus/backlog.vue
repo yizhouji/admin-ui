@@ -2,8 +2,13 @@
   <page-header-wrapper>
     <div id="table-container">
       <a-card :bordered="false">
-        <div class="table-title" slot="title">
-          <div class="text">货物统计</div>
+        <div
+          class="table-title"
+          slot="title"
+        >
+          <div class="text">
+            货物统计
+          </div>
           <div class="operation">
             <!-- <a class="item">下载货物模板</a>
             <a class="item">导入表格</a> -->
@@ -18,7 +23,10 @@
           :data-source="list"
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         >
-          <template slot="note" slot-scope="text">
+          <template
+            slot="note"
+            slot-scope="text"
+          >
             <a>{{ text }}</a>
           </template>
         </a-table>
@@ -34,7 +42,7 @@ export default {
   },
   data () {
     return {
-       columns: [
+      columns: [
         {
           title: '货物类型',
           dataIndex: 'type'
@@ -149,7 +157,7 @@ export default {
     }
   },
   methods: {
-     onSelectChange (selectedRowKeys) {
+    onSelectChange (selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     }

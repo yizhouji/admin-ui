@@ -1,7 +1,9 @@
 <template>
   <page-header-wrapper>
-    <a-card :body-style="{padding: '24px 32px'}" :bordered="false">
-    </a-card>
+    <a-card
+      :body-style="{padding: '24px 32px'}"
+      :bordered="false"
+    />
   </page-header-wrapper>
 </template>
 

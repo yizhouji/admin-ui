@@ -16,7 +16,7 @@ const constantRouterComponents = {
 
   // 你需要动态引入的页面组件
   'Workplace': () => import('@/views/dashboard/Workplace'),
-  'Analysis': () => import('@/views/dashboard/Analysis'),
+  'index': () => import('@/views/dashboard/index'),
 
   // 货物管理
   'GoodsManage': () => import('@/views/goods/goodsManage'),
@@ -69,9 +69,9 @@ const notFoundRouter = {
 const rootRouter = {
   key: '',
   name: 'index',
-  path: '',
-  component: 'BasicLayout',
-  redirect: '/dashboard',
+  path: '/',
+  component: 'index',
+  redirect: '/dashboard/index',
   meta: {
     title: '首页'
   },

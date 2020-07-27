@@ -48,13 +48,6 @@ module.exports = {
         'beforeStatementContinuationChars': 'never'
       }
     ],
-    'no-delete-var': 2,
-    'prefer-const': [
-      2,
-      {
-        'ignoreReadBeforeAssign': false
-      }
-    ],
     'template-curly-spacing': 'off',
     'indent': 'off'
   },

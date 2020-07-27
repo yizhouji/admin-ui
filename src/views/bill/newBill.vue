@@ -1,6 +1,9 @@
 <template>
   <page-header-wrapper>
-    <a-card id="search-form" :bordered="false">
+    <a-card
+      id="search-form"
+      :bordered="false"
+    >
       <a-form-model
         class="ant-advanced-search-form"
         :label-col="labelCol"
@@ -9,35 +12,78 @@
         @submit="handleSearch"
       >
         <a-row :gutter="24">
-          <a-col :md="8" :sm="24">
+          <a-col
+            :md="8"
+            :sm="24"
+          >
             <a-form-model-item label="单位">
-              <a-input placeholder="请输入单位" v-model="form.type" allowClear/>
+              <a-input
+                placeholder="请输入单位"
+                v-model="form.type"
+                allow-clear
+              />
             </a-form-model-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col
+            :md="8"
+            :sm="24"
+          >
             <a-form-model-item label="开票人">
-              <a-input name="id" v-model="form.id" placeholder="请输入开票人" allowClear/>
+              <a-input
+                name="id"
+                v-model="form.id"
+                placeholder="请输入开票人"
+                allow-clear
+              />
             </a-form-model-item>
           </a-col>
 
-          <a-col :md="8" :sm="24">
+          <a-col
+            :md="8"
+            :sm="24"
+          >
             <a-form-model-item label="开票人联系方式">
-              <a-input placeholder="请输入开票人联系方式" v-model="form.date" allowClear/>
+              <a-input
+                placeholder="请输入开票人联系方式"
+                v-model="form.date"
+                allow-clear
+              />
             </a-form-model-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col
+            :md="8"
+            :sm="24"
+          >
             <a-form-model-item label="客户名字">
-              <a-input placeholder="请输入客户名字" v-model="form.date" allowClear />
+              <a-input
+                placeholder="请输入客户名字"
+                v-model="form.date"
+                allow-clear
+              />
             </a-form-model-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col
+            :md="8"
+            :sm="24"
+          >
             <a-form-model-item label="客户联系方式">
-              <a-input placeholder="请输入客户联系方式" v-model="form.date" allowClear/>
+              <a-input
+                placeholder="请输入客户联系方式"
+                v-model="form.date"
+                allow-clear
+              />
             </a-form-model-item>
           </a-col>
-          <a-col :md="8" :sm="24">
+          <a-col
+            :md="8"
+            :sm="24"
+          >
             <a-form-model-item label="是否已付款">
-              <a-select v-model="form.type" placeholder="请选择" allowClear>
+              <a-select
+                v-model="form.type"
+                placeholder="请选择"
+                allow-clear
+              >
                 <a-select-option value="1">
                   是
                 </a-select-option>
@@ -49,17 +95,35 @@
           </a-col>
         </a-row>
         <a-row>
-          <a-col :span="24" :style="{ textAlign: 'right' }">
-            <a-button type="primary" html-type="submit">查询</a-button>
-            <a-button :style="{ marginLeft: '8px' }" @click="handleReset">重置</a-button>
+          <a-col
+            :span="24"
+            :style="{ textAlign: 'right' }"
+          >
+            <a-button
+              type="primary"
+              html-type="submit"
+            >
+              查询
+            </a-button>
+            <a-button
+              :style="{ marginLeft: '8px' }"
+              @click="handleReset"
+            >
+              重置
+            </a-button>
           </a-col>
         </a-row>
       </a-form-model>
     </a-card>
     <div id="table-container">
       <a-card :bordered="false">
-        <div class="table-title" slot="title">
-          <div class="text">货物统计</div>
+        <div
+          class="table-title"
+          slot="title"
+        >
+          <div class="text">
+            货物统计
+          </div>
           <div class="operation">
             <a class="item">发送</a>
             <a class="item">打印</a>
@@ -74,19 +138,21 @@
           :data-source="list"
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         >
-          <template slot="note" slot-scope="text">
+          <template
+            slot="note"
+            slot-scope="text"
+          >
             <a>{{ text }}</a>
           </template>
         </a-table>
       </a-card>
-
     </div>
   </page-header-wrapper>
 </template>
 
 <script>
 export default {
-name: 'GoodManage',
+  name: 'GoodManage',
   components: {},
   data () {
     return {
@@ -208,7 +274,7 @@ name: 'GoodManage',
       ]
     }
   },
-    computed: {},
+  computed: {},
   created () {},
   methods: {
     handleOk () {

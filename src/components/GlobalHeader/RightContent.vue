@@ -1,25 +1,41 @@
 <template>
   <div :class="wrpCls">
     <div class="part">
-      <a href="#" class="buy">VIP购买/低至每月8元 </a>
+      <a
+        href="#"
+        class="buy"
+      >VIP购买/低至每月8元</a>
     </div>
-    <div class="part" @click="backHome">
+    <div
+      class="part"
+      @click="backHome"
+    >
       <div class="link">
-        <a-icon type="home" :style="{ fontSize: '18px' }" />
+        <a-icon
+          type="home"
+          :style="{ fontSize: '18px' }"
+        />
       </div>
     </div>
     <div class="part">
       <a-badge
-        :numberStyle="{'font-size':'10px','height':'12px','line-height':'12px','padding':'0 3px'}"
+        :number-style="{'font-size':'10px','height':'12px','line-height':'12px','padding':'0 3px'}"
         :count="99"
         :overflow-count="9"
       >
         <div class="link">
-          <a-icon type="bell" :style="{ fontSize: '18px' }" />
+          <a-icon
+            type="bell"
+            :style="{ fontSize: '18px' }"
+          />
         </div>
       </a-badge>
     </div>
-    <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
+    <avatar-dropdown
+      :menu="showMenu"
+      :current-user="currentUser"
+      :class="prefixCls"
+    />
     <!-- <select-lang :class="prefixCls" /> -->
   </div>
 </template>
@@ -27,6 +43,7 @@
 <script>
 import AvatarDropdown from './AvatarDropdown'
 import SelectLang from '@/components/SelectLang'
+import storage from 'store'
 
 export default {
   name: 'RightContent',
@@ -54,11 +71,20 @@ export default {
   },
   data () {
     return {
-      showMenu: true,
-      currentUser: {}
+      showMenu: true
     }
   },
   computed: {
+    currentUser () {
+      let user = ''
+      if (this.$store.state.user.user) {
+        user = this.$store.state.user.user
+      } else {
+        user = storage.get('USERINFO')
+      }
+      return user
+    },
+
     wrpCls () {
       return {
         'ant-pro-global-header-index-right': true,
@@ -66,18 +92,14 @@ export default {
       }
     }
   },
-  mounted () {
-    setTimeout(() => {
-      this.currentUser = {
-        name: 'Serati Ma'
-      }
-    }, 1500)
-  },
+  mounted () {},
   methods: {
     backHome () {
+      if (this.$route.path.indexOf('/dashboard/index') < 0) {
         this.$router.push({
           path: '/dashboard/index'
         })
+      }
     }
   }
 }
@@ -92,10 +114,10 @@ export default {
     color: #595959;
     cursor: pointer;
   }
-  .buy{
-    color: #FF7300;
+  .buy {
+    color: #ff7300;
     font-size: 14px;
-    padding:0 15px;
+    padding: 0 15px;
   }
   .ant-badge {
     height: 100%;

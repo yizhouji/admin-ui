@@ -1,7 +1,17 @@
 <template>
   <div class="details">
-    <a-modal v-model="visible" width="734px" centered destroyOnClose>
-      <div slot="title" class="modal-title text-center">备注</div>
+    <a-modal
+      v-model="visible"
+      width="734px"
+      centered
+      destroy-on-close
+    >
+      <div
+        slot="title"
+        class="modal-title text-center"
+      >
+        备注
+      </div>
       <div class="form">
         <input type="textarea">
       </div>
@@ -13,13 +23,13 @@
 export default {
   data () {
     return {
-        visible: false
+      visible: false
     }
   },
   methods: {
-      show () {
-          this.visible = true
-      }
+    show () {
+      this.visible = true
+    }
   }
 }
 </script>

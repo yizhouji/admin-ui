@@ -31,6 +31,9 @@ const assetsCDN = {
 
 // vue.config.js
 const vueConfig = {
+  publicPath: '/wms',
+  outputDir: 'wms',
+  assetsDir: 'static',
   configureWebpack: {
     // webpack plugins
     plugins: [
@@ -42,6 +45,17 @@ const vueConfig = {
         BUILD_DATE: buildDate
       })
     ],
+    performance: {
+      hints: 'warning',
+      // 入口起点的最大体积
+      maxEntrypointSize: 50000000,
+      // 生成文件的最大体积
+      maxAssetSize: 30000000,
+      // 只给出 js 文件的性能提示
+      assetFilter: function (assetFilename) {
+        return assetFilename.endsWith('.js')
+      }
+    },
     // if prod, add externals
     externals: isProd ? assetsCDN.externals : {}
   },
@@ -94,15 +108,18 @@ const vueConfig = {
 
   devServer: {
     // development server port 8000
-    port: 8000
+    port: 8000,
     // If you want to turn on the proxy, please remove the mockjs /src/main.jsL11
-    // proxy: {
-    //   '/api': {
-    //     target: 'https://mock.ihx.me/mock/5baf3052f7da7e07e04a5116/antd-pro',
-    //     ws: false,
-    //     changeOrigin: true
-    //   }
-    // }
+    proxy: {
+      '/warehouse': {
+        target: 'http://47.101.190.37:8080',
+        changeOrigin: true,
+        secure: true,
+        pathRewrite: { // 路径重写，
+          '^/warehouse': '/warehouse'
+        }
+      }
+    }
   },
 
   // disable source map in production
