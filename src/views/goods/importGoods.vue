@@ -2,13 +2,8 @@
   <page-header-wrapper>
     <div id="table-container">
       <a-card :bordered="false">
-        <div
-          class="table-title"
-          slot="title"
-        >
-          <div class="text">
-            输入信息
-          </div>
+        <div class="table-title" slot="title">
+          <div class="text">输入信息</div>
           <div class="operation">
             <a class="item">下载货物模板</a>
             <a class="item">导入表格</a>
@@ -23,11 +18,7 @@
           :wrapper-col="wrapperCol"
           @submit="confirm"
         >
-          <a-form-model-item
-            label="类别"
-            required
-            prop="productCategory"
-          >
+          <a-form-model-item label="类别" required prop="productCategory">
             <a-dropdown>
               <a-input
                 name="id"
@@ -46,21 +37,10 @@
               </a-menu>
             </a-dropdown>
           </a-form-model-item>
-          <a-form-model-item
-            label="商品名称"
-            required
-            prop="productName"
-          >
-            <a-input
-              placeholder="请输入商品名称"
-              v-model="form.productName"
-            />
+          <a-form-model-item label="商品名称" required prop="productName">
+            <a-input placeholder="请输入商品名称" v-model="form.productName"/>
           </a-form-model-item>
-          <a-form-model-item
-            label="商品数量"
-            required
-            prop="amount"
-          >
+          <a-form-model-item label="商品数量" required prop="amount">
             <a-input-number
               style="width:100%"
               placeholder="请输入商品数量"
@@ -68,20 +48,21 @@
               v-model="form.amount"
             />
           </a-form-model-item>
-          <a-form-model-item
-            label="单位"
-            required
-            prop="productUnit"
-          >
-            <a-input
-              placeholder="请输入单位"
-              v-model="form.productUnit"
-            />
+          <a-form-model-item label="单位" required prop="productUnit">
+            <a-dropdown>
+              <a-input placeholder="请输入单位" v-model="form.productUnit" autocomplete="off"/>
+              <a-menu slot="overlay">
+                <a-menu-item
+                  v-for="item in units"
+                  :key="item.key"
+                  @click="unitsChange(item.value)"
+                >
+                  <a>{{ item.value }}</a>
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
           </a-form-model-item>
-          <a-form-model-item
-            label="备注"
-            prop="remark"
-          >
+          <a-form-model-item label="备注" prop="remark">
             <a-input
               type="textarea"
               placeholder="备注"
@@ -90,19 +71,8 @@
             />
           </a-form-model-item>
           <a-form-model-item :wrapper-col="{ span: 14, offset: 3 }">
-            <a-button
-              type="primary"
-              html-type="submit"
-              :loading="iconLoading"
-            >
-              确定
-            </a-button>
-            <a-button
-              @click="handleReset"
-              :style="{ marginLeft: '8px' }"
-            >
-              重置
-            </a-button>
+            <a-button type="primary" html-type="submit" :loading="iconLoading">确定</a-button>
+            <a-button @click="handleReset" :style="{ marginLeft: '8px' }">重置</a-button>
           </a-form-model-item>
         </a-form-model>
       </a-card>
@@ -111,7 +81,7 @@
 </template>
 
 <script>
-import { addProducts, productsCategories } from '@/api/product'
+import { addProducts, productsCategories, getUnits } from '@/api/product'
 import { setTimeout } from 'timers'
 
 export default {
@@ -122,6 +92,7 @@ export default {
       labelCol: { span: 3 },
       wrapperCol: { span: 14 },
       categories: '',
+      units: '',
       form: {
         productCategory: '',
         productCategoryName: '',
@@ -140,6 +111,7 @@ export default {
   },
   created () {
     this.getCategories()
+    this.getunits()
   },
   mounted () {},
   methods: {
@@ -148,11 +120,21 @@ export default {
         this.categories = res.result
       })
     },
+    getunits () {
+      getUnits().then(res => {
+        this.units = res.result
+      })
+    },
     categoriesChange (key) {
       let form = this.form
       form.productCategoryName = this.getName(key)
       console.log(this.form)
       form.productCategory = key
+      this.form = form
+    },
+    unitsChange (value) {
+       let form = this.form
+      form.productUnit = value
       this.form = form
     },
     getName (key) {
@@ -188,13 +170,14 @@ export default {
     },
     handleReset () {
       this.form = {
-        id: '',
-        name: '',
-        keyword: '',
-        ctime: '',
-        total: ''
+        productCategory: '',
+        productCategoryName: '',
+        productName: '',
+        amount: '',
+        productUnit: '',
+        remark: ''
       }
-       this.$refs.ruleForm.resetFields()
+      this.$refs.ruleForm.resetFields()
     }
   }
 }
