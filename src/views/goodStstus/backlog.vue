@@ -24,7 +24,7 @@
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         >
           <template
-            slot="note"
+            slot="remark"
             slot-scope="text"
           >
             <a>{{ text }}</a>
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { getOverstocks } from '@/api/overstocks'
+
 export default {
   name: 'Backlog',
   components: {
@@ -45,23 +47,23 @@ export default {
       columns: [
         {
           title: '货物类型',
-          dataIndex: 'type'
+          dataIndex: 'categoryName'
         },
         {
           title: '货物名称',
-          dataIndex: 'name'
+          dataIndex: 'productName'
         },
         {
           title: '总库存',
-          dataIndex: 'total'
+          dataIndex: 'productTotal'
         },
         {
           title: '已卖出',
-          dataIndex: 'sold'
+          dataIndex: 'hasSold'
         },
         {
           title: '输入时间',
-          dataIndex: 'time',
+          dataIndex: 'createTime',
           width: 200
         },
         {
@@ -70,72 +72,13 @@ export default {
         },
         {
           title: '备注',
-          dataIndex: 'note',
+          dataIndex: 'remark',
           ellipsis: true,
-          scopedSlots: { customRender: 'note' }
+          scopedSlots: { customRender: 'remark' }
         }
       ],
       list: [
-        {
-          key: '1',
-          type: 'John Brown',
-          name: '灯具',
-          total: '100',
-          sold: '20',
-          soldAgain: '10',
-          amount: '1000',
-          time: '20220-07-15 12:00:000',
-          stock: '70',
-          note: '备注信息'
-        },
-        {
-          key: '2',
-          type: 'John Brown',
-          name: '灯具',
-          total: '100',
-          sold: '20',
-          soldAgain: '10',
-          time: '20220-07-15 12:00:000',
-          amount: '1000',
-          stock: '70',
-          note: '备注信息'
-        },
-        {
-          key: '3',
-          type: 'John Brown',
-          name: '灯具',
-          total: '100',
-          sold: '20',
-          soldAgain: '10',
-          amount: '1000',
-          time: '20220-07-15 12:00:000',
-          stock: '70',
-          note: '备注信息'
-        },
-        {
-          key: '4',
-          type: 'John Brown',
-          name: '灯具',
-          total: '100',
-          sold: '20',
-          soldAgain: '10',
-          amount: '1000',
-          time: '20220-07-15 12:00:000',
-          stock: '70',
-          note: '备注信息'
-        },
-        {
-          key: '5',
-          type: 'John Brown',
-          name: '灯具',
-          total: '100',
-          sold: '20',
-          soldAgain: '10',
-          time: '20220-07-15 12:00:000',
-          amount: '1000',
-          stock: '70',
-          note: '备注信息'
-        }
+
       ],
       labelCol: {
         xs: {
@@ -156,7 +99,18 @@ export default {
       selectedRowKeys: []
     }
   },
+  created () {
+     this.getList()
+  },
+  mounted () {
+
+  },
   methods: {
+    getList () {
+      getOverstocks().then((res) => {
+        this.list = res.result
+      })
+    },
     onSelectChange (selectedRowKeys) {
       console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys

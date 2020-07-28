@@ -25,6 +25,7 @@
                 v-model="form.productCategoryName"
                 placeholder="请输入类别"
                 autocomplete="off"
+                allowClear
               />
               <a-menu slot="overlay">
                 <a-menu-item
@@ -38,25 +39,27 @@
             </a-dropdown>
           </a-form-model-item>
           <a-form-model-item label="商品名称" required prop="productName">
-            <a-input placeholder="请输入商品名称" v-model="form.productName"/>
+            <a-input placeholder="请输入商品名称" v-model="form.productName" allowClear />
           </a-form-model-item>
           <a-form-model-item label="商品数量" required prop="amount">
             <a-input-number
               style="width:100%"
               placeholder="请输入商品数量"
               :min="1"
+              allowClear
               v-model="form.amount"
             />
           </a-form-model-item>
           <a-form-model-item label="单位" required prop="productUnit">
             <a-dropdown>
-              <a-input placeholder="请输入单位" v-model="form.productUnit" autocomplete="off"/>
+              <a-input
+                placeholder="请输入单位"
+                v-model="form.productUnit"
+                autocomplete="off"
+                allowClear
+              />
               <a-menu slot="overlay">
-                <a-menu-item
-                  v-for="item in units"
-                  :key="item.key"
-                  @click="unitsChange(item.value)"
-                >
+                <a-menu-item v-for="item in units" :key="item.key" @click="unitsChange(item.value)">
                   <a>{{ item.value }}</a>
                 </a-menu-item>
               </a-menu>
@@ -81,8 +84,10 @@
 </template>
 
 <script>
-import { addProducts, productsCategories, getUnits } from '@/api/product'
+import { addProducts } from '@/api/product'
 import { setTimeout } from 'timers'
+// import { mapActions } from 'vuex'
+// import { log } from 'util'
 
 export default {
   name: 'ImportGoods',
@@ -91,8 +96,7 @@ export default {
       iconLoading: false,
       labelCol: { span: 3 },
       wrapperCol: { span: 14 },
-      categories: '',
-      units: '',
+
       form: {
         productCategory: '',
         productCategoryName: '',
@@ -109,37 +113,34 @@ export default {
       }
     }
   },
+  computed: {
+    categories () {
+      return this.$store.state.good.categories
+    },
+    units () {
+      return this.$store.state.good.units
+    }
+  },
   created () {
-    this.getCategories()
-    this.getunits()
+    this.$store.dispatch('getCategories')
+    this.$store.dispatch('getunits')
   },
   mounted () {},
   methods: {
-    getCategories () {
-      productsCategories().then(res => {
-        this.categories = res.result
-      })
-    },
-    getunits () {
-      getUnits().then(res => {
-        this.units = res.result
-      })
-    },
     categoriesChange (key) {
       let form = this.form
       form.productCategoryName = this.getName(key)
-      console.log(this.form)
       form.productCategory = key
       this.form = form
     },
     unitsChange (value) {
-       let form = this.form
+      let form = this.form
       form.productUnit = value
       this.form = form
     },
     getName (key) {
       let name = ''
-      this.categories.forEach(element => {
+      this.categories.forEach((element) => {
         if (element.key === key) {
           name = element.value
         }
@@ -148,12 +149,12 @@ export default {
     },
     confirm (e) {
       e.preventDefault()
-      this.$refs.ruleForm.validate(valid => {
+      this.$refs.ruleForm.validate((valid) => {
         if (valid) {
           console.log(this.form)
           this.iconLoading = true
           addProducts(this.form)
-            .then(res => {
+            .then((res) => {
               this.$message.success(res.result)
               setTimeout(() => {
                 this.iconLoading = false

@@ -60,7 +60,7 @@ export const asyncRouterMap = [
             path: '/bill/newBill',
             name: 'NewBill',
             component: () => import('@/views/bill/newBill'),
-            meta: { title: '新建票据', keepAlive: true }
+            meta: { title: '销货清单', keepAlive: true }
           },
           {
             path: '/bill/soldList',
