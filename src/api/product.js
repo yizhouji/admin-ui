@@ -40,7 +40,10 @@ export function productsDownload (parameter) {
   return request({
     url: productApi.download,
     method: 'get',
-    params: parameter
+    params: parameter,
+    headers: {
+      'Content-Type': 'application/json;charset=UTF-8'
+    }
   })
 }
 

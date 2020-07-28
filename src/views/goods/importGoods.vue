@@ -18,7 +18,7 @@
           :wrapper-col="wrapperCol"
           @submit="confirm"
         >
-          <a-form-model-item label="类别" required prop="productCategory">
+          <a-form-model-item label="类别" required prop="productCategoryName">
             <a-dropdown>
               <a-input
                 name="id"
@@ -26,6 +26,7 @@
                 placeholder="请输入类别"
                 autocomplete="off"
                 allowClear
+                @change="inputChange"
               />
               <a-menu slot="overlay">
                 <a-menu-item
@@ -106,7 +107,7 @@ export default {
         remark: ''
       },
       rules: {
-        productCategory: [{ required: true, message: '请输入商品类型', trigger: 'blur' }],
+        productCategoryName: [{ required: true, message: '请输入商品类型', trigger: 'blur' }],
         productName: [{ required: true, message: '请输入商品名称', trigger: 'blur' }],
         amount: [{ required: true, message: '请输入商品数量', trigger: 'blur' }],
         productUnit: [{ required: true, message: '请输入单位', trigger: 'blur' }]
@@ -127,8 +128,15 @@ export default {
   },
   mounted () {},
   methods: {
+    inputChange (e) {
+      let form = this.form
+      form.productCategory = ''
+      form.productCategoryName = e.target.value
+      this.form = form
+    },
     categoriesChange (key) {
       let form = this.form
+      form.productCategory = ''
       form.productCategoryName = this.getName(key)
       form.productCategory = key
       this.form = form
@@ -153,7 +161,16 @@ export default {
         if (valid) {
           console.log(this.form)
           this.iconLoading = true
-          addProducts(this.form)
+
+          let obj = {
+              productCategory: this.form.productCategory || this.form.productCategoryName,
+              productName: this.form.productName,
+              amount: this.form.amount,
+              productUnit: this.form.productUnit,
+              remark: this.form.remark
+          }
+
+          addProducts(obj)
             .then((res) => {
               this.$message.success(res.result)
               setTimeout(() => {
@@ -165,6 +182,7 @@ export default {
               this.iconLoading = false
             })
         } else {
+          console.log(this.form)
           return false
         }
       })

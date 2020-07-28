@@ -24,7 +24,7 @@ export function handleScrollHeader (callback) {
   let timer = 0
 
   let beforeScrollTop = window.pageYOffset
-  callback = callback || function () {}
+  callback = callback || function () { }
   window.addEventListener(
     'scroll',
     event => {
@@ -64,4 +64,25 @@ export function removeLoadingAnimate (id = '', timeout = 1500) {
   setTimeout(() => {
     document.body.removeChild(document.getElementById(id))
   }, timeout)
+}
+
+export function getJson (obj) {
+  var object = obj
+  for (var i in object) {
+    var value = object[i]
+    if (typeof value === 'object') {
+      if (Array.isArray(value)) {
+        if (value.length === 0) {
+          delete object[i]
+          continue
+        }
+      }
+      this.deleteEmptyProperty(value)
+    } else {
+      if (value === '' || value === null || value === undefined) {
+        delete object[i]
+      }
+    }
+  }
+  return object
 }

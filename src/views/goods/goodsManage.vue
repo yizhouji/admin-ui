@@ -11,14 +11,19 @@
         <a-row :gutter="24">
           <a-col :md="8" :sm="24">
             <a-form-model-item label="商品类型">
-              <a-select style="width: 100%" allowClear @change="categoryChange" placeholder="请输入商品类型">
+              <a-select
+                style="width: 100%"
+                allowClear
+                @change="categoryChange"
+                placeholder="请输入商品类型"
+              >
                 <a-select-option v-for="item in categories" :key="item.key">{{ item.value }}</a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="商品名称">
-              <a-input placeholder="请输入商品名称" allowClear v-model="form.productName" />
+              <a-input placeholder="请输入商品名称" allowClear v-model="form.productName"/>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -46,7 +51,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="商品名称">
-              <a-range-picker @change="onChange" allowClear style="width:100%" />
+              <a-range-picker @change="onChange" allowClear style="width:100%"/>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -63,10 +68,10 @@
         <div class="table-title" slot="title">
           <div class="text">货物统计</div>
           <div class="operation">
-            <a class="item">下载货物模板</a>
+            <a class="item" @click="download">下载货物模板</a>
             <a class="item">导入表格</a>
             <div class="item-line">
-              <a-icon type="setting" />
+              <a-icon type="setting"/>
               <span>操作</span>
             </div>
           </div>
@@ -76,7 +81,7 @@
           :data-source="list"
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         >
-          <template slot="note" slot-scope="text, record">
+          <template slot="remark" slot-scope="text, record">
             <a @click="showDialog(record.id)">{{ text }}</a>
           </template>
         </a-table>
@@ -102,11 +107,11 @@
 </template>
 
 <script>
-import { getProducts } from '@/api/product'
+import { getProducts, productsDownload } from '@/api/product'
+import { getJson } from '@/utils/util'
 export default {
   name: 'GoodManage',
-  components: {
-  },
+  components: {},
   data () {
     return {
       visible: false,
@@ -115,27 +120,23 @@ export default {
       columns: [
         {
           title: '货物类型',
-          dataIndex: 'type'
+          dataIndex: 'categoryName'
         },
         {
           title: '货物名称',
-          dataIndex: 'name'
+          dataIndex: 'productName'
         },
         {
           title: '总库存',
-          dataIndex: 'total'
+          dataIndex: 'productTotal'
         },
         {
           title: '已卖出',
-          dataIndex: 'sold'
+          dataIndex: 'hasSold'
         },
         {
           title: '又卖出',
-          dataIndex: 'soldAgain'
-        },
-        {
-          title: '卖出金额',
-          dataIndex: 'amount'
+          dataIndex: 'saleCount'
         },
         {
           title: '剩余库存',
@@ -143,13 +144,12 @@ export default {
         },
         {
           title: '备注',
-          dataIndex: 'note',
+          dataIndex: 'remark',
           ellipsis: true,
-          scopedSlots: { customRender: 'note' }
+          scopedSlots: { customRender: 'remark' }
         }
       ],
-      list: [
-      ],
+      list: [],
       labelCol: {
         xs: {
           span: 24
@@ -196,14 +196,14 @@ export default {
       ]
     }
   },
- computed: {
+  computed: {
     categories () {
       return this.$store.state.good.categories
     },
-     units () {
+    units () {
       return this.$store.state.good.units
     }
- },
+  },
   created () {
     this.$store.dispatch('getCategories')
     this.$store.dispatch('getunits')
@@ -212,9 +212,14 @@ export default {
     this.getList(this.form)
   },
   methods: {
+     download () {
+        productsDownload().then(res => {
+           this.$message.success('下载成功')
+      })
+    },
     getList (form) {
-      getProducts(form).then(res => {
-          this.list = res.result
+      getProducts(getJson(form)).then(res => {
+        this.list = res.result.list
       })
     },
     handleOk () {
@@ -232,14 +237,14 @@ export default {
       this.form.pageNum = 1
       this.form.pageSize = 20
       if (this.form.minStock > this.form.maxStock) {
-          this.$message.error('库存量输入有误')
-          return
+        this.$message.error('库存量输入有误')
+        return
       }
       this.getList(this.form)
     },
     handleReset () {
       this.form = {
-       categoryId: '',
+        categoryId: '',
         startTime: '',
         endTime: '',
         maxStock: '',
@@ -251,10 +256,10 @@ export default {
       this.$refs.ruleForm.resetFields()
     },
     onChange (date, dateString) {
-        let form = this.form
-        form.startTime = dateString[0]
-        form.endTime = dateString[1]
-        this.form = form
+      let form = this.form
+      form.startTime = dateString[0]
+      form.endTime = dateString[1]
+      this.form = form
     },
     toggle () {
       this.expand = !this.expand
@@ -264,9 +269,9 @@ export default {
       this.selectedRowKeys = selectedRowKeys
     },
     categoryChange (value) {
-         let form = this.form
-         form.categoryId = value
-        this.form = form
+      let form = this.form
+      form.categoryId = value
+      this.form = form
     }
   }
 }
