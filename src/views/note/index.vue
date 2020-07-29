@@ -2,25 +2,23 @@
   <page-header-wrapper>
     <div id="table-container">
       <a-card :bordered="false">
-        <div
-          class="table-title"
-          slot="title"
-        >
-          <div class="text">
-            记事列表
-          </div>
+        <div class="table-title" slot="title">
+          <div class="text">记事列表</div>
           <div class="operation">
-            <a-input-search
-              placeholder="请输入查询条件"
-              style="width: 200px"
-              @search="onSearch"
-            />
-            <a class="item">新建文件</a>
+            <a-input-search placeholder="请输入查询条件" style="width: 200px" @search="onSearch" />
+            <a class="item" @click="addHandel">新建文件</a>
             <a class="item">上传图片</a>
-            <div class="item-line">
-              <a-icon type="setting" />
-              <span>操作</span>
-            </div>
+
+            <a-dropdown :trigger="['click']" overlayClassName="drop">
+              <div class="item-line">
+                <a-icon type="setting" />
+                <span>操作</span>
+              </div>
+              <a-menu slot="overlay" @click="onClick">
+                <a-menu-item key="1">添加</a-menu-item>
+                <a-menu-item key="2">删除</a-menu-item>
+              </a-menu>
+            </a-dropdown>
           </div>
         </div>
 
@@ -29,36 +27,16 @@
           :data-source="list"
           :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 8, total: 50}"
         >
-          <a-list-item
-            slot="renderItem"
-            slot-scope="item"
-            @click="linkDetails"
-          >
+          <a-list-item slot="renderItem" slot-scope="item" @click="linkDetails">
             <template v-if="item.img">
               <a-card class="note-card">
-                <img
-                  :src="item.img"
-                  alt
-                >
+                <img :src="item.img" alt />
                 <div class="text">
-                  <div class="title">
-                    {{ item.title }}
-                  </div>
-                  <div
-                    class="dsc"
-                    v-if="item.dsc"
-                  >
-                    {{ item.dsc }}
-                  </div>
+                  <div class="title">{{ item.title }}</div>
+                  <div class="dsc" v-if="item.dsc">{{ item.dsc }}</div>
                   <div class="date">
-                    <span
-                      class="doted danger"
-                      v-if="item.type === 1 "
-                    />
-                    <span
-                      class="doted info"
-                      v-if="item.type === 2 "
-                    />
+                    <span class="doted danger" v-if="item.type === 1 " />
+                    <span class="doted info" v-if="item.type === 2 " />
                     {{ item.date }}
                   </div>
                 </div>
@@ -67,24 +45,11 @@
             <template v-else>
               <a-card class="note-card no-img">
                 <div class="text">
-                  <div class="title">
-                    {{ item.title }}
-                  </div>
-                  <div
-                    class="more-text"
-                    v-if="item.dsc"
-                  >
-                    {{ item.dsc }}
-                  </div>
+                  <div class="title">{{ item.title }}</div>
+                  <div class="more-text" v-if="item.dsc">{{ item.dsc }}</div>
                   <div class="date">
-                    <span
-                      class="doted danger"
-                      v-if="item.type === 1 "
-                    />
-                    <span
-                      class="doted info"
-                      v-if="item.type === 2 "
-                    />
+                    <span class="doted danger" v-if="item.type === 1 " />
+                    <span class="doted info" v-if="item.type === 2 " />
                     {{ item.date }}
                   </div>
                 </div>
@@ -95,15 +60,19 @@
       </a-card>
     </div>
     <Details ref="Details" />
+    <add ref="Add"></add>
   </page-header-wrapper>
 </template>
 
 <script>
 import Details from './details'
+import add from './add'
+
 export default {
   name: 'Note',
   components: {
-    Details
+    Details,
+    add
   },
   data () {
     return {
@@ -167,6 +136,9 @@ export default {
     }
   },
   methods: {
+    addHandel () {
+      this.$refs.Add.show()
+    },
     onSearch () {},
     linkDetails () {
       this.$refs.Details.show()
@@ -259,5 +231,10 @@ export default {
 }
 .danger {
   background: #f2637b;
+}
+.drop{
+  li{
+    padding: 5px 20px;
+  }
 }
 </style>

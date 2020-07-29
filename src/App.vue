@@ -32,6 +32,9 @@ export default {
 }
 </script>
 <style lang="less">
+*{
+  outline: none;
+}
 .text-center{
   text-align: center;
 }
@@ -47,6 +50,7 @@ export default {
 .ant-layout-footer{
     display: none !important;
   }
+
 #table-container {
   .table-title {
     display: flex;

@@ -50,14 +50,14 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户联系方式">
-              <a-input placeholder="请输入客户联系方式" v-model="form.customerPhone" allow-clear />
+              <a-input placeholder="请输入客户联系方式" maxlength="11" v-model="form.customerPhone" allow-clear />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="是否已付款">
               <a-select v-model="form.payment" placeholder="请选择" allow-clear>
-                <a-select-option value="1">是</a-select-option>
-                <a-select-option value="0">否</a-select-option>
+                <a-select-option :value="1">是</a-select-option>
+                <a-select-option :value="0">否</a-select-option>
               </a-select>
             </a-form-model-item>
           </a-col>
@@ -109,29 +109,29 @@ export default {
       columns: [
         {
           title: '客户名字',
-          dataIndex: 'name'
+          dataIndex: 'customer'
         },
         {
           title: '客户联系方式',
-          dataIndex: 'phone'
+          dataIndex: 'customerPhone'
         },
-        {
-          title: '单位',
-          dataIndex: 'unit'
-        },
-        {
-          title: '数量',
-          dataIndex: 'count',
-          scopedSlots: { customRender: 'sold' }
-        },
+        // {
+        //   title: '单位',
+        //   dataIndex: 'unit'
+        // },
+        // {
+        //   title: '数量',
+        //   dataIndex: 'count',
+        //   scopedSlots: { customRender: 'sold' }
+        // },
         {
           title: '是否已付款',
-          dataIndex: 'hasPay',
-          scopedSlots: { customRender: 'amount' }
+          dataIndex: 'payment',
+          scopedSlots: { customRender: 'payment' }
         },
         {
           title: '开票时间',
-          dataIndex: 'time',
+          dataIndex: 'createTime',
           width: 200,
           ellipsis: true
         },
@@ -191,11 +191,13 @@ export default {
     }
   },
   computed: {},
-  created () {},
+  created () {
+    this.getList(this.form)
+  },
   methods: {
     getList (form) {
       getChecklists(form).then((res) => {
-        this.list = res.result
+        this.list = res.result.list
       })
     },
     handleOk () {
@@ -214,7 +216,9 @@ export default {
       this.form.pageSize = 20
       if (this.form.minStock > this.form.maxStock) {
         this.$message.error('库存量输入有误')
+        return
       }
+      this.getList(this.form)
     },
     handleReset () {
       this.form = {

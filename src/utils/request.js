@@ -59,7 +59,6 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
-  console.log(response)
   return response.data
 }, errorHandler)
 

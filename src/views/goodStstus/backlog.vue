@@ -108,7 +108,7 @@ export default {
   methods: {
     getList () {
       getOverstocks().then((res) => {
-        this.list = res.result
+        this.list = res.result.list
       })
     },
     onSelectChange (selectedRowKeys) {

@@ -23,7 +23,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="商品名称">
-              <a-input placeholder="请输入商品名称" allowClear v-model="form.productName"/>
+              <a-input placeholder="请输入商品名称" allowClear v-model="form.productName" />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -51,7 +51,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="商品名称">
-              <a-range-picker @change="onChange" allowClear style="width:100%"/>
+              <a-range-picker @change="onChange" allowClear style="width:100%" />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -71,7 +71,7 @@
             <a class="item" @click="download">下载货物模板</a>
             <a class="item">导入表格</a>
             <div class="item-line">
-              <a-icon type="setting"/>
+              <a-icon type="setting" />
               <span>操作</span>
             </div>
           </div>
@@ -79,6 +79,9 @@
         <a-table
           :columns="columns"
           :data-source="list"
+          :pagination="pagination"
+          @change="pageNumChange"
+          @showSizeChange="pageSizeChange"
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         >
           <template slot="remark" slot-scope="text, record">
@@ -116,7 +119,12 @@ export default {
     return {
       visible: false,
       minStockMax: '',
-
+      pagination: {
+        pageSize: 20,
+        total: 0,
+        showQuickJumper: true,
+        showSizeChanger: true
+      },
       columns: [
         {
           title: '货物类型',
@@ -209,17 +217,34 @@ export default {
     this.$store.dispatch('getunits')
   },
   mounted () {
-    this.getList(this.form)
+    this.getList()
   },
   methods: {
-     download () {
-        productsDownload().then(res => {
-           this.$message.success('下载成功')
+    pageNumChange (e) {
+      let form = this.form
+      form.pageNum = e.current
+      this.form = form
+      this.getList()
+    },
+    pageSizeChange (e) {
+      let form = this.form
+      form.pageNum = 1
+      form.pageSize = e.pageSize
+      this.form = form
+      this.getList()
+    },
+    download () {
+      productsDownload().then((res) => {
+        this.$message.success('下载成功')
       })
     },
-    getList (form) {
-      getProducts(getJson(form)).then(res => {
+    getList () {
+      getProducts(getJson(this.form)).then((res) => {
         this.list = res.result.list
+        let pagination = this.pagination
+        pagination.total = res.result.total
+
+        this.pagination = pagination
       })
     },
     handleOk () {
@@ -240,7 +265,7 @@ export default {
         this.$message.error('库存量输入有误')
         return
       }
-      this.getList(this.form)
+      this.getList()
     },
     handleReset () {
       this.form = {
@@ -254,6 +279,7 @@ export default {
         productName: ''
       }
       this.$refs.ruleForm.resetFields()
+      this.getList()
     },
     onChange (date, dateString) {
       let form = this.form
