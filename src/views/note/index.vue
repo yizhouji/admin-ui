@@ -15,7 +15,7 @@
                 <span>操作</span>
               </div>
               <a-menu slot="overlay" @click="onClick">
-                <a-menu-item key="1">添加</a-menu-item>
+                <a-menu-item key="1" @click="addHandel">添加</a-menu-item>
                 <a-menu-item key="2">删除</a-menu-item>
               </a-menu>
             </a-dropdown>
@@ -27,7 +27,7 @@
           :data-source="list"
           :pagination="pagination"
         >
-          <a-list-item slot="renderItem" slot-scope="item" @click="linkDetails">
+          <a-list-item slot="renderItem" slot-scope="item" @click="linkDetails(item)">
             <template v-if="item.imgPaths.length>0">
               <a-card class="note-card">
                 <img :src="item.imgPaths[0]" alt />
@@ -80,18 +80,29 @@ export default {
   data () {
     return {
       result: {},
-      params: {
-        pageNum: 1,
-        pageSize: 20
-      },
+
       list: [],
       pagination: {
-        pageSizeOptions: ['4', '8', '12'],
-        pageSize: 20,
+        pageSizeOptions: ['10', '20', '30'],
+        pageNum: 1,
+        pageSize: 10,
         total: 0,
         showQuickJumper: true,
         showSizeChanger: true,
-        onChange: this.pageNumChange()
+        onChange: page => {
+          let pagination = this.pagination
+          pagination.pageNum = page
+          this.pagination = pagination
+          this.getList()
+        },
+        onShowSizeChange: (current, size) => {
+          console.log(current, size)
+           let pagination = this.pagination
+            pagination.pageNum = 1
+            pagination.pageSize = size
+            this.form = pagination
+            this.getList()
+        }
       }
     }
   },
@@ -99,11 +110,9 @@ export default {
     this.getList()
   },
   methods: {
-    pageNumChange (e) {
-      console.log(e)
-    },
     getList () {
-      getNote(this.params).then((res) => {
+      const { pageNum, pageSize } = this.pagination
+      getNote({ pageNum, pageSize }).then((res) => {
         let result = res.result
         this.list = res.result.list
         let pagination = this.pagination
@@ -113,14 +122,15 @@ export default {
           pagination.total = 0
         }
         this.pagination = pagination
+        console.log(this.pagination)
       })
     },
     addHandel () {
       this.$refs.Add.show()
     },
     onSearch () {},
-    linkDetails () {
-      this.$refs.Details.show()
+    linkDetails (item) {
+      this.$refs.Details.show(item)
     },
     onClick () {}
   }

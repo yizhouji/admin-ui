@@ -19,7 +19,6 @@ export function addNote (parameter) {
       headers: {
           'Content-Type': 'multipart/form-data'
      },
-
       data: parameter
     })
   }

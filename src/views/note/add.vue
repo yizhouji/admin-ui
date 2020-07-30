@@ -2,7 +2,7 @@
   <div class="noteAdd">
     <a-modal v-model="visible" width="734px" centered destroy-on-close @ok="handleOk">
       <div slot="title" class="modal-title text-left">
-        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />新建文件
+        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px"/>新建文件
       </div>
       <div class="form">
         <a-input
@@ -17,7 +17,6 @@
           :auto-size="{ minRows: 5, maxRows: 5 }"
           style="border:none;margin-bottom:20px;"
         />
-
         <div class="clearfix">
           <a-upload
             list-type="picture-card"
@@ -28,14 +27,14 @@
             @change="handleChange"
           >
             <div v-if="fileList.length < 8">
-              <a-icon type="plus" />
+              <a-icon type="plus"/>
               <div class="ant-upload-text">点击上传</div>
             </div>
           </a-upload>
         </div>
       </div>
       <div class="title">
-        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />选择事件重要级
+        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px"/>选择事件重要级
       </div>
       <a-radio-group
         v-model="significance"
@@ -48,7 +47,7 @@
         <a-radio :value="3" class="radio3">普通</a-radio>
       </a-radio-group>
       <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-        <img alt="example" style="width: 100%" :src="previewImage" />
+        <img alt="example" style="width: 100%" :src="previewImage">
       </a-modal>
     </a-modal>
   </div>
@@ -98,7 +97,7 @@ export default {
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = () => resolve(reader.result)
-        reader.onerror = (error) => reject(error)
+        reader.onerror = error => reject(error)
       })
     },
     handleCancel () {
@@ -122,12 +121,6 @@ export default {
     },
     handleOk () {
       const { baseList, fileList, significance, notepadTitle, notepadContent } = this
-      let arr = []
-      baseList.forEach((element) => {
-        arr.push(this.dataURItoBlob(element))
-      })
-      console.log(arr)
-
       let formData = new FormData()
       let a = notepadTitle.trim().length > 0 && fileList.length > 0
       let b = notepadTitle.trim().length > 0 && notepadContent.trim().length > 0
@@ -146,34 +139,19 @@ export default {
       formData.append('notepadTitle', notepadTitle)
       // console.log(formData)
 
-      addNote(formData).then((res) => {
+      addNote(formData).then(res => {
         this.$message.success('提交成功')
+        this.previewImage = ''
+        this.fileList = []
+        this.baseList = []
+        this.significance = 3
+        this.notepadTitle = ''
+        this.notepadContent = ''
         setTimeout(() => {
           this.visible = false
           this.$emit('getList')
         }, 2000)
       })
-    },
-    dataURItoBlob (base64Data) {
-      // console.log(base64Data);//data:image/png;base64,
-      var byteString
-      if (base64Data.split(',')[0].indexOf('base64') >= 0) {
-        byteString = atob(base64Data.split(',')[1])
-      } else {
-        byteString = unescape(base64Data.split(',')[1])
-      }
-      var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0] // mime类型 -- image/png
-
-      // var arrayBuffer = new ArrayBuffer(byteString.length); //创建缓冲数组
-      // var ia = new Uint8Array(arrayBuffer);//创建视图
-      var ia = new Uint8Array(byteString.length) // 创建视图
-      for (var i = 0; i < byteString.length; i++) {
-        ia[i] = byteString.charCodeAt(i)
-      }
-      var blob = new Blob([ia], {
-        type: mimeString
-      })
-      return blob
     }
   }
 }
