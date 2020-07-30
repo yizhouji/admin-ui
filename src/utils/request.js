@@ -23,6 +23,12 @@ const errorHandler = (error) => {
     const data = error.response.data
     // 从 localstorage 获取 token
     const token = storage.get(ACCESS_TOKEN)
+    if (error.response.status === 500) {
+      notification.error({
+        message: '请求失败',
+        description: data.message
+      })
+    }
     if (error.response.status === 403) {
       notification.error({
         message: 'Forbidden',

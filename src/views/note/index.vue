@@ -25,19 +25,20 @@
         <a-list
           :grid="{ gutter: 16, column: 4,lg:4,md:3,sm:2 }"
           :data-source="list"
-          :pagination="{showSizeChanger: true, showQuickJumper: true, pageSize: 8, total: 50}"
+          :pagination="pagination"
         >
           <a-list-item slot="renderItem" slot-scope="item" @click="linkDetails">
-            <template v-if="item.img">
+            <template v-if="item.imgPaths.length>0">
               <a-card class="note-card">
-                <img :src="item.img" alt />
+                <img :src="item.imgPaths[0]" alt />
                 <div class="text">
-                  <div class="title">{{ item.title }}</div>
-                  <div class="dsc" v-if="item.dsc">{{ item.dsc }}</div>
+                  <div class="title">{{ item.notepadTitle }}</div>
+                  <div class="dsc" v-if="item.notepadContent">{{ item.notepadContent }}</div>
                   <div class="date">
-                    <span class="doted danger" v-if="item.type === 1 " />
-                    <span class="doted info" v-if="item.type === 2 " />
-                    {{ item.date }}
+                    <span class="doted danger" v-if="item.significance === 1 " />
+                    <span class="doted info" v-if="item.significance === 2 " />
+                    <span class="doted gray" v-if="item.significance === 3 " />
+                    {{ item.createTime }}
                   </div>
                 </div>
               </a-card>
@@ -45,12 +46,13 @@
             <template v-else>
               <a-card class="note-card no-img">
                 <div class="text">
-                  <div class="title">{{ item.title }}</div>
-                  <div class="more-text" v-if="item.dsc">{{ item.dsc }}</div>
+                  <div class="title">{{ item.notepadTitle }}</div>
+                  <div class="dsc" v-if="item.notepadContent">{{ item.notepadContent }}</div>
                   <div class="date">
-                    <span class="doted danger" v-if="item.type === 1 " />
-                    <span class="doted info" v-if="item.type === 2 " />
-                    {{ item.date }}
+                    <span class="doted danger" v-if="item.significance === 1 " />
+                    <span class="doted info" v-if="item.significance === 2 " />
+                    <span class="doted gray" v-if="item.significance === 3 " />
+                    {{ item.createTime }}
                   </div>
                 </div>
               </a-card>
@@ -60,11 +62,12 @@
       </a-card>
     </div>
     <Details ref="Details" />
-    <add ref="Add"></add>
+    <add ref="Add" @getList="getList"></add>
   </page-header-wrapper>
 </template>
 
 <script>
+import { getNote } from '@/api/note'
 import Details from './details'
 import add from './add'
 
@@ -76,73 +79,50 @@ export default {
   },
   data () {
     return {
-      list: [
-        {
-          title: 'Title 1',
-          date: '2020-07-15 12:00:00',
-          type: 1,
-          dsc:
-            '哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或哈哈哈哈或或或或或或或或或或或或或或'
-        },
-        {
-          title: 'Title 2',
-          date: '2020-07-15 12:00:00',
-          type: 2,
-          dsc: '哈哈哈哈或或或或或或或或或或或或或或',
-          img: require('../../assets/coupon.png')
-        },
-        {
-          title: 'Title 3',
-          date: '2020-07-15 12:00:00',
-          img: require('../../assets/coupon.png')
-        },
-        {
-          title: 'Title 4',
-          date: '2020-07-15 12:00:00',
-          type: '',
-          dsc: '哈哈哈哈或或或或或或或或或或或或或或'
-        },
-        {
-          title: 'Title 4',
-          date: '2020-07-15 12:00:00',
-          type: '',
-          dsc: '哈哈哈哈或或或或或或或或或或或或或或'
-        },
-        {
-          title: 'Title 4',
-          date: '2020-07-15 12:00:00',
-          type: '',
-          dsc: '哈哈哈哈或或或或或或或或或或或或或或'
-        },
-        {
-          title: 'Title 4',
-          date: '2020-07-15 12:00:00',
-          type: '',
-          dsc: '哈哈哈哈或或或或或或或或或或或或或或'
-        },
-        {
-          title: 'Title 4',
-          date: '2020-07-15 12:00:00',
-          type: '',
-          dsc: '哈哈哈哈或或或或或或或或或或或或或或'
-        },
-        {
-          title: 'Title 4',
-          date: '2020-07-15 12:00:00',
-          type: '',
-          dsc: '哈哈哈哈或或或或或或或或或或或或或或'
-        }
-      ]
+      result: {},
+      params: {
+        pageNum: 1,
+        pageSize: 20
+      },
+      list: [],
+      pagination: {
+        pageSizeOptions: ['4', '8', '12'],
+        pageSize: 20,
+        total: 0,
+        showQuickJumper: true,
+        showSizeChanger: true,
+        onChange: this.pageNumChange()
+      }
     }
   },
+  mounted () {
+    this.getList()
+  },
   methods: {
+    pageNumChange (e) {
+      console.log(e)
+    },
+    getList () {
+      getNote(this.params).then((res) => {
+        let result = res.result
+        this.list = res.result.list
+        let pagination = this.pagination
+        if (result.total > 0) {
+          pagination.total = result.total
+        } else {
+          pagination.total = 0
+        }
+        this.pagination = pagination
+      })
+    },
     addHandel () {
       this.$refs.Add.show()
     },
     onSearch () {},
     linkDetails () {
       this.$refs.Details.show()
-    }
+    },
+    onClick () {}
   }
 }
 </script>
@@ -232,8 +212,11 @@ export default {
 .danger {
   background: #f2637b;
 }
-.drop{
-  li{
+.gray {
+  background: #999999;
+}
+.drop {
+  li {
     padding: 5px 20px;
   }
 }

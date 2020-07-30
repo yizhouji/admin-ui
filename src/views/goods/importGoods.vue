@@ -5,7 +5,7 @@
         <div class="table-title" slot="title">
           <div class="text">输入信息</div>
           <div class="operation">
-            <a class="item">下载货物模板</a>
+            <a class="item" @click="download">下载货物模板</a>
             <a class="item">导入表格</a>
           </div>
         </div>
@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { addProducts } from '@/api/product'
+import { addProducts, productsDownload } from '@/api/product'
 import { setTimeout } from 'timers'
 // import { mapActions } from 'vuex'
 // import { log } from 'util'
@@ -163,11 +163,11 @@ export default {
           this.iconLoading = true
 
           let obj = {
-              productCategory: this.form.productCategory || this.form.productCategoryName,
-              productName: this.form.productName,
-              amount: this.form.amount,
-              productUnit: this.form.productUnit,
-              remark: this.form.remark
+            productCategory: this.form.productCategory || this.form.productCategoryName,
+            productName: this.form.productName,
+            amount: this.form.amount,
+            productUnit: this.form.productUnit,
+            remark: this.form.remark
           }
 
           addProducts(obj)
@@ -185,6 +185,11 @@ export default {
           console.log(this.form)
           return false
         }
+      })
+    },
+    download () {
+      productsDownload().then((res) => {
+        this.$message.success('下载成功')
       })
     },
     handleReset () {

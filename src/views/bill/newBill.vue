@@ -44,12 +44,12 @@
             </a-form-model-item>
           </a-col>
         </a-row>
-        <a-row>
+        <!-- <a-row>
           <a-col :span="24" :style="{ textAlign: 'right' }">
             <a-button type="primary" html-type="submit">查询</a-button>
             <a-button :style="{ marginLeft: '8px' }" @click="handleReset">重置</a-button>
           </a-col>
-        </a-row>
+        </a-row> -->
       </a-form-model>
     </a-card>
     <div id="table-container">

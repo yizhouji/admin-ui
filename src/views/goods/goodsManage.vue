@@ -4,31 +4,38 @@
       <a-form-model
         class="ant-advanced-search-form"
         :label-col="labelCol"
+        ref="ruleForm"
         :wrapper-col="wrapperCol"
         :model="form"
         @submit="handleSearch"
       >
         <a-row :gutter="24">
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="商品类型">
+            <a-form-model-item label="商品类型" prop="categoryId">
               <a-select
                 style="width: 100%"
                 allowClear
                 @change="categoryChange"
+                v-model="form.categoryId"
                 placeholder="请输入商品类型"
               >
-                <a-select-option v-for="item in categories" :key="item.key">{{ item.value }}</a-select-option>
+                <template v-for="item in categories">
+                  <a-select-option :key="item.key" :value="item.key">{{ item.value }}</a-select-option>
+                </template>
               </a-select>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="商品名称">
+            <a-form-model-item label="商品名称" prop="productName">
               <a-input placeholder="请输入商品名称" allowClear v-model="form.productName" />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="库存量">
-              <a-form-model-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-form-model-item
+                :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }"
+                prop="minStock"
+              >
                 <a-input-number
                   placeholder="最小数量"
                   :min="1"
@@ -38,7 +45,10 @@
                 />
               </a-form-model-item>
               <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }">-</span>
-              <a-form-model-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }">
+              <a-form-model-item
+                :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }"
+                prop="maxStock"
+              >
                 <a-input-number
                   placeholder="最大数量"
                   :min="1"
@@ -50,8 +60,8 @@
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="商品名称">
-              <a-range-picker @change="onChange" allowClear style="width:100%" />
+            <a-form-model-item label="创建时间">
+              <a-range-picker v-model="creatTime" @change="onChange" allowClear style="width:100%" />
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -76,18 +86,26 @@
             </div>
           </div>
         </div>
-        <a-table
-          :columns="columns"
-          :data-source="list"
-          :pagination="pagination"
-          @change="pageNumChange"
-          @showSizeChange="pageSizeChange"
-          :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+
+        <BaseTable
+          ref="BaseTable"
+          @getList="getList"
+          @pageNumChange="pageNumChange"
+          @pageSizeChange="pageSizeChange"
+          @onSelectChange="onSelectChange"
         >
-          <template slot="remark" slot-scope="text, record">
-            <a @click="showDialog(record.id)">{{ text }}</a>
-          </template>
-        </a-table>
+          <a-table-column key="categoryName" title="货物类型" data-index="categoryName" />
+          <a-table-column key="productName" title="货物名称" data-index="productName" />
+          <a-table-column key="productTotal" title="总库存" data-index="productTotal" />
+          <a-table-column key="hasSold" title="已卖出" data-index="hasSold" />
+          <a-table-column key="saleCount" title="又卖出" data-index="saleCount" />
+          <a-table-column key="stock" title="剩余库存" data-index="stock" />
+          <a-table-column key="remark" title="备注" data-index="remark">
+            <template slot-scope="text, record">
+              <a @click="showDialog(record.categoryId)">{{ text }}</a>
+            </template>
+          </a-table-column>
+        </BaseTable>
       </a-card>
       <a-modal v-model="visible" width="400" footer centered destroy-on-close>
         <div slot="title" class="modal-title text-center">备注</div>
@@ -110,14 +128,18 @@
 </template>
 
 <script>
+import BaseTable from '@/components/BaseTable'
 import { getProducts, productsDownload } from '@/api/product'
 import { getJson } from '@/utils/util'
 export default {
   name: 'GoodManage',
-  components: {},
+  components: {
+    BaseTable
+  },
   data () {
     return {
       visible: false,
+      tableLoading: false,
       minStockMax: '',
       pagination: {
         pageSize: 20,
@@ -125,38 +147,7 @@ export default {
         showQuickJumper: true,
         showSizeChanger: true
       },
-      columns: [
-        {
-          title: '货物类型',
-          dataIndex: 'categoryName'
-        },
-        {
-          title: '货物名称',
-          dataIndex: 'productName'
-        },
-        {
-          title: '总库存',
-          dataIndex: 'productTotal'
-        },
-        {
-          title: '已卖出',
-          dataIndex: 'hasSold'
-        },
-        {
-          title: '又卖出',
-          dataIndex: 'saleCount'
-        },
-        {
-          title: '剩余库存',
-          dataIndex: 'stock'
-        },
-        {
-          title: '备注',
-          dataIndex: 'remark',
-          ellipsis: true,
-          scopedSlots: { customRender: 'remark' }
-        }
-      ],
+
       list: [],
       labelCol: {
         xs: {
@@ -175,10 +166,11 @@ export default {
         }
       },
       queryParam: {},
+      creatTime: undefined,
       expand: false,
       selectedRowKeys: [],
       form: {
-        categoryId: '',
+        categoryId: undefined,
         startTime: '',
         endTime: '',
         maxStock: '',
@@ -187,21 +179,8 @@ export default {
         pageSize: 20,
         productName: ''
       },
-      noteList: [
-        {
-          text:
-            'Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1  Ant Design Title 1'
-        },
-        {
-          text: 'Ant Design Title 2'
-        },
-        {
-          text: 'Ant Design Title 3'
-        },
-        {
-          text: 'Ant Design Title 4'
-        }
-      ]
+      noteList: [],
+      dataSource: ''
     }
   },
   computed: {
@@ -217,7 +196,8 @@ export default {
     this.$store.dispatch('getunits')
   },
   mounted () {
-    this.getList()
+    // this.$refs.BaseTable.loading(this.columns, [])
+    // this.getList()
   },
   methods: {
     pageNumChange (e) {
@@ -236,16 +216,33 @@ export default {
     download () {
       productsDownload().then((res) => {
         this.$message.success('下载成功')
+        const blob = new Blob([res], {
+          type: 'application/ms-excel'
+        })
+        // const reader = new FileReader()
+        // reader.readAsDataURL(blob)
+        // reader.onload = (e) => {
+          const a = document.createElement('a')
+
+          a.href = window.URL.createObjectURL(blob)
+           a.download = '货物模板.xls'
+          document.body.appendChild(a)
+          a.click()
+          document.body.removeChild(a)
+
+        // }
       })
     },
     getList () {
-      getProducts(getJson(this.form)).then((res) => {
-        this.list = res.result.list
-        let pagination = this.pagination
-        pagination.total = res.result.total
-
-        this.pagination = pagination
-      })
+      this.$refs.BaseTable.loading()
+      getProducts(getJson(this.form))
+        .then((res) => {
+          this.dataSource = res.result
+          this.$refs.BaseTable.getData(res.result)
+        })
+        .catch(() => {
+          this.$refs.BaseTable.hideLoading()
+        })
     },
     handleOk () {
       this.visible = false
@@ -269,7 +266,7 @@ export default {
     },
     handleReset () {
       this.form = {
-        categoryId: '',
+        categoryId: undefined,
         startTime: '',
         endTime: '',
         maxStock: '',
@@ -278,10 +275,13 @@ export default {
         pageSize: 20,
         productName: ''
       }
-      this.$refs.ruleForm.resetFields()
-      this.getList()
+      this.creatTime = undefined
+      this.$nextTick(() => {
+        this.getList()
+      })
     },
     onChange (date, dateString) {
+      this.creatTime = dateString
       let form = this.form
       form.startTime = dateString[0]
       form.endTime = dateString[1]
@@ -291,10 +291,11 @@ export default {
       this.expand = !this.expand
     },
     onSelectChange (selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      console.log('selectedRowKeys changed11: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
     categoryChange (value) {
+      console.log(value)
       let form = this.form
       form.categoryId = value
       this.form = form

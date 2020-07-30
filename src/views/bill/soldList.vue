@@ -50,7 +50,12 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户联系方式">
-              <a-input placeholder="请输入客户联系方式" maxlength="11" v-model="form.customerPhone" allow-clear />
+              <a-input
+                placeholder="请输入客户联系方式"
+                :maxLength="11"
+                v-model="form.customerPhone"
+                allow-clear
+              />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -83,64 +88,53 @@
             </div>
           </div>
         </div>
-        <a-table
+        <!-- <a-table
           :columns="columns"
           :data-source="list"
+          :loading="tableLoading"
           :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
         >
           <template slot="visitd">
             <a>查看</a>
           </template>
-        </a-table>
+        </a-table>-->
+        <BaseTable
+          ref="BaseTable"
+          @getList="getList"
+          @pageNumChange="pageNumChange"
+          @pageSizeChange="pageSizeChange"
+          @onSelectChange="onSelectChange"
+        >
+          <a-table-column key="customer" title="客户名字" data-index="customer" />
+          <a-table-column key="customerPhone" title="客户联系方式" data-index="customerPhone" />
+          <a-table-column key="payment" title="是否已付款" data-index="payment" />
+          <a-table-column key="createTime" title="开票时间" data-index="createTime" />
+          <a-table-column key="visitd" title="查看" data-index="createTime">
+            <template>
+              <a>查看</a>
+            </template>
+          </a-table-column>
+
+        </BaseTable>
       </a-card>
     </div>
   </page-header-wrapper>
 </template>
 
 <script>
+import BaseTable from '@/components/BaseTable'
+
 import { getChecklists } from '@/api/bill'
+import { getJson } from '@/utils/util'
 
 export default {
   name: 'GoodManage',
-  components: {},
+  components: {
+    BaseTable
+  },
   data () {
     return {
       visible: false,
-      columns: [
-        {
-          title: '客户名字',
-          dataIndex: 'customer'
-        },
-        {
-          title: '客户联系方式',
-          dataIndex: 'customerPhone'
-        },
-        // {
-        //   title: '单位',
-        //   dataIndex: 'unit'
-        // },
-        // {
-        //   title: '数量',
-        //   dataIndex: 'count',
-        //   scopedSlots: { customRender: 'sold' }
-        // },
-        {
-          title: '是否已付款',
-          dataIndex: 'payment',
-          scopedSlots: { customRender: 'payment' }
-        },
-        {
-          title: '开票时间',
-          dataIndex: 'createTime',
-          width: 200,
-          ellipsis: true
-        },
-        {
-          title: '查看',
-          dataIndex: 'visitd',
-          scopedSlots: { customRender: 'visitd' }
-        }
-      ],
       list: [],
       labelCol: {
         xs: {
@@ -161,6 +155,7 @@ export default {
       queryParam: {},
       expand: false,
       selectedRowKeys: [],
+      tableLoading: false,
       form: {
         customer: '',
         customerPhone: '',
@@ -169,7 +164,7 @@ export default {
         groupName: '',
         pageNum: 1,
         pageSize: 20,
-        payment: '',
+        payment: undefined,
         startAmount: '',
         startTime: ''
       },
@@ -192,13 +187,19 @@ export default {
   },
   computed: {},
   created () {
-    this.getList(this.form)
+    this.getList()
   },
   methods: {
-    getList (form) {
-      getChecklists(form).then((res) => {
-        this.list = res.result.list
-      })
+    getList () {
+      this.tableLoading = true
+      getChecklists(getJson(this.form))
+        .then((res) => {
+          this.list = res.result.list
+          this.tableLoading = false
+        })
+        .catch(() => {
+          this.tableLoading = false
+        })
     },
     handleOk () {
       this.visible = false
@@ -222,10 +223,20 @@ export default {
     },
     handleReset () {
       this.form = {
-        id: '',
-        type: '',
-        date: ''
+        customer: '',
+        customerPhone: '',
+        endAmount: '',
+        endTime: '',
+        groupName: '',
+        pageNum: 1,
+        pageSize: 20,
+        payment: undefined,
+        startAmount: '',
+        startTime: ''
       }
+      this.$nextTick(() => {
+        this.getList()
+      })
     },
     toggle () {
       this.expand = !this.expand
@@ -239,6 +250,19 @@ export default {
       form.startTime = dateString[0]
       form.endTime = dateString[1]
       this.form = form
+    },
+     pageNumChange (e) {
+      let form = this.form
+      form.pageNum = e.current
+      this.form = form
+      this.getList()
+    },
+    pageSizeChange (e) {
+      let form = this.form
+      form.pageNum = 1
+      form.pageSize = e.pageSize
+      this.form = form
+      this.getList()
     }
   }
 }

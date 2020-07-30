@@ -50,7 +50,9 @@ export default {
 .ant-layout-footer{
     display: none !important;
   }
-
+.ant-form-item{
+  height: 40px;
+}
 #table-container {
   .table-title {
     display: flex;

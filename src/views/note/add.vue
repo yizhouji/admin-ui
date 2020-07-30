@@ -1,18 +1,18 @@
 <template>
   <div class="noteAdd">
-    <a-modal v-model="visible" width="734px" centered destroy-on-close>
+    <a-modal v-model="visible" width="734px" centered destroy-on-close @ok="handleOk">
       <div slot="title" class="modal-title text-left">
         <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />新建文件
       </div>
       <div class="form">
         <a-input
-          v-model="title"
+          v-model="notepadTitle "
           placeholder="请输入标题"
           style="border:none;margin-bottom:10px;font-weight:bold;font-size:14px;"
         />
         <p></p>
         <a-textarea
-          v-model="dsc"
+          v-model="notepadContent "
           placeholder="请输入描述"
           :auto-size="{ minRows: 5, maxRows: 5 }"
           style="border:none;margin-bottom:20px;"
@@ -20,10 +20,11 @@
 
         <div class="clearfix">
           <a-upload
-            action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
             list-type="picture-card"
             :file-list="fileList"
+            multiple
             @preview="handlePreview"
+            :before-upload="beforeUpload"
             @change="handleChange"
           >
             <div v-if="fileList.length < 8">
@@ -36,7 +37,12 @@
       <div class="title">
         <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />选择事件重要级
       </div>
-      <a-radio-group name="radioGroup" :default-value="radio" @change="radioChange">
+      <a-radio-group
+        v-model="significance"
+        name="radioGroup"
+        :default-value="radio"
+        @change="radioChange"
+      >
         <a-radio :value="1" class="radio1">重要</a-radio>
         <a-radio :value="2" class="radio2">二级</a-radio>
         <a-radio :value="3" class="radio3">普通</a-radio>
@@ -49,16 +55,20 @@
 </template>
 
 <script>
+// eslint-disable-next-line no-unused-vars
+import { addNote } from '../../api/note'
 export default {
   data () {
     return {
       radio: 3,
       visible: false,
-      title: '',
-      dsc: '',
+      significance: 3,
+      notepadTitle: '',
+      notepadContent: '',
       previewVisible: false,
       previewImage: '',
-      fileList: []
+      fileList: [],
+      baseList: []
     }
   },
   methods: {
@@ -67,6 +77,21 @@ export default {
     },
     show () {
       this.visible = true
+    },
+    beforeUpload (file) {
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+      if (!isJpgOrPng) {
+        this.$message.error('图片格式只能是image/jpeg或者image/png')
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('图片大小不能超过2m')
+      }
+
+      // return isJpgOrPng && isLt2M
+
+      this.fileList = [...this.fileList, file]
+      return false
     },
     getBase64 (file) {
       return new Promise((resolve, reject) => {
@@ -80,15 +105,75 @@ export default {
       this.previewVisible = false
     },
     async handlePreview (file) {
+      console.log('handlePreview:', file)
       if (!file.url && !file.preview) {
         file.preview = await this.getBase64(file.originFileObj)
       }
+      console.log(file)
       this.previewImage = file.url || file.preview
       this.previewVisible = true
     },
-    handleChange ({ fileList }) {
+    async handleChange ({ file, fileList }) {
+      let baseList = this.baseList
+      let Base64 = await this.getBase64(file)
+      baseList.push(Base64)
+      this.baseList = baseList
       this.fileList = fileList
-      console.log(this)
+    },
+    handleOk () {
+      const { baseList, fileList, significance, notepadTitle, notepadContent } = this
+      let arr = []
+      baseList.forEach((element) => {
+        arr.push(this.dataURItoBlob(element))
+      })
+      console.log(arr)
+
+      let formData = new FormData()
+      let a = notepadTitle.trim().length > 0 && fileList.length > 0
+      let b = notepadTitle.trim().length > 0 && notepadContent.trim().length > 0
+      if (a) {
+        formData.append('files', baseList)
+      }
+      if (b) {
+        formData.append('notepadContent', notepadContent)
+      }
+      if (a || b) {
+      } else {
+        this.$message.error('请输入内容')
+        return
+      }
+      formData.append('significance', significance)
+      formData.append('notepadTitle', notepadTitle)
+      // console.log(formData)
+
+      addNote(formData).then((res) => {
+        this.$message.success('提交成功')
+        setTimeout(() => {
+          this.visible = false
+          this.$emit('getList')
+        }, 2000)
+      })
+    },
+    dataURItoBlob (base64Data) {
+      // console.log(base64Data);//data:image/png;base64,
+      var byteString
+      if (base64Data.split(',')[0].indexOf('base64') >= 0) {
+        byteString = atob(base64Data.split(',')[1])
+      } else {
+        byteString = unescape(base64Data.split(',')[1])
+      }
+      var mimeString = base64Data.split(',')[0].split(':')[1].split(';')[0] // mime类型 -- image/png
+
+      // var arrayBuffer = new ArrayBuffer(byteString.length); //创建缓冲数组
+      // var ia = new Uint8Array(arrayBuffer);//创建视图
+      var ia = new Uint8Array(byteString.length) // 创建视图
+      for (var i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i)
+      }
+      var blob = new Blob([ia], {
+        type: mimeString
+      })
+      return blob
     }
   }
 }
@@ -126,18 +211,6 @@ ant-radio-wrapper-checked {
     border-color: #f2637b;
   }
 }
-// .radio2,
-// ant-radio-wrapper-checked {
-//   /deep/ .ant-radio-checked .ant-radio-inner {
-//     border-color: #f2637b;
-//   }
-//   /deep/.ant-radio-inner::after {
-//     background-color: #f2637b;
-//   }
-//   /deep/ .ant-radio-checked::after {
-//     border-color: #f2637b;
-//   }
-// }
 .radio3,
 ant-radio-wrapper-checked {
   /deep/ .ant-radio-checked .ant-radio-inner {
