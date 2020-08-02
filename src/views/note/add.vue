@@ -121,6 +121,7 @@ export default {
     },
     handleOk () {
       const { baseList, fileList, significance, notepadTitle, notepadContent } = this
+      console.log(baseList)
       let formData = new FormData()
       let a = notepadTitle.trim().length > 0 && fileList.length > 0
       let b = notepadTitle.trim().length > 0 && notepadContent.trim().length > 0
@@ -138,7 +139,11 @@ export default {
       formData.append('significance', significance)
       formData.append('notepadTitle', notepadTitle)
       // console.log(formData)
-
+//       let formData = {
+// significance,
+// notepadTitle,
+// notepadContent,
+//       }
       addNote(formData).then(res => {
         this.$message.success('提交成功')
         this.previewImage = ''

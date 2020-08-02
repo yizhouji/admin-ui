@@ -69,7 +69,8 @@ export default {
       previewImage: '',
       fileList: [],
       baseList: [],
-      edit: true
+      edit: true,
+      detail: ''
     }
   },
   methods: {

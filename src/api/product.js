@@ -5,8 +5,8 @@ const productApi = {
   productsCategories: '/warehouse/products/categories',
   download: '/warehouse/products/download',
   import: '/warehouse/products/import',
-  units: '/warehouse/products/units'
-
+  units: '/warehouse/products/units',
+  productsInfo: '/warehouse/products/info'
 }
 
 /**
@@ -66,6 +66,14 @@ export function productsImport (parameter) {
 export function getUnits (parameter) {
   return request({
     url: productApi.units,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function getProductsInfo (parameter) {
+  return request({
+    url: productApi.productsInfo,
     method: 'get',
     params: parameter
   })

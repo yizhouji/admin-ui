@@ -10,7 +10,7 @@ import i18n from './locales'
 import { VueAxios } from './utils/request'
 import ProLayout, { PageHeaderWrapper } from '@ant-design-vue/pro-layout'
 import themePluginConfig from '../config/themePluginConfig'
-import { FormModel } from 'ant-design-vue'
+import { FormModel, message } from 'ant-design-vue'
 // mock
 // WARNING: `mockjs` NOT SUPPORT `IE` PLEASE DO NOT USE IN `production` ENV.
 // import './mock'
@@ -20,6 +20,15 @@ import './core/lazy_use'
 import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less'
+
+let height = document.body.offsetHeight || document.documentElement.clientHeight || document.body.offsetHeight
+
+Vue.prototype.$message = message
+message.config({
+    duration: 2, // 持续时间
+    top: height / 2 + 'px', // 到页面顶部距离
+    maxCount: 3 // 最大显示数, 超过限制时，最早的消息会被自动关闭
+})
 Vue.use(FormModel)
 
 Vue.config.productionTip = false

@@ -1,12 +1,22 @@
 import request from '@/utils/request'
 
 const billApi = {
-  checklists: '/warehouse/checklists'
+  getChecklists: '/warehouse/checklists',
+  addChecklists: '/warehouse/checklists'
+
 }
 export function getChecklists (parameter) {
   return request({
-    url: billApi.checklists,
+    url: billApi.getChecklists,
     method: 'get',
+    params: parameter
+  })
+}
+
+export function addChecklists (parameter) {
+  return request({
+    url: billApi.addChecklists,
+    method: 'post',
     params: parameter
   })
 }

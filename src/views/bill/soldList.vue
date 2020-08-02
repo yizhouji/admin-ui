@@ -187,7 +187,7 @@ export default {
   },
   computed: {},
   created () {
-    this.getList()
+    // this.getList()
   },
   methods: {
     getList () {

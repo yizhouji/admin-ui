@@ -216,19 +216,14 @@ export default {
     download () {
       productsDownload().then((res) => {
         this.$message.success('下载成功')
-        const blob = new Blob([res], {
-          type: 'application/ms-excel'
-        })
-        // const reader = new FileReader()
-        // reader.readAsDataURL(blob)
-        // reader.onload = (e) => {
-          const a = document.createElement('a')
-
-          a.href = window.URL.createObjectURL(blob)
-           a.download = '货物模板.xls'
-          document.body.appendChild(a)
-          a.click()
-          document.body.removeChild(a)
+         let url = window.URL.createObjectURL(res)
+          let link = document.createElement('a')
+          link.style.display = 'none'
+          link.href = url
+          // 获取服务器端的文件名
+          link.setAttribute('download', '历史考勤信息.xlsx')
+          document.body.appendChild(link)
+          link.click()
 
         // }
       })
