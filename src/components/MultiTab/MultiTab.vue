@@ -31,6 +31,7 @@ export default {
         item.meta.customTitle = name
         this.$forceUpdate()
       } catch (e) {
+        console.log()
       }
     })
 

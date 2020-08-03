@@ -216,14 +216,14 @@ export default {
     download () {
       productsDownload().then((res) => {
         this.$message.success('下载成功')
-         let url = window.URL.createObjectURL(res)
-          let link = document.createElement('a')
-          link.style.display = 'none'
-          link.href = url
-          // 获取服务器端的文件名
-          link.setAttribute('download', '历史考勤信息.xlsx')
-          document.body.appendChild(link)
-          link.click()
+        let url = window.URL.createObjectURL(res)
+        let link = document.createElement('a')
+        link.style.display = 'none'
+        link.href = url
+        // 获取服务器端的文件名
+        link.setAttribute('download', '历史考勤信息.xlsx')
+        document.body.appendChild(link)
+        link.click()
 
         // }
       })

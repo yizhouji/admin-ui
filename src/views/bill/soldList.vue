@@ -1,3 +1,4 @@
+/* eslint-disable vue/no-unused-vars */
 <template>
   <page-header-wrapper>
     <a-card id="search-form" :bordered="false">
@@ -107,30 +108,33 @@
         >
           <a-table-column key="customer" title="客户名字" data-index="customer" />
           <a-table-column key="customerPhone" title="客户联系方式" data-index="customerPhone" />
-          <a-table-column key="payment" title="是否已付款" data-index="payment" />
+          <a-table-column key="payment" title="是否已付款" data-index="payment">
+            <template slot-scope="text">{{ text ? '是':'否' }}</template>
+          </a-table-column>
           <a-table-column key="createTime" title="开票时间" data-index="createTime" />
-          <a-table-column key="visitd" title="查看" data-index="createTime">
-            <template>
-              <a>查看</a>
+          <a-table-column key="visitd" title="操作">
+            <template slot-scope="text,recored">
+              <a @click="detailHandle(recored.checkId)">查看</a>
             </template>
           </a-table-column>
-
         </BaseTable>
       </a-card>
     </div>
+    <Details ref="Details"></Details>
   </page-header-wrapper>
 </template>
 
 <script>
 import BaseTable from '@/components/BaseTable'
-
-import { getChecklists } from '@/api/bill'
+import Details from './components/details'
+import { getChecklists, getCheckDetails } from '@/api/bill'
 import { getJson } from '@/utils/util'
 
 export default {
   name: 'GoodManage',
   components: {
-    BaseTable
+    BaseTable,
+    Details
   },
   data () {
     return {
@@ -190,11 +194,18 @@ export default {
     // this.getList()
   },
   methods: {
+    detailHandle (checkId) {
+      console.log(checkId)
+      getCheckDetails(checkId).then(res => {
+          this.$refs.Details.show(res.result)
+      })
+    },
     getList () {
       this.tableLoading = true
       getChecklists(getJson(this.form))
         .then((res) => {
           this.list = res.result.list
+          this.$refs.BaseTable.getData(res.result)
           this.tableLoading = false
         })
         .catch(() => {
@@ -251,7 +262,7 @@ export default {
       form.endTime = dateString[1]
       this.form = form
     },
-     pageNumChange (e) {
+    pageNumChange (e) {
       let form = this.form
       form.pageNum = e.current
       this.form = form

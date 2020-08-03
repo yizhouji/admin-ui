@@ -83,7 +83,7 @@
             <a class="item" @click="showModal">发送</a>
             <a class="item">打印</a>
             <div class="item-line">
-              <a-icon type="setting"/>
+              <a-icon type="setting" />
               <span>操作</span>
             </div>
           </div>
@@ -168,14 +168,14 @@
           <template slot="remove" slot-scope="text,record,index">
             <template>
               <div class="remove" @click="removeHandle(index)">
-                <a-icon type="minus-circle"/>
+                <a-icon type="minus-circle" />
               </div>
             </template>
           </template>
         </a-table>
         <div class="add">
           <div class="addBtn" @click="addHandle">
-            <a-icon type="plus-circle" theme="filled" style="fontSize:18px;"/>
+            <a-icon type="plus-circle" theme="filled" style="fontSize:18px;" />
             <p>添加</p>
           </div>
         </div>
@@ -200,10 +200,10 @@
                 <a>{{ text }}</a>
               </template>
             </a-table-column>
-            <a-table-column key="productUnit" title="单位" data-index="productUnit"/>
-            <a-table-column key="amount" title="数量" data-index="amount"/>
-            <a-table-column key="unitPrice" title="单价" data-index="unitPrice"/>
-            <a-table-column key="grossAmount" title="金额" data-index="grossAmount"/>
+            <a-table-column key="productUnit" title="单位" data-index="productUnit" />
+            <a-table-column key="amount" title="数量" data-index="amount" />
+            <a-table-column key="unitPrice" title="单价" data-index="unitPrice" />
+            <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />
           </a-table>
         </div>
         <template slot="footer">
@@ -214,11 +214,11 @@
           <div class="input">
             <div class="item">
               <label>手机号：</label>
-              <a-input v-model="form.telephone" :value="text" placeholder="请输入手机号"/>
+              <a-input v-model="form.telephone" :value="text" placeholder="请输入手机号" />
             </div>
             <div class="item">
               <label>微信号：</label>
-              <a-input v-model="form.wechatNo" :value="text" placeholder="请输入微信号"/>
+              <a-input v-model="form.wechatNo" :value="text" placeholder="请输入微信号" />
             </div>
           </div>
           <div class="bottom">
@@ -232,20 +232,17 @@
 </template>
 
 <script>
-import EditableCell from './components/add'
 import { getProductsInfo } from '@/api/product'
 import { addChecklists } from '@/api/bill'
 export default {
   name: 'GoodManage',
-  components: {
-    EditableCell
-  },
+  components: {},
 
   data () {
     return {
       btnLoading: false,
       pagination: false,
-      visible: true,
+      visible: false,
       columns: [
         {
           title: '货名',
@@ -322,7 +319,7 @@ export default {
   },
   computed: {},
   created () {
-    getProductsInfo().then(res => {
+    getProductsInfo().then((res) => {
       this.product = res.result
     })
   },
@@ -333,7 +330,7 @@ export default {
       //   return
       // }
       let arr = []
-      this.list.forEach(element => {
+      this.list.forEach((element) => {
         let obj = {
           amount: element.amount,
           grossAmount: element.grossAmount,
@@ -346,7 +343,7 @@ export default {
       console.log(arr)
       this.btnLoading = true
       addChecklists(parmas)
-        .then(res => {
+        .then((res) => {
           this.btnLoading = false
           this.$message.error('添加清单成功')
           this.$confirm({
@@ -356,33 +353,33 @@ export default {
             okType: 'primary',
             cancelText: '查看清单列表',
             onOk () {
-               this.form = {
-                  customer: '',
-                  customerPhone: '',
-                  drawer: '',
-                  drawerPhone: '',
-                  groupName: '',
-                  payment: undefined,
-                  telephone: '',
-                  wechatNo: ''
-                }
-                this.list = []
-                this.visible = false
+              this.form = {
+                customer: '',
+                customerPhone: '',
+                drawer: '',
+                drawerPhone: '',
+                groupName: '',
+                payment: undefined,
+                telephone: '',
+                wechatNo: ''
+              }
+              this.list = []
+              this.visible = false
             },
             onCancel () {
               this.$router.push({ path: '/bill/soldList' })
             }
           })
         })
-        .catch(() => {
+        .catch((error) => {
           this.btnLoading = false
-          this.$message.error('添加清单失败')
+          this.$message.error(error.message || '添加清单失败')
         })
     },
     printHandle () {},
     handleChange (value, key, column) {
       const newData = [...this.list]
-      const target = newData.filter(item => key === item.key)[0]
+      const target = newData.filter((item) => key === item.key)[0]
       if (target) {
         target[column] = value
         this.list = newData
@@ -502,6 +499,7 @@ export default {
           element.unitPrice &&
           element.grossAmount
         ) {
+          console.log()
         } else {
           this.$message.error('第' + (index + 1) + '行数据请补充完整')
           bool = false

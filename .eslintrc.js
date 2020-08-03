@@ -1,20 +1,11 @@
-
 module.exports = {
   root: true,
   env: {
     node: true
   },
-  'extends': [
-    'plugin:vue/strongly-recommended',
-    '@vue/standard'
-  ],
+  extends: ['plugin:vue/strongly-recommended', '@vue/standard'],
   rules: {
-    "no-unused-vars": [2, { 
-      // 允许声明未使用变量
-      "vars": "local",
-      // 参数不检查
-      "args": "none" 
-    }],
+    'no-unused-vars': 'off',
     'no-console': 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'generator-star-spacing': 'off',
@@ -22,10 +13,10 @@ module.exports = {
     'vue/max-attributes-per-line': [
       2,
       {
-        'singleline': 5,
-        'multiline': {
-          'max': 1,
-          'allowFirstLine': false
+        singleline: 5,
+        multiline: {
+          max: 1,
+          allowFirstLine: false
         }
       }
     ],
@@ -40,33 +31,31 @@ module.exports = {
     'vue/html-closing-bracket-newline': 0,
     'vue/no-parsing-error': 0,
     'no-tabs': 0,
-    'quotes': [
+    quotes: [
       2,
       'single',
       {
-        'avoidEscape': true,
-        'allowTemplateLiterals': true
+        avoidEscape: true,
+        allowTemplateLiterals: true
       }
     ],
-    'semi': [
+    semi: [
       2,
       'never',
       {
-        'beforeStatementContinuationChars': 'never'
+        beforeStatementContinuationChars: 'never'
       }
     ],
     'template-curly-spacing': 'off',
-    'indent': 'off'
+    indent: 'off',
+    'no-unused-vars': 'off'
   },
   parserOptions: {
     parser: 'babel-eslint'
   },
   overrides: [
     {
-      files: [
-        '**/__tests__/*.{j,t}s?(x)',
-        '**/tests/unit/**/*.spec.{j,t}s?(x)'
-      ],
+      files: ['**/__tests__/*.{j,t}s?(x)', '**/tests/unit/**/*.spec.{j,t}s?(x)'],
       env: {
         jest: true
       }

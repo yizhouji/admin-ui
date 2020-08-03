@@ -97,11 +97,11 @@ export default {
         },
         onShowSizeChange: (current, size) => {
           console.log(current, size)
-           let pagination = this.pagination
-            pagination.pageNum = 1
-            pagination.pageSize = size
-            this.form = pagination
-            this.getList()
+          let pagination = this.pagination
+          pagination.pageNum = 1
+          pagination.pageSize = size
+          this.form = pagination
+          this.getList()
         }
       }
     }

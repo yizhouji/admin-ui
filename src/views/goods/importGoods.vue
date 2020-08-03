@@ -28,7 +28,7 @@
                 allowClear
                 @change="inputChange"
               />
-              <a-menu slot="overlay">
+              <a-menu slot="overlay" v-if="categories && categories.length>0">
                 <a-menu-item
                   v-for="item in categories"
                   :key="item.key"
@@ -59,7 +59,7 @@
                 autocomplete="off"
                 allowClear
               />
-              <a-menu slot="overlay">
+              <a-menu slot="overlay" v-if="units && units.length>0">
                 <a-menu-item v-for="item in units" :key="item.key" @click="unitsChange(item.value)">
                   <a>{{ item.value }}</a>
                 </a-menu-item>

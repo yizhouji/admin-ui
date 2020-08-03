@@ -1,20 +1,11 @@
 <template>
   <div :class="wrpCls">
     <div class="part">
-      <a
-        href="#"
-        class="buy"
-      >VIP购买/低至每月8元</a>
+      <a href="#" class="buy">VIP购买/低至每月8元</a>
     </div>
-    <div
-      class="part"
-      @click="backHome"
-    >
+    <div class="part" @click="backHome">
       <div class="link">
-        <a-icon
-          type="home"
-          :style="{ fontSize: '18px' }"
-        />
+        <a-icon type="home" :style="{ fontSize: '18px' }" />
       </div>
     </div>
     <div class="part">
@@ -24,19 +15,12 @@
         :overflow-count="9"
       >
         <div class="link">
-          <a-icon
-            type="bell"
-            :style="{ fontSize: '18px' }"
-          />
+          <a-icon type="bell" :style="{ fontSize: '18px' }" />
         </div>
       </a-badge>
     </div>
-    <avatar-dropdown
-      :menu="showMenu"
-      :current-user="currentUser"
-      :class="prefixCls"
-    />
-    <!-- <select-lang :class="prefixCls" /> -->
+    <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
+    <select-lang :class="prefixCls" />
   </div>
 </template>
 

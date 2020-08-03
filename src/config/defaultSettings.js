@@ -26,5 +26,6 @@ export default {
   title: 'Ant Design Pro',
   pwa: false,
   iconfontUrl: '',
+  // eslint-disable-next-line no-undef
   production: process.env.NODE_ENV === 'production' && process.env.VUE_APP_PREVIEW !== 'true'
 }

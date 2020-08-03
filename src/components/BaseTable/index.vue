@@ -36,13 +36,13 @@ export default {
       this.tableLoading = true
     },
     hideLoading () {
-        this.tableLoading = false
+      this.tableLoading = false
     },
 
     getData (dataSource) {
-        if (dataSource && dataSource.list.length > 0) {
-            this.dataSource = dataSource
-        }
+      if (dataSource && dataSource.list.length > 0) {
+        this.dataSource = dataSource
+      }
 
       let pagination = this.pagination
       pagination.total = dataSource.total
@@ -50,10 +50,10 @@ export default {
       this.tableLoading = false
     },
     pageNumChange (e) {
-         this.$emit('pageNumChange')
+      this.$emit('pageNumChange')
     },
     pageSizeChange (e) {
-         this.$emit('pageSizeChange')
+      this.$emit('pageSizeChange')
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys

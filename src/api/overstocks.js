@@ -1,7 +1,7 @@
 import request from '@/utils/request'
 
 const overstocksApi = {
-    overstocks: '/warehouse/overstocks'
+  overstocks: '/warehouse/overstocks'
 }
 export function getOverstocks (parameter) {
   return request({

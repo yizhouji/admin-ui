@@ -8,7 +8,9 @@
     "test:unit": "vue-cli-service test:unit",
     "lint": "vue-cli-service lint",
     "build:preview": "vue-cli-service build --mode preview",
-    "lint:nofix": "vue-cli-service lint --no-fix"
+    "lint:nofix": "vue-cli-service lint --no-fix",
+    "lint:fix": "vue-cli-service lint --fix"
+
   },
   "dependencies": {
     "@ant-design-vue/pro-layout": "^0.3.0",

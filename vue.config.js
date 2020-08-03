@@ -31,6 +31,7 @@ const assetsCDN = {
 
 // vue.config.js
 const vueConfig = {
+  lintOnSave: false,
   publicPath: '/wms',
   outputDir: 'wms',
   assetsDir: 'static',

@@ -81,16 +81,16 @@ export default {
       if (data.imgPaths && data.imgPaths.length > 0) {
         let imgPaths = data.imgPaths
         let arr = []
-         for (let index = 0; index < imgPaths.length; index++) {
-           const element = imgPaths[index]
-            arr.push({
-              uid: index,
-              name: 'image.png',
-              status: 'done',
-              url: element
-            })
-         }
-         data.imgPaths = arr
+        for (let index = 0; index < imgPaths.length; index++) {
+          const element = imgPaths[index]
+          arr.push({
+            uid: index,
+            name: 'image.png',
+            status: 'done',
+            url: element
+          })
+        }
+        data.imgPaths = arr
       }
       this.visible = true
       this.detail = data

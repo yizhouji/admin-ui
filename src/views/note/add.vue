@@ -2,7 +2,7 @@
   <div class="noteAdd">
     <a-modal v-model="visible" width="734px" centered destroy-on-close @ok="handleOk">
       <div slot="title" class="modal-title text-left">
-        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px"/>新建文件
+        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />新建文件
       </div>
       <div class="form">
         <a-input
@@ -27,14 +27,14 @@
             @change="handleChange"
           >
             <div v-if="fileList.length < 8">
-              <a-icon type="plus"/>
+              <a-icon type="plus" />
               <div class="ant-upload-text">点击上传</div>
             </div>
           </a-upload>
         </div>
       </div>
       <div class="title">
-        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px"/>选择事件重要级
+        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />选择事件重要级
       </div>
       <a-radio-group
         v-model="significance"
@@ -47,7 +47,7 @@
         <a-radio :value="3" class="radio3">普通</a-radio>
       </a-radio-group>
       <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-        <img alt="example" style="width: 100%" :src="previewImage">
+        <img alt="example" style="width: 100%" :src="previewImage" />
       </a-modal>
     </a-modal>
   </div>
@@ -97,7 +97,7 @@ export default {
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = () => resolve(reader.result)
-        reader.onerror = error => reject(error)
+        reader.onerror = (error) => reject(error)
       })
     },
     handleCancel () {
@@ -132,6 +132,7 @@ export default {
         formData.append('notepadContent', notepadContent)
       }
       if (a || b) {
+        console.log()
       } else {
         this.$message.error('请输入内容')
         return
@@ -139,12 +140,12 @@ export default {
       formData.append('significance', significance)
       formData.append('notepadTitle', notepadTitle)
       // console.log(formData)
-//       let formData = {
-// significance,
-// notepadTitle,
-// notepadContent,
-//       }
-      addNote(formData).then(res => {
+      //       let formData = {
+      // significance,
+      // notepadTitle,
+      // notepadContent,
+      //       }
+      addNote(formData).then((res) => {
         this.$message.success('提交成功')
         this.previewImage = ''
         this.fileList = []

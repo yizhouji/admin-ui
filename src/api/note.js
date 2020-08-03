@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
 const noteApi = {
-    getNote: '/warehouse/notepads',
-    addNote: '/warehouse/notepads'
+  getNote: '/warehouse/notepads',
+  addNote: '/warehouse/notepads'
 }
 export function getNote (parameter) {
   return request({
@@ -13,12 +13,12 @@ export function getNote (parameter) {
 }
 
 export function addNote (parameter) {
-    return request({
-      url: noteApi.addNote,
-      method: 'post',
-      headers: {
-          'Content-Type': 'multipart/form-data'
-     },
-      data: parameter
-    })
-  }
+  return request({
+    url: noteApi.addNote,
+    method: 'post',
+    headers: {
+      'Content-Type': 'multipart/form-data'
+    },
+    data: parameter
+  })
+}

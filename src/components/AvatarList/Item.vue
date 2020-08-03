@@ -1,18 +1,9 @@
 <template>
   <tooltip v-if="tips !== ''">
-    <template slot="title">
-      {{ tips }}
-    </template>
-    <avatar
-      :size="avatarSize"
-      :src="src"
-    />
+    <template slot="title">{{ tips }}</template>
+    <avatar :size="avatarSize" :src="src" />
   </tooltip>
-  <avatar
-    v-else
-    :size="avatarSize"
-    :src="src"
-  />
+  <avatar v-else :size="avatarSize" :src="src" />
 </template>
 
 <script>
@@ -43,7 +34,7 @@ export default {
   },
   computed: {
     avatarSize () {
-      return this.size !== 'mini' && this.size || 20
+      return (this.size !== 'mini' && this.size) || 20
     }
   },
   watch: {

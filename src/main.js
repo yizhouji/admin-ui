@@ -25,9 +25,9 @@ let height = document.body.offsetHeight || document.documentElement.clientHeight
 
 Vue.prototype.$message = message
 message.config({
-    duration: 2, // 持续时间
-    top: height / 2 + 'px', // 到页面顶部距离
-    maxCount: 3 // 最大显示数, 超过限制时，最早的消息会被自动关闭
+  duration: 2, // 持续时间
+  top: height / 2 + 'px', // 到页面顶部距离
+  maxCount: 3 // 最大显示数, 超过限制时，最早的消息会被自动关闭
 })
 Vue.use(FormModel)
 
