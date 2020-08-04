@@ -10,7 +10,7 @@ import { i18nRender } from '@/locales'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['login', 'register'] // no redirect whitelist
+const whiteList = ['login', 'register', 'index', 'price'] // no redirect whitelist
 const loginRoutePath = '/user/login'
 const defaultRoutePath = '/dashboard/index'
 
