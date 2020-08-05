@@ -1,13 +1,425 @@
 <template>
-  <div>价格页</div>
+  <div class="price">
+    <navBar></navBar>
+    <div class="banner">
+      <div class="part">
+        <div class="content">
+          <div class="title">选择您需要的</div>
+          <p>我们的目标</p>
+          <p>为了给您更好的体验更多的功能服务</p>
+        </div>
+      </div>
+      <div class="list">
+        <div class="item">
+          <div class="title">试用版</div>
+          <div class="content">
+            <div class="txt">
+              <p>想试一试，果断选它</p>
+              <p>不到一瓶水的价格</p>
+            </div>
+            <div class="btm">
+              <div class="priceBox">
+                <span>¥1.88/</span>
+                <span class="unit">月</span>
+              </div>
+              <button>立即使用</button>
+            </div>
+          </div>
+        </div>
+        <div class="item item_1">
+          <div class="title">三个月</div>
+          <div class="content">
+            <div class="txt">
+              <p>试一个月意犹未尽</p>
+              <p>直接选三个月的使用</p>
+            </div>
+            <div class="btm">
+              <div class="priceBox">
+                <span class="old">¥58</span>
+                <span>¥36</span>
+              </div>
+              <button>立即使用</button>
+            </div>
+          </div>
+        </div>
+        <div class="item item_2">
+          <div class="title">12个月</div>
+          <div class="content">
+            <div class="txt">
+              <p>一年仅一百多块钱</p>
+              <p>就可以享受四大针对性功能</p>
+            </div>
+            <div class="btm">
+              <div class="priceBox">
+                <span class="old">¥218</span>
+                <span>¥118</span>
+              </div>
+              <button>立即使用</button>
+            </div>
+          </div>
+        </div>
+        <div class="item item_3">
+          <div class="title">24+12个月</div>
+          <div class="content">
+            <div class="txt">
+              <p>买两年送一年</p>
+              <p>每天不到8块钱，超划算</p>
+            </div>
+            <div class="btm">
+              <div class="priceBox">
+                <span class="old">¥438</span>
+                <span>¥288</span>
+              </div>
+              <button>立即使用</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dsc">
+      <div class="part">
+        <div class="content">
+          <div class="title">一键获取-4大功能</div>
+          <p>针对商家对于货物管理开发的</p>
+          <p>4 种 主 要 的 具 有 针 对 性 的 功 能</p>
+        </div>
+      </div>
+      <div class="list">
+        <div class="item">
+          <div class="img">
+            <img src="./static/img/price_1.png" alt />
+          </div>
+          <div class="title">出库入库</div>
+          <p>货物出库入库灵活掌握</p>
+        </div>
+        <div class="item">
+          <div class="img">
+            <img src="./static/img/price_2.png" alt />
+          </div>
+          <div class="title">一键发送/打印清单</div>
+          <p>抛弃传统手写清单，直接传送手机或微信</p>
+        </div>
+        <div class="item">
+          <div class="img">
+            <img src="./static/img/price_3.png" alt />
+          </div>
+          <div class="title">货物管理</div>
+          <p>仓库积压货物一键掌握</p>
+        </div>
+        <div class="item">
+          <div class="img">
+            <img src="./static/img/price_4.png" alt />
+          </div>
+          <div class="title">记事本/图片</div>
+          <p>标注重要等级让您轻松掌控</p>
+        </div>
+      </div>
+    </div>
+    <div class="question">
+      <div class="title">常见问题</div>
+      <div class="list">
+        <div class="part">
+          <div class="item">
+            <div class="q">01.试用版可以购买几次？</div>
+            <p>因为是试用版，每个用户只能申请一次哦。</p>
+          </div>
+          <div class="item">
+            <div class="q">03.付费之后是否可以退费？</div>
+            <p>一经购买即认定成交，是不能退费的哦。</p>
+          </div>
+          <div class="item">
+            <div class="q">05.操作中如果遇到什么问题怎么办？</div>
+            <p>遇到任何问题不清楚的请联系客户，我们将会竭尽全力为您解决。</p>
+          </div>
+        </div>
+        <div class="part">
+          <div class="item">
+            <div class="q">02.一个手机号能申请几个账户？</div>
+            <p>一个手机号只能申请一个账户。</p>
+          </div>
+
+          <div class="item">
+            <div class="q">04.在哪里看到VIP所剩使用时间？</div>
+            <p>点击头像，即可在个人中心里看到会员所剩余时间。</p>
+          </div>
+
+          <div class="item">
+            <div class="q">06.成为VIP之后是否可以享受哪些功能？</div>
+            <p>成为VIP之后可以享受系统所有功能，以及后续的更新功能。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {
+import navBar from './components/navbar'
 
+export default {
+  components: {
+    navBar
+  }
 }
 </script>
+<style lang="less">
+.price {
+  padding-top: 80px;
+  .banner {
+    height: 556px;
+    background: rgba(6, 47, 84, 1);
+    .part {
+      padding-top: 103px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      .title {
+        font-size: 48px;
+        font-family: Microsoft YaHei;
+        font-weight: bold;
+        color: #ffffff;
+        line-height: 48px;
+        padding: 0 0 26px;
+        position: relative;
+        margin-bottom: 35px;
+      }
+      .title:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 33px;
+        height: 4px;
+        background: #ffffff;
+        border-radius: 2px;
+      }
 
-<style>
+      p {
+        font-size: 20px;
+        color: #ffffff;
+        margin-bottom: 0;
+      }
+      button {
+        width: 174px;
+        height: 54px;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 10px;
+        color: #1890ff;
+        font-weight: bold;
+        font-size: 20px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+    .list {
+      margin: 85px auto 0;
+      width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .item {
+        width: 282px;
+        height: 420px;
+        background: rgba(255, 255, 255, 1);
+        border: 1px solid rgba(221, 221, 221, 1);
+        border-radius: 30px;
+        overflow: hidden;
+        text-align: center;
+        .title {
+          background: #e1e1e1;
+          color: #6f6f6f;
+          height: 86px;
+          line-height: 86px;
+          font-size: 24px;
+          font-weight: bold;
+        }
+        .content {
+          padding: 0 20px;
+          .txt {
+            margin: 0 auto;
+            padding: 36px 0 107px;
+            p {
+              color: #333333;
+              font-size: 18px;
+              line-height: 18px;
+              margin-bottom: 13px;
+            }
+            p:last-child {
+              margin-bottom: 0;
+            }
+          }
+          .btm {
+            border-top: 1px dashed #eeeeee;
+            padding-top: 26px;
+            .priceBox {
+              color: #f88204;
+              font-size: 30px;
+              line-height: 30px;
+              margin-bottom: 20px;
+              .old {
+                color: #666666;
+                font-size: 24px;
+                display: inline-block;
+                margin-right: 13px;
+                text-decoration: line-through;
+              }
+              .unit {
+                font-size: 18px;
+              }
+            }
+            button {
+              width: 116px;
+              height: 36px;
+              line-height: 36px;
+              border: none;
+              color: #ffffff;
+              background: rgba(24, 144, 255, 1);
+              border-radius: 4px;
+            }
+          }
+        }
+      }
+      .item_1 {
+        .title {
+          background: #ffce8e;
+          color: #da800a;
+        }
+      }
+      .item_2 {
+        .title {
+          background: #a9d6ff;
+          color: #096ec9;
+        }
+      }
+      .item_3 {
+        .title {
+          color: #2f0eda;
+          background: linear-gradient(55deg, rgba(181, 169, 255, 1), rgba(174, 158, 255, 1));
+        }
+      }
+    }
+  }
+  .dsc {
+    height: 800px;
+    background: #ffffff;
+    .part {
+      padding-top: 320px;
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      .title {
+        font-size: 48px;
+        font-family: Microsoft YaHei;
+        font-weight: bold;
+        color: #121212;
+        line-height: 48px;
+        padding: 0 0 26px;
+        position: relative;
+        margin-bottom: 35px;
+      }
+      .title:after {
+        content: '';
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        transform: translateX(-50%);
+        width: 33px;
+        height: 4px;
+        background: #1890ff;
+        border-radius: 2px;
+      }
 
+      p {
+        font-size: 20px;
+        color: #666666;
+        margin-bottom: 0;
+      }
+      button {
+        width: 174px;
+        height: 54px;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 10px;
+        color: #1890ff;
+        font-weight: bold;
+        font-size: 20px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+      }
+    }
+    .list {
+      margin: 84px auto 0;
+      width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .item {
+        text-align: center;
+        .img {
+          margin-bottom: 30px;
+          height: 80px;
+          img {
+            width: auto;
+            height: 80px;
+          }
+        }
+        .title {
+          color: #121212;
+          font-size: 24px;
+          line-height: 24px;
+          margin-bottom: 11px;
+        }
+        p {
+          font-size: 18px;
+          color: #666666;
+          line-height: 18px;
+        }
+      }
+    }
+  }
+  .question {
+    height: 470px;
+    background: rgba(246, 246, 246, 1);
+    padding-top: 60px;
+    box-sizing: border-box;
+    .title {
+      text-align: center;
+      font-size: 48px;
+      font-weight: bold;
+      color: #121212;
+      margin-bottom: 38px;
+    }
+    .part {
+    }
+    .list {
+      width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .item {
+        // width: 50%;
+        margin-bottom: 36px;
+        .q {
+          color: #121212;
+          font-size: 18px;
+          line-height: 1;
+          margin-bottom: 20px;
+        }
+        p {
+          color: #666666;
+          line-height: 1;
+          margin-bottom: 0;
+          font-size: 16px;
+        }
+      }
+    }
+  }
+}
 </style>

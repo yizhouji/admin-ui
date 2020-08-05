@@ -23,7 +23,7 @@ export default {
   menu: {
     locale: true
   },
-  title: 'Ant Design Pro',
+  title: '壹周记',
   pwa: false,
   iconfontUrl: '',
   // eslint-disable-next-line no-undef

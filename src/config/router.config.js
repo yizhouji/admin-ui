@@ -10,23 +10,6 @@ const RouteView = {
 export const asyncRouterMap = [
   {
     path: '/',
-    component: BlankLayout,
-    redirect: '/index',
-    children: [
-      {
-        path: 'index',
-        name: 'index',
-        component: () => import('@/views/web/index')
-      },
-      {
-        path: 'price',
-        name: 'price',
-        component: () => import('@/views/web/price')
-      }
-    ]
-  },
-  {
-    path: '/dashboard',
     name: 'dashboard',
     component: BasicLayout,
     meta: { title: '首页' },
@@ -132,11 +115,14 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'login',
+        meta: { title: '登录', keepAlive: true },
         component: () => import('@/views/user/Login')
       },
       {
         path: 'register',
         name: 'register',
+        meta: { title: '注册', keepAlive: true },
+
         component: () => import('@/views/user/Register')
       },
       {
@@ -146,7 +132,26 @@ export const constantRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/',
+    component: BlankLayout,
+    redirect: '/index',
+    hidden: true,
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        meta: { title: '首页', keepAlive: true },
+        component: () => import('@/views/web/index')
+      },
+      {
+        path: 'price',
+        name: 'price',
+        meta: { title: '价格', keepAlive: true },
+        component: () => import('@/views/web/price')
+      }
+    ]
+  },
   {
     path: '/404',
     component: () => import(/* webpackChunkName: "fail" */ '@/views/exception/404')
