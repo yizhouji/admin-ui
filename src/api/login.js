@@ -27,10 +27,7 @@ export function login (parameter) {
 export function logout () {
   return request({
     url: userApi.Logout,
-    method: 'get',
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
+    method: 'get'
   })
 }
 

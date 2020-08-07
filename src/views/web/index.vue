@@ -5,7 +5,7 @@
       <div class="title">高效系统的商家货物后台管理系统</div>
       <p>货物管理，清单票据，销量分析，记事便签，货物状态</p>
       <p>简单明了，高效快捷的一体化货物管理系统</p>
-      <button>立即使用</button>
+      <button @click="linkHandle">立即使用</button>
       <div class="img">
         <img src="./static/img/web_5.png" alt />
       </div>
@@ -71,7 +71,7 @@
         <div class="imgBox">
           <img src="./static/img/20000000+.png" alt />
         </div>
-        <button>立即使用</button>
+        <button @click="linkHandle">立即使用</button>
       </div>
     </div>
   </div>
@@ -85,6 +85,11 @@ export default {
   },
   data () {
     return {}
+  },
+  methods: {
+    linkHandle () {
+      this.$router.push({ name: 'login' })
+    }
   }
 }
 </script>
@@ -96,6 +101,7 @@ p {
 }
 .page {
   color: #0d0a0a;
+  min-width: 1200px;
   .part_1 {
     padding-top: 156px;
     box-sizing: border-box;
@@ -321,7 +327,11 @@ p {
     justify-content: center;
     height: 570px;
     text-align: center;
-    background: rgba(6, 47, 84, 0.6);
+    background-image: url('./static/img/index_bg.jpg');
+    background-repeat: no-repeat;
+    // background-size: 100% 100%;
+    background-position: center;
+    // background: rgba(6, 47, 84, 0.6);
     .title {
       font-size: 48px;
       font-family: Microsoft YaHei;

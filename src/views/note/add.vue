@@ -115,21 +115,26 @@ export default {
     async handleChange ({ file, fileList }) {
       let baseList = this.baseList
       let Base64 = await this.getBase64(file)
-      baseList.push(Base64)
+      console.log(Base64)
+      let a = Base64.replace('data:image/png;base64,', '')
+      baseList.push(a)
       this.baseList = baseList
       this.fileList = fileList
     },
     handleOk () {
       const { baseList, fileList, significance, notepadTitle, notepadContent } = this
-      console.log(baseList)
-      let formData = new FormData()
+
+      let formData = {
+        significance,
+        notepadTitle
+      }
       let a = notepadTitle.trim().length > 0 && fileList.length > 0
       let b = notepadTitle.trim().length > 0 && notepadContent.trim().length > 0
       if (a) {
-        formData.append('files', baseList)
+        formData.newAddPics = baseList
       }
       if (b) {
-        formData.append('notepadContent', notepadContent)
+        formData.notepadContent = notepadContent
       }
       if (a || b) {
         console.log()
@@ -137,14 +142,6 @@ export default {
         this.$message.error('请输入内容')
         return
       }
-      formData.append('significance', significance)
-      formData.append('notepadTitle', notepadTitle)
-      // console.log(formData)
-      //       let formData = {
-      // significance,
-      // notepadTitle,
-      // notepadContent,
-      //       }
       addNote(formData).then((res) => {
         this.$message.success('提交成功')
         this.previewImage = ''

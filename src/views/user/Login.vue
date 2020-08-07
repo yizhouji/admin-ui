@@ -18,13 +18,13 @@
             type="error"
             showIcon
             style="margin-bottom: 24px;"
-            message="账户或密码错误（admin/ant.design )"
+            message="账户或密码错误"
           />
           <a-form-item>
             <a-input
               size="large"
               type="text"
-              placeholder="账户: admin"
+              placeholder="请输入用户名"
               v-decorator="[
                 'userName',
                 {rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
@@ -38,8 +38,7 @@
             <a-input
               size="large"
               type="password"
-              autocomplete="false"
-              placeholder="密码: admin or ant.design"
+              placeholder="请输入密码"
               v-decorator="[
                 'password',
                 {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
@@ -70,9 +69,13 @@
           :disabled="state.loginBtn"
         >确定</a-button>
       </a-form-item>
-
-      <div class="user-login-other">
-        <router-link class="register" :to="{ name: 'register' }">注册账户</router-link>
+      <div class="target">
+        <div class="user-login-other">
+          <router-link class="register" :to="{ name: 'index' }">官网首页</router-link>
+        </div>
+        <div class="user-login-other">
+          <router-link :to="{ name: 'register' }">注册账户</router-link>
+        </div>
       </div>
     </a-form>
 
@@ -225,7 +228,7 @@ export default {
 
   .user-login-other {
     text-align: left;
-    margin-top: 24px;
+    // margin-top: 24px;
     line-height: 22px;
 
     .item-icon {
@@ -247,6 +250,11 @@ export default {
   }
   /deep/ .ant-tabs-ink-bar {
     width: 0 !important;
+  }
+  .target{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
   }
 }
 </style>

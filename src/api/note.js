@@ -16,9 +16,6 @@ export function addNote (parameter) {
   return request({
     url: noteApi.addNote,
     method: 'post',
-    headers: {
-      'Content-Type': 'multipart/form-data'
-    },
     data: parameter
   })
 }

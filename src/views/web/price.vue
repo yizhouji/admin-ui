@@ -165,9 +165,12 @@ export default {
 <style lang="less">
 .price {
   padding-top: 80px;
+  min-width: 1200px;
   .banner {
     height: 556px;
-    background: rgba(6, 47, 84, 1);
+     background-image: url('./static/img/price_bg.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
     .part {
       padding-top: 103px;
       box-sizing: border-box;

@@ -32,9 +32,9 @@ const assetsCDN = {
 // vue.config.js
 const vueConfig = {
   lintOnSave: false,
-  publicPath: '/website',
-  outputDir: 'website',
-  assetsDir: 'static',
+  // publicPath: '/website',
+  // outputDir: 'website',
+  // assetsDir: 'static',
   configureWebpack: {
     // webpack plugins
     plugins: [

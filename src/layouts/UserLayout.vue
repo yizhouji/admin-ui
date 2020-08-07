@@ -5,11 +5,10 @@
         <div class="header">
           <a href="/">
             <img src="../assets/logo.png" class="logo" alt="logo">
-            <span class="title">Ant Design</span>
           </a>
         </div>
         <div class="desc">
-          Ant Design 是西湖区最具影响力的 Web 设计规范
+          最好用的商家货物管理系统
         </div>
       </div>
 
@@ -103,7 +102,7 @@ export default {
           }
         }
         .desc {
-          font-size: 14px;
+          font-size: 16px;
           color: rgba(0, 0, 0, 0.45);
           margin-top: 12px;
           margin-bottom: 40px;

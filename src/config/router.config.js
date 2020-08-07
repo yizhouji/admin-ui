@@ -9,7 +9,7 @@ const RouteView = {
 
 export const asyncRouterMap = [
   {
-    path: '/',
+    path: '/dashboard',
     name: 'dashboard',
     component: BasicLayout,
     meta: { title: '首页' },

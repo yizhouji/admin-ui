@@ -2,26 +2,90 @@
   <div class="navbar">
     <div class="content">
       <div class="logo">
-        <img src="../static/img/logo.png" alt />
+        <img src="../static/img/logo_blue.png" alt />
       </div>
       <div class="text">
-        <div class="item"><a href="/index">我们的服务</a></div>
-        <div class="item"><a href="/price">价格</a></div>
-        <div class="item"><a>微信公众号</a></div>
-        <div class="item"><a>登录</a></div>
         <div class="item">
-          <button>注册</button>
+          <a @click="linkHandle('index')">我们的服务</a>
         </div>
+        <div class="item">
+          <a @click="linkHandle('price')">价格</a>
+        </div>
+        <div class="item">
+          <a>微信公众号</a>
+        </div>
+        <template v-if="userInfo">
+          <div class="userInfo">
+            <a-dropdown>
+              <a class="ant-dropdown-link">
+                {{ userInfo.userName }}
+                <a-icon type="down" />
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item key="0">
+                  <a target="_blank" @click="linkHandle('dashboard')" rel="noopener noreferrer">进入系统</a>
+                </a-menu-item>
+                <a-menu-divider />
+                <a-menu-item key="1">
+                  <a target="_blank" @click="logout" rel="noopener noreferrer">退出登录</a>
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
+          </div>
+        </template>
+        <template v-else>
+          <div class="item">
+            <a @click="linkHandle('login')">登录</a>
+          </div>
+          <div class="item">
+            <button @click="linkHandle('register')">注册</button>
+          </div>
+        </template>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Modal } from 'ant-design-vue'
+import storage from 'store'
+import { logout } from '@/api/login'
 export default {
   name: 'Navbar',
   data () {
     return {}
+  },
+  computed: {
+    userInfo () {
+      let user = ''
+      if (this.$store.state.user.user) {
+        user = this.$store.state.user.user
+      } else {
+        user = storage.get('USERINFO')
+      }
+      return user
+    }
+  },
+  methods: {
+    logout () {
+      Modal.confirm({
+        title: this.$t('提示'),
+        content: this.$t('是否退出登录'),
+        onOk: () => {
+          logout().then(() => {
+            this.userInfo = ''
+            localStorage.clear()
+            this.$router.push({ name: 'index' })
+            this.$message.success('退出成功')
+          })
+        },
+        onCancel () {}
+      })
+    },
+    linkHandle (name) {
+      console.log(name)
+      this.$router.push({ name: name })
+    }
   }
 }
 </script>
@@ -61,7 +125,7 @@ export default {
           height: 36px;
           color: #0d0a0a;
           line-height: 36px;
-          font-family:PingFang SC;
+          font-family: PingFang SC;
         }
         button {
           cursor: pointer;
@@ -76,6 +140,11 @@ export default {
         }
       }
     }
+  }
+  .ant-dropdown-link {
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 30px;
   }
 }
 </style>

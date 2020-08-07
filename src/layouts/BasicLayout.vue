@@ -86,7 +86,8 @@ export default {
   created () {
     // const routes = this.mainMenu.find(item => item.path === '/')
     // this.menus = (routes && routes.children) || []
-    this.menus = asyncRouterMap.find((item) => item.path === '/').children
+    this.menus = asyncRouterMap.find((item) => item.path === '/dashboard').children
+    console.log(this.menus)
     this.collapsed = !this.sidebarOpened
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {

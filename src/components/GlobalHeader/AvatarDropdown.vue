@@ -29,6 +29,7 @@
 
 <script>
 import { Modal } from 'ant-design-vue'
+import { logout } from '@/api/login'
 
 export default {
   name: 'AvatarDropdown',
@@ -51,12 +52,15 @@ export default {
     },
     handleLogout (e) {
       Modal.confirm({
-        title: this.$t('layouts.usermenu.dialog.title'),
-        content: this.$t('layouts.usermenu.dialog.content'),
+        title: this.$t('提示'),
+        content: this.$t('是否退出登录'),
         onOk: () => {
-          return new Promise((resolve, reject) => {
-            setTimeout(Math.random() > 0.5 ? resolve : reject, 1500)
-          }).catch(() => console.log('Oops errors!'))
+           logout().then(() => {
+            this.userInfo = ''
+            localStorage.clear()
+            this.$router.push({ name: 'index' })
+             this.$message.success('退出成功')
+          })
         },
         onCancel () {}
       })
