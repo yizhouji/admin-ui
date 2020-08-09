@@ -441,8 +441,6 @@
         margin-bottom: 38px;
       }
 
-      .part {}
-
       .list {
         width: 1200px;
         margin: 0 auto;
