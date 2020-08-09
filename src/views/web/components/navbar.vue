@@ -83,8 +83,11 @@ export default {
       })
     },
     linkHandle (name) {
-      console.log(name)
-      this.$router.push({ name: name })
+     if (this.$route.name === name) {
+        return false
+     } else {
+       this.$router.push({ name: name })
+     }
     }
   }
 }

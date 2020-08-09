@@ -55,7 +55,7 @@
 
 <script>
 // eslint-disable-next-line no-unused-vars
-import { addNote } from '../../api/note'
+import { addNote, getNoteDetails } from '../../api/note'
 export default {
   data () {
     return {
@@ -75,14 +75,14 @@ export default {
       this.radio = e.target.value
     },
     show () {
-      this.visible = true
+        this.visible = true
     },
     beforeUpload (file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
       if (!isJpgOrPng) {
         this.$message.error('图片格式只能是image/jpeg或者image/png')
       }
-      const isLt2M = file.size / 1024 / 1024 < 2
+      const isLt2M = file.size / 1024 / 1024 < 1
       if (!isLt2M) {
         this.$message.error('图片大小不能超过2m')
       }

@@ -66,6 +66,7 @@ body{
       font-weight: bolder
     }
     .operation {
+      display: flex;
       font-size: 14px;
       color: #666666;
       .item {

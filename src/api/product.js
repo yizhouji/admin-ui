@@ -6,7 +6,8 @@ const productApi = {
   download: '/warehouse/products/download',
   import: '/warehouse/products/import',
   units: '/warehouse/products/units',
-  productsInfo: '/warehouse/products/info'
+  productsInfo: '/warehouse/products/info',
+  records: '/warehouse/products/records'
 }
 
 /**
@@ -41,9 +42,7 @@ export function productsDownload (parameter) {
     url: productApi.download,
     method: 'get',
     params: parameter,
-    headers: {
-      'Content-Type': 'application/json;charset=UTF-8'
-    }
+    responseType: 'arraybuffer'
   })
 }
 
@@ -63,6 +62,10 @@ export function productsImport (parameter) {
   })
 }
 
+export function productsImportApi (parameter) {
+  return productApi.import
+}
+
 export function getUnits (parameter) {
   return request({
     url: productApi.units,
@@ -74,6 +77,14 @@ export function getUnits (parameter) {
 export function getProductsInfo (parameter) {
   return request({
     url: productApi.productsInfo,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function records (parameter) {
+  return request({
+    url: productApi.records,
     method: 'get',
     params: parameter
   })

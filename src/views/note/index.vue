@@ -27,7 +27,7 @@
           :data-source="list"
           :pagination="pagination"
         >
-          <a-list-item slot="renderItem" slot-scope="item" @click="linkDetails(item)">
+          <a-list-item slot="renderItem" slot-scope="item" @click="linkDetails(item.notepadId)">
             <template v-if="item.imgPaths.length>0">
               <a-card class="note-card">
                 <img :src="item.imgPaths[0]" alt />
@@ -61,7 +61,7 @@
         </a-list>
       </a-card>
     </div>
-    <Details ref="Details" />
+    <Details ref="Details" @getList="getList"/>
     <add ref="Add" @getList="getList"></add>
   </page-header-wrapper>
 </template>
@@ -129,8 +129,8 @@ export default {
       this.$refs.Add.show()
     },
     onSearch () {},
-    linkDetails (item) {
-      this.$refs.Details.show(item)
+    linkDetails (id) {
+      this.$refs.Details.show(id)
     },
     onClick () {}
   }
@@ -143,6 +143,7 @@ export default {
   color: #000000;
   border-radius: 24px;
   overflow: hidden;
+  cursor: pointer;
   height: 250px;
   .ant-card-body {
     padding: 0;
