@@ -74,14 +74,18 @@
         <button @click="linkHandle">立即使用</button>
       </div>
     </div>
+    <baseFooter></baseFooter>
   </div>
 </template>
 
 <script>
 import navBar from './components/navbar'
+import baseFooter from './components/baseFooter'
+
 export default {
   components: {
-    navBar
+    navBar,
+    baseFooter
   },
   data () {
     return {}
@@ -329,7 +333,7 @@ p {
     text-align: center;
     background-image: url('./static/img/index_bg.jpg');
     background-repeat: no-repeat;
-    // background-size: 100% 100%;
+    background-size: 100% 100%;
     background-position: center;
     // background: rgba(6, 47, 84, 0.6);
     .title {

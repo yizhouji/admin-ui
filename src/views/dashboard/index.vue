@@ -340,6 +340,7 @@ import {
   MiniSmoothArea
 } from '@/components'
 import { baseMixin } from '@/store/app-mixin'
+import { Salerooms } from '@/api/index'
 
 const barData = []
 const barData2 = []
@@ -482,7 +483,18 @@ export default {
     setTimeout(() => {
       this.loading = !this.loading
     }, 1000)
+  },
+  mounted () {
+    this.getSalerooms()
+  },
+  methods: {
+    getSalerooms () {
+    Salerooms().then(res => {
+        console.log(res)
+    })
   }
+  }
+
 }
 </script>
 
