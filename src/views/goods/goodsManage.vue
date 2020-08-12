@@ -84,7 +84,13 @@
           @onSelectChange="onSelectChange">
           <a-table-column key="categoryName" title="货物类型" data-index="categoryName" />
           <a-table-column key="productName" title="货物名称" data-index="productName" />
-          <a-table-column key="productTotal" title="总库存" data-index="productTotal" />
+          <a-table-column key="productTotal" title="总库存" data-index="productTotal">
+            <template slot-scope="text,record">
+              <div class="count">{{ text }}
+                <span class="bardge">{{ record.newlyIncreased | unit }}</span>
+              </div>
+            </template>
+          </a-table-column>
           <a-table-column key="hasSold" title="已卖出" data-index="hasSold" />
           <a-table-column key="saleCount" title="又卖出" data-index="saleCount" />
           <a-table-column key="stock" title="剩余库存" data-index="stock" />
@@ -127,10 +133,21 @@
   import {
     getJson
   } from '@/utils/util'
+import { login } from '@/api/login'
   export default {
     name: 'GoodManage',
     components: {
       BaseTable
+    },
+    filters: {
+      unit: function (value) {
+        let val = parseInt(value)
+        if (val) {
+            return '新增' + value
+        } else {
+          return ''
+        }
+      }
     },
     data () {
       return {
@@ -254,7 +271,7 @@
         this.visible = true
       },
       updated () {
-        console.log('updated')
+        // console.log('updated')
       },
       handleSearch (e) {
         e.preventDefault()
@@ -278,6 +295,7 @@
           productName: ''
         }
         this.creatTime = undefined
+        this.$refs.ruleForm.resetFields()
         this.$nextTick(() => {
           this.getList()
         })
@@ -293,11 +311,11 @@
         this.expand = !this.expand
       },
       onSelectChange (selectedRowKeys) {
-        console.log('selectedRowKeys changed11: ', selectedRowKeys)
+        // console.log('selectedRowKeys changed11: ', selectedRowKeys)
         this.selectedRowKeys = selectedRowKeys
       },
       categoryChange (value) {
-        console.log(value)
+        // console.log(value)
         let form = this.form
         form.categoryId = value
         this.form = form
@@ -336,7 +354,7 @@
           this.showUploading = false
 
           if (file.response && file.response.result === '上传成功！') {
-            console.log(file.response)
+            // console.log(file.response)
             this.$message.success('上传成功！')
           } else {
 
@@ -359,5 +377,21 @@
 
   /deep/ .ant-upload-list {
     display: none
+  }
+
+  .count {
+    position: relative;
+
+    .bardge {
+      display: inline-block;
+      color: #F2637B;
+      font-size: 12px;
+      height: 20px;
+      line-height: 20px;
+      position: absolute;
+      top: -15px;
+      right: -0%;
+      margin-right: -50%;
+    }
   }
 </style>

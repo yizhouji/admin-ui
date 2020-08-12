@@ -104,18 +104,18 @@ export default {
       this.previewVisible = false
     },
     async handlePreview (file) {
-      console.log('handlePreview:', file)
+      // console.log('handlePreview:', file)
       if (!file.url && !file.preview) {
         file.preview = await this.getBase64(file.originFileObj)
       }
-      console.log(file)
+      // console.log(file)
       this.previewImage = file.url || file.preview
       this.previewVisible = true
     },
     async handleChange ({ file, fileList }) {
       let baseList = this.baseList
       let Base64 = await this.getBase64(file)
-      console.log(Base64)
+      // console.log(Base64)
       let a = Base64.replace('data:image/png;base64,', '')
       baseList.push(a)
       this.baseList = baseList
@@ -137,7 +137,7 @@ export default {
         formData.notepadContent = notepadContent
       }
       if (a || b) {
-        console.log()
+        // console.log()
       } else {
         this.$message.error('请输入内容')
         return

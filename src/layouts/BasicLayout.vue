@@ -23,14 +23,14 @@
       />
     </template>
     <template v-slot:footerRender>
-      <global-footer />
+      <!-- <global-footer /> -->
     </template>
     <router-view />
   </pro-layout>
 </template>
 
 <script>
-import { SettingDrawer, updateTheme } from '@ant-design-vue/pro-layout'
+import { SettingDrawer } from '@ant-design-vue/pro-layout'
 import { i18nRender } from '@/locales'
 import { mapState } from 'vuex'
 import { SIDEBAR_TYPE, TOGGLE_MOBILE_TYPE } from '@/store/mutation-types'
@@ -84,10 +84,7 @@ export default {
     })
   },
   created () {
-    // const routes = this.mainMenu.find(item => item.path === '/')
-    // this.menus = (routes && routes.children) || []
     this.menus = asyncRouterMap.find((item) => item.path === '/dashboard').children
-    console.log(this.menus)
     this.collapsed = !this.sidebarOpened
     // 处理侧栏收起状态
     this.$watch('collapsed', () => {
@@ -109,7 +106,7 @@ export default {
     }
 
     // first update color
-    updateTheme(this.settings.primaryColor)
+    // updateTheme(this.settings.primaryColor)
   },
   methods: {
     i18nRender,
@@ -130,7 +127,7 @@ export default {
       this.collapsed = val
     },
     handleSettingChange ({ type, value }) {
-      console.log('type', type, value)
+      // console.log('type', type, value)
       type && (this.settings[type] = value)
       switch (type) {
         case 'contentWidth':

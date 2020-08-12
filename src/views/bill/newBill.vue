@@ -99,7 +99,6 @@
               <a-select
                 name="payment"
                 v-model="record.productId"
-                :value="text"
                 placeholder="请选择"
                 style="width:100%"
                 allow-clear
@@ -118,7 +117,6 @@
             <a-input
               v-if="record.editable"
               style="margin: -5px 0"
-              :value="text"
               v-model="record.productUnit"
               disabled
               @change="e => handleChange(e.target.value, record.key, 'productUnit')"
@@ -130,7 +128,6 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.amount"
-              :value="text"
               @change="e => handleChange(e.target.value, record.key, 'amount')"
             />
             <template v-else>{{ text }}</template>
@@ -140,7 +137,6 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.unitPrice"
-              :value="text"
               @change="e => handleChange(e.target.value, record.key, 'unitPrice')"
             />
             <template v-else>{{ text }}</template>
@@ -150,7 +146,6 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.grossAmount"
-              :value="text"
               @change="e => handleChange(e.target.value, record.key, 'grossAmount')"
             />
             <template v-else>{{ text }}</template>
@@ -159,7 +154,6 @@
             <a-input
               v-if="record.editable"
               style="margin: -5px 0"
-              :value="text"
               v-model="record.remark"
               @change="e => handleChange(e.target.value, record.key ,'remark')"
             />
@@ -214,11 +208,11 @@
           <div class="input">
             <div class="item">
               <label>手机号：</label>
-              <a-input v-model="form.telephone" :value="text" placeholder="请输入手机号" />
+              <a-input v-model="form.telephone" placeholder="请输入手机号" />
             </div>
             <div class="item">
               <label>微信号：</label>
-              <a-input v-model="form.wechatNo" :value="text" placeholder="请输入微信号" />
+              <a-input v-model="form.wechatNo" placeholder="请输入微信号" />
             </div>
           </div>
           <div class="bottom">
@@ -340,7 +334,7 @@ export default {
         arr.push(obj)
       })
       let parmas = { ...this.form, productChecklists: arr }
-      console.log(arr)
+      //  console.log(arr)
       this.btnLoading = true
       addChecklists(parmas)
         .then((res) => {
@@ -499,7 +493,7 @@ export default {
           element.unitPrice &&
           element.grossAmount
         ) {
-          console.log()
+          //  console.log()
         } else {
           this.$message.error('第' + (index + 1) + '行数据请补充完整')
           bool = false
@@ -516,15 +510,15 @@ export default {
       this.visible = false
     },
     showDialog (id) {
-      console.log('id:', id)
+      //  console.log('id:', id)
       this.visible = true
     },
     updated () {
-      console.log('updated')
+      //  console.log('updated')
     },
     handleSearch (e) {
       e.preventDefault()
-      console.log(this.form)
+      //  console.log(this.form)
     },
     handleReset () {
       this.form = {
@@ -537,11 +531,11 @@ export default {
       this.expand = !this.expand
     },
     onSelectChange (selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      //  console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
     onChange (pageNumber) {
-      console.log('Page: ', pageNumber)
+      //  console.log('Page: ', pageNumber)
     }
   }
 }

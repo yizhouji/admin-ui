@@ -6,14 +6,18 @@
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
-        <a-menu-item v-if="menu" key="center" @click="handleToCenter">
+        <a-menu-item v-if="menu" key="center" @click="handleToIndex">
+          <a-icon type="home" />
+          官网首页
+        </a-menu-item>
+        <!-- <a-menu-item v-if="menu" key="center" @click="handleToCenter">
           <a-icon type="user" />
           个人中心
-        </a-menu-item>
-        <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
+        </a-menu-item> -->
+        <!-- <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
           <a-icon type="setting" />
           个人设置
-        </a-menu-item>
+        </a-menu-item> -->
         <a-menu-divider v-if="menu" />
         <a-menu-item key="logout" @click="handleLogout">
           <a-icon type="logout" />
@@ -44,6 +48,9 @@ export default {
     }
   },
   methods: {
+    handleToIndex () {
+      this.$router.push({ name: 'index' })
+    },
     handleToCenter () {
       this.$router.push({ path: '/account/center' })
     },

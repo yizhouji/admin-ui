@@ -100,7 +100,6 @@ export default {
     }
   },
   created () {
-    this.getList()
   },
   mounted () {},
   methods: {
@@ -115,11 +114,11 @@ export default {
         })
     },
     onSelectChange (selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      //  console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
     showDialog (id) {
-      console.log('id:', id)
+      //  console.log('id:', id)
       this.visible = true
     },
     pageNumChange (e) {

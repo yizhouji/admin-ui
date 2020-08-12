@@ -302,15 +302,15 @@ export default {
       this.visible = false
     },
     showDialog (id) {
-      console.log('id:', id)
+      //  console.log('id:', id)
       this.visible = true
     },
     updated () {
-      console.log('updated')
+      //  console.log('updated')
     },
     handleSearch (e) {
       e.preventDefault()
-      console.log(this.form)
+      //  console.log(this.form)
     },
     handleReset () {
       this.form = {
@@ -323,11 +323,11 @@ export default {
       this.expand = !this.expand
     },
     onSelectChange (selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      //  console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
     onChange (pageNumber) {
-      console.log('Page: ', pageNumber)
+      //  console.log('Page: ', pageNumber)
     }
   }
 }

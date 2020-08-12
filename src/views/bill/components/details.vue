@@ -26,18 +26,16 @@
       </a-table>
     </div>
     <template slot="footer">
-      <div
-        class="tip"
-        style="margin:20px 0;color:#F2637B;"
-      >提示：可全部填也可只填一个(手机号则以彩信形式发送至客户手机，微信号则在双方是微信好友的前提下发送到客户微信）</div>
+      <div class="tip" style="margin:20px 0;color:#F2637B;">提示：可全部填也可只填一个(手机号则以彩信形式发送至客户手机，微信号则在双方是微信好友的前提下发送到客户微信）
+      </div>
       <div class="input">
         <div class="item">
           <label>手机号：</label>
-          <a-input v-model="Details.telephone" disabled :value="text" placeholder="请输入手机号" />
+          <a-input v-model="Details.telephone" disabled placeholder="请输入手机号" />
         </div>
         <div class="item">
           <label>微信号：</label>
-          <a-input v-model="Details.wechatNo" disabled :value="text" placeholder="请输入微信号" />
+          <a-input v-model="Details.wechatNo" disabled placeholder="请输入微信号" />
         </div>
       </div>
       <div class="bottom">
@@ -49,62 +47,70 @@
 </template>
 
 <script>
-export default {
-  name: 'GoodManage',
-  components: {},
+  export default {
+    name: 'GoodManage',
+    components: {},
 
-  data () {
-    return {
-      visible: false,
-      Details: ''
-    }
-  },
-  methods: {
-    show (data) {
-      this.visible = true
-      this.Details = data
+    data () {
+      return {
+        pagination: false,
+        btnLoading: false,
+        visible: false,
+        Details: ''
+      }
     },
-    confirmHandle () {
-      this.visible = false
-    },
-    printHandle () {
-      this.visible = false
+    methods: {
+      show (data) {
+        this.visible = true
+        this.Details = data
+      },
+      confirmHandle () {
+        this.visible = false
+        this.btnLoading = false
+      },
+      printHandle () {
+        this.visible = false
+      }
     }
   }
-}
 </script>
 
 <style lang="less" scoped>
-.part {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
-  li {
-    width: 33.3%;
-    margin-bottom: 10px;
+  .part {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+
+    li {
+      width: 33.3%;
+      margin-bottom: 10px;
+    }
   }
-}
-.bottom {
+
+  .bottom {
     padding: 30px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 10px;
-}
-.input {
+  }
+
+  .input {
     display: flex;
     align-items: center;
-.item {
-    margin-right: 20px;
-    width: 40%;
-    display: flex;
-    align-items: center;
-    label {
+
+    .item {
+      margin-right: 20px;
+      width: 40%;
+      display: flex;
+      align-items: center;
+
+      label {
         width: 80px;
+      }
     }
   }
-}
 </style>
