@@ -33,9 +33,6 @@ export default {
 </script>
 <style lang="less">
 
-*{
-  outline: none;
-}
 .text-center{
   text-align: center;
 }
@@ -85,4 +82,5 @@ export default {
     text-align: center;
   }
 }
+
 </style>
