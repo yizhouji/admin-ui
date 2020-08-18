@@ -159,7 +159,7 @@ export default {
       e.preventDefault()
       this.$refs.ruleForm.validate((valid) => {
         if (valid) {
-          console.log(this.form)
+          //  console.log(this.form)
           this.iconLoading = true
 
           let obj = {
@@ -182,7 +182,7 @@ export default {
               this.iconLoading = false
             })
         } else {
-          console.log(this.form)
+          //  console.log(this.form)
           return false
         }
       })

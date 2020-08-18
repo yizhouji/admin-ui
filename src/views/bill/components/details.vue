@@ -49,10 +49,9 @@
 </template>
 
 <script>
-export default {
-  name: 'GoodManage',
-  components: {},
-
+  export default {
+    name: 'GoodManage',
+    components: {},
   data () {
     return {
       visible: false,
@@ -77,20 +76,22 @@ export default {
       this.btnLoading = false
     }
   }
-}
+  }
 </script>
 
 <style lang="less" scoped>
-.part {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin: 0;
-  padding: 0;
-  li {
-    width: 33.3%;
-    margin-bottom: 10px;
+  .part {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+
+    li {
+      width: 33.3%;
+      margin-bottom: 10px;
+    }
   }
 }
 .bottom {
@@ -112,5 +113,4 @@ export default {
       width: 80px;
     }
   }
-}
 </style>

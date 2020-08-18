@@ -163,11 +163,11 @@
         this.previewVisible = false
       },
       async handlePreview (file) {
-        console.log('handlePreview:', file)
+        //  console.log('handlePreview:', file)
         if (!file.url && !file.preview) {
           file.preview = await this.getBase64(file.originFileObj)
         }
-        console.log(file)
+        //  console.log(file)
         this.previewImage = file.url || file.preview
         this.previewVisible = true
       },
@@ -197,7 +197,7 @@
           formData.notepadContent = notepadContent
         }
         if (a || b) {
-          console.log()
+          //  console.log()
         } else {
           this.$message.error('请输入内容')
           return

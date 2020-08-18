@@ -77,7 +77,7 @@ export function getJson (obj) {
           continue
         }
       }
-      this.getJson(value)
+      getJson(value)
     } else {
       if (value === '' || value === null || value === undefined) {
         delete object[i]

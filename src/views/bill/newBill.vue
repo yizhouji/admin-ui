@@ -353,7 +353,7 @@ export default {
         arr.push(obj)
       })
       let parmas = { ...this.form, productChecklists: arr }
-      console.log(arr)
+      //  console.log(arr)
       this.btnLoading = true
       addChecklists(parmas)
         .then((res) => {
@@ -512,7 +512,7 @@ export default {
           element.unitPrice &&
           element.grossAmount
         ) {
-          console.log()
+          //  console.log()
         } else {
           this.$message.error('第' + (index + 1) + '行数据请补充完整')
           bool = false
@@ -529,15 +529,15 @@ export default {
       this.visible = false
     },
     showDialog (id) {
-      console.log('id:', id)
+      //  console.log('id:', id)
       this.visible = true
     },
     updated () {
-      console.log('updated')
+      //  console.log('updated')
     },
     handleSearch (e) {
       e.preventDefault()
-      console.log(this.form)
+      //  console.log(this.form)
     },
     handleReset () {
       this.form = {
@@ -550,11 +550,11 @@ export default {
       this.expand = !this.expand
     },
     onSelectChange (selectedRowKeys) {
-      console.log('selectedRowKeys changed: ', selectedRowKeys)
+      //  console.log('selectedRowKeys changed: ', selectedRowKeys)
       this.selectedRowKeys = selectedRowKeys
     },
     onChange (pageNumber) {
-      console.log('Page: ', pageNumber)
+      //  console.log('Page: ', pageNumber)
     }
   }
 }

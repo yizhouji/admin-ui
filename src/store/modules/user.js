@@ -28,7 +28,7 @@ const user = {
       return new Promise((resolve, reject) => {
         login(userInfo)
           .then(response => {
-            console.log(response)
+            //  console.log(response)
             const result = response.result
 
             storage.set(ACCESS_TOKEN, result.userId, 7 * 24 * 60 * 60 * 1000)
@@ -39,7 +39,7 @@ const user = {
             resolve()
           })
           .catch(error => {
-            console.log(error)
+            //  console.log(error)
             reject(error)
           })
       })

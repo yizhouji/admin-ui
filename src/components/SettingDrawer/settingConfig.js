@@ -31,7 +31,7 @@ const colorList = [
 ]
 
 const updateTheme = newPrimaryColor => {
-  const hideMessage = message.loading('正在切换主题！', 0)
+  const hideMessage = message.loading('正在切换', 0)
   themeColor.changeColor(newPrimaryColor).finally(() => {
     setTimeout(() => {
       hideMessage()
@@ -40,7 +40,7 @@ const updateTheme = newPrimaryColor => {
 }
 
 const updateColorWeak = colorWeak => {
-  // document.body.className = colorWeak ? 'colorWeak' : '';
+  document.body.className = colorWeak ? 'colorWeak' : ''
   const app = document.body.querySelector('#app')
   colorWeak ? app.classList.add('colorWeak') : app.classList.remove('colorWeak')
 }

@@ -96,7 +96,7 @@ export default {
           this.getList()
         },
         onShowSizeChange: (current, size) => {
-          console.log(current, size)
+          //  console.log(current, size)
           let pagination = this.pagination
           pagination.pageNum = 1
           pagination.pageSize = size
@@ -122,7 +122,7 @@ export default {
           pagination.total = 0
         }
         this.pagination = pagination
-        console.log(this.pagination)
+        //  console.log(this.pagination)
       })
     },
     addHandel () {
