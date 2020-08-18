@@ -33,16 +33,16 @@
       <div class="input">
         <div class="item">
           <label>手机号：</label>
-          <a-input v-model="Details.telephone" disabled :value="text" placeholder="请输入手机号" />
+          <a-input v-model="Details.telephone" disabled placeholder="请输入手机号" />
         </div>
         <div class="item">
           <label>微信号：</label>
-          <a-input v-model="Details.wechatNo" disabled :value="text" placeholder="请输入微信号" />
+          <a-input v-model="Details.wechatNo" disabled placeholder="请输入微信号" />
         </div>
       </div>
       <div class="bottom">
         <a-button type="primary" @click="confirmHandle" :loading="btnLoading">确定</a-button>
-        <a-button type="danger" @click="printHandle">打印</a-button>
+        <a-button type="danger" @click="printHandle" :loading="btnLoading">打印</a-button>
       </div>
     </template>
   </a-modal>
@@ -56,7 +56,9 @@ export default {
   data () {
     return {
       visible: false,
-      Details: ''
+      Details: '',
+      btnLoading: false,
+      pagination: {}
     }
   },
   methods: {
@@ -65,10 +67,14 @@ export default {
       this.Details = data
     },
     confirmHandle () {
+      this.btnLoading = true
       this.visible = false
+      this.btnLoading = false
     },
     printHandle () {
+      this.btnLoading = true
       this.visible = false
+      this.btnLoading = false
     }
   }
 }
@@ -88,22 +94,22 @@ export default {
   }
 }
 .bottom {
-    padding: 30px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 10px;
+  padding: 30px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
 }
 .input {
-    display: flex;
-    align-items: center;
-.item {
+  display: flex;
+  align-items: center;
+  .item {
     margin-right: 20px;
     width: 40%;
     display: flex;
     align-items: center;
     label {
-        width: 80px;
+      width: 80px;
     }
   }
 }

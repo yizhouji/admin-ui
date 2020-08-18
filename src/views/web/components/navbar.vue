@@ -14,7 +14,7 @@
         <div class="item">
           <a>微信公众号</a>
         </div>
-        <template v-if="userInfo">
+        <!-- <template v-if="userInfo">
           <div class="userInfo">
             <a-dropdown>
               <a class="ant-dropdown-link">
@@ -32,8 +32,8 @@
               </a-menu>
             </a-dropdown>
           </div>
-        </template>
-        <template v-else>
+        </template> -->
+        <template>
           <div class="item">
             <a @click="linkHandle('login')">登录</a>
           </div>

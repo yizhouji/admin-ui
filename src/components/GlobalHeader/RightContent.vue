@@ -8,7 +8,7 @@
         <a-icon type="home" :style="{ fontSize: '18px' }" />
       </div>
     </div>
-    <div class="part">
+    <!-- <div class="part">
       <a-badge
         :number-style="{'font-size':'10px','height':'12px','line-height':'12px','padding':'0 3px'}"
         :count="99"
@@ -18,22 +18,22 @@
           <a-icon type="bell" :style="{ fontSize: '18px' }" />
         </div>
       </a-badge>
-    </div>
+    </div> -->
     <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
-    <select-lang :class="prefixCls" />
+    <!-- <select-lang :class="prefixCls" /> -->
   </div>
 </template>
 
 <script>
 import AvatarDropdown from './AvatarDropdown'
-import SelectLang from '@/components/SelectLang'
+// import SelectLang from '@/components/SelectLang'
 import storage from 'store'
 
 export default {
   name: 'RightContent',
   components: {
-    AvatarDropdown,
-    SelectLang
+    AvatarDropdown
+    // SelectLang
   },
   props: {
     prefixCls: {

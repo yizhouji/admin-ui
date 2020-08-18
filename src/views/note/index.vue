@@ -7,7 +7,7 @@
           <div class="operation">
             <a-input-search placeholder="请输入查询条件" style="width: 200px" @search="onSearch" />
             <a class="item" @click="addHandel">新建文件</a>
-            <a class="item">上传图片</a>
+            <a class="item" @click="addHandel">上传图片</a>
 
             <a-dropdown :trigger="['click']" overlayClassName="drop">
               <div class="item-line">

@@ -11,10 +11,10 @@
     :i18n-render="i18nRender"
     v-bind="settings"
   >
-    <setting-drawer
+    <!-- <setting-drawer
       :settings="settings"
       @change="handleSettingChange"
-    />
+    /> -->
     <template v-slot:rightContentRender>
       <right-content
         :top-menu="settings.layout === 'topmenu'"

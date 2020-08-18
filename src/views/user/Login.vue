@@ -181,7 +181,7 @@ export default {
       })
     },
     loginSuccess (res) {
-      this.$router.push({ path: '/' })
+      this.$router.push({ name: 'dashboard' })
       // 延迟 1 秒显示欢迎信息
       setTimeout(() => {
         this.$notification.success({

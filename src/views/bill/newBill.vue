@@ -80,8 +80,8 @@
         <div class="table-title" slot="title">
           <div class="text">清单列表</div>
           <div class="operation">
-            <a class="item" @click="showModal">发送</a>
-            <a class="item">打印</a>
+            <!-- <a class="item" @click="showModal">发送</a>
+            <a class="item">打印</a> -->
             <div class="item-line">
               <a-icon type="setting" />
               <span>操作</span>
@@ -99,7 +99,6 @@
               <a-select
                 name="payment"
                 v-model="record.productId"
-                :value="text"
                 placeholder="请选择"
                 style="width:100%"
                 allow-clear
@@ -118,7 +117,6 @@
             <a-input
               v-if="record.editable"
               style="margin: -5px 0"
-              :value="text"
               v-model="record.productUnit"
               disabled
               @change="e => handleChange(e.target.value, record.key, 'productUnit')"
@@ -130,7 +128,6 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.amount"
-              :value="text"
               @change="e => handleChange(e.target.value, record.key, 'amount')"
             />
             <template v-else>{{ text }}</template>
@@ -140,7 +137,6 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.unitPrice"
-              :value="text"
               @change="e => handleChange(e.target.value, record.key, 'unitPrice')"
             />
             <template v-else>{{ text }}</template>
@@ -150,7 +146,6 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.grossAmount"
-              :value="text"
               @change="e => handleChange(e.target.value, record.key, 'grossAmount')"
             />
             <template v-else>{{ text }}</template>
@@ -159,7 +154,6 @@
             <a-input
               v-if="record.editable"
               style="margin: -5px 0"
-              :value="text"
               v-model="record.remark"
               @change="e => handleChange(e.target.value, record.key ,'remark')"
             />
@@ -175,9 +169,15 @@
         </a-table>
         <div class="add">
           <div class="addBtn" @click="addHandle">
-            <a-icon type="plus-circle" theme="filled" style="fontSize:18px;" />
+            <a-icon type="plus-circle" theme="filled" style="fontSize:18px;color#ffffff;" />
             <p>添加</p>
           </div>
+        </div>
+
+        <div class="operationBtn">
+          <a-button style="color:#ffffff;background-color:#1D18FF;" @click="showModal">发送客户</a-button>
+          <a-button style="margin:0 20px;" type="primary">打印</a-button>
+          <a-button @click="reset">重置</a-button>
         </div>
       </a-card>
       <a-modal v-model="visible" @ok="handleOk" width="800px">
@@ -214,11 +214,11 @@
           <div class="input">
             <div class="item">
               <label>手机号：</label>
-              <a-input v-model="form.telephone" :value="text" placeholder="请输入手机号" />
+              <a-input v-model="form.telephone" placeholder="请输入手机号" />
             </div>
             <div class="item">
               <label>微信号：</label>
-              <a-input v-model="form.wechatNo" :value="text" placeholder="请输入微信号" />
+              <a-input v-model="form.wechatNo" placeholder="请输入微信号" />
             </div>
           </div>
           <div class="bottom">
@@ -324,6 +324,19 @@ export default {
     })
   },
   methods: {
+    reset () {
+      this.form = {
+        customer: '',
+        customerPhone: '',
+        drawer: '',
+        drawerPhone: '',
+        groupName: '',
+        payment: undefined,
+        telephone: '',
+        wechatNo: ''
+      }
+      this.list = []
+    },
     confirmHandle () {
       // if (!(this.form.telephone || this.form.wechatNo)) {
       //   this.$message.error('请输入手机号或微信号')
@@ -593,6 +606,13 @@ export default {
   p {
     margin-bottom: 0;
   }
+}
+.operationBtn {
+  padding-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 .remove {
   cursor: pointer;

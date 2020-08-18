@@ -31,7 +31,6 @@ const assetsCDN = {
 
 // vue.config.js
 const vueConfig = {
-  lintOnSave: false,
   // publicPath: '/website',
   // outputDir: 'website',
   // assetsDir: 'static',
