@@ -19,14 +19,14 @@ export const asyncRouterMap = [
         path: '/dashboard/index',
         name: 'dashboard',
         component: () => import('@/views/dashboard/index'),
-        meta: { title: '首页', keepAlive: true, icon: bxAnaalyse }
+        meta: { title: '首页', keepAlive: true, icon: 'profile' }
       },
       // 货物管理
       {
         path: '/goods',
         redirect: '/goods/goodsManage',
         component: RouteView,
-        meta: { title: '货物管理', icon: 'form' },
+        meta: { title: '货物管理', icon: 'dashboard' },
         children: [
           {
             path: '/goods/goodsManage',
@@ -54,7 +54,7 @@ export const asyncRouterMap = [
         path: '/bill',
         redirect: '/bill/newBill',
         component: RouteView,
-        meta: { title: '票据打印', icon: 'form' },
+        meta: { title: '票据打印', icon: 'table' },
         children: [
           {
             path: '/bill/newBill',
@@ -89,7 +89,7 @@ export const asyncRouterMap = [
         path: '/note/index',
         name: 'note',
         component: () => import('@/views/note/index'),
-        meta: { title: '记事本/图片', keepAlive: true, icon: bxAnaalyse }
+        meta: { title: '记事本/图片', keepAlive: true, icon: 'profile' }
       }
     ]
   },

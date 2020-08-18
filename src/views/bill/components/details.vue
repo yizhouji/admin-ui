@@ -26,10 +26,8 @@
       </a-table>
     </div>
     <template slot="footer">
-      <div
-        class="tip"
-        style="margin:20px 0;color:#F2637B;"
-      >提示：可全部填也可只填一个(手机号则以彩信形式发送至客户手机，微信号则在双方是微信好友的前提下发送到客户微信）</div>
+      <div class="tip" style="margin:20px 0;color:#F2637B;">提示：可全部填也可只填一个(手机号则以彩信形式发送至客户手机，微信号则在双方是微信好友的前提下发送到客户微信）
+      </div>
       <div class="input">
         <div class="item">
           <label>手机号：</label>
@@ -52,30 +50,30 @@
   export default {
     name: 'GoodManage',
     components: {},
-  data () {
-    return {
-      visible: false,
-      Details: '',
-      btnLoading: false,
-      pagination: {}
-    }
-  },
-  methods: {
-    show (data) {
-      this.visible = true
-      this.Details = data
+    data () {
+      return {
+        visible: false,
+        Details: '',
+        btnLoading: false,
+        pagination: {}
+      }
     },
-    confirmHandle () {
-      this.btnLoading = true
-      this.visible = false
-      this.btnLoading = false
-    },
-    printHandle () {
-      this.btnLoading = true
-      this.visible = false
-      this.btnLoading = false
+    methods: {
+      show (data) {
+        this.visible = true
+        this.Details = data
+      },
+      confirmHandle () {
+        this.btnLoading = true
+        this.visible = false
+        this.btnLoading = false
+      },
+      printHandle () {
+        this.btnLoading = true
+        this.visible = false
+        this.btnLoading = false
+      }
     }
-  }
   }
 </script>
 
@@ -93,24 +91,28 @@
       margin-bottom: 10px;
     }
   }
-}
-.bottom {
-  padding: 30px 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 10px;
-}
-.input {
-  display: flex;
-  align-items: center;
-  .item {
-    margin-right: 20px;
-    width: 40%;
+
+  .bottom {
+    padding: 30px 0;
     display: flex;
     align-items: center;
-    label {
-      width: 80px;
+    justify-content: center;
+    margin: 0 10px;
+  }
+
+  .input {
+    display: flex;
+    align-items: center;
+
+    .item {
+      margin-right: 20px;
+      width: 40%;
+      display: flex;
+      align-items: center;
+
+      label {
+        width: 80px;
+      }
     }
   }
 </style>

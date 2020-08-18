@@ -198,7 +198,6 @@ import { login } from '@/api/login'
         listLoading: false,
         headers: {
           authorization: 'authorization-text'
-
         },
         fileList: [],
         productsImportApi: productsImportApi
@@ -248,7 +247,7 @@ import { login } from '@/api/login'
           link.setAttribute('download', 'productTemplate.xls')
           document.body.appendChild(link)
           link.click()
-
+          document.body.removeChild(link)
           // }
         })
       },
