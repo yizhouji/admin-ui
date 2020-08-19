@@ -355,10 +355,11 @@ export default {
       let parmas = { ...this.form, productChecklists: arr }
       //  console.log(arr)
       this.btnLoading = true
+      let self = this
       addChecklists(parmas)
         .then((res) => {
           this.btnLoading = false
-          this.$message.error('添加清单成功')
+          this.$message.siccess('添加清单成功')
           this.$confirm({
             title: '温馨提示',
             content: '添加清单成功',
@@ -366,7 +367,7 @@ export default {
             okType: 'primary',
             cancelText: '查看清单列表',
             onOk () {
-              this.form = {
+              self.form = {
                 customer: '',
                 customerPhone: '',
                 drawer: '',
@@ -376,11 +377,11 @@ export default {
                 telephone: '',
                 wechatNo: ''
               }
-              this.list = []
-              this.visible = false
+              self.list = []
+              self.visible = false
             },
             onCancel () {
-              this.$router.push({ path: '/bill/soldList' })
+              self.$router.push({ name: 'SoldList' })
             }
           })
         })
