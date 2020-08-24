@@ -334,8 +334,7 @@ export default {
             emphasis: {
               label: {
                 show: true,
-                fontSize: '30',
-                fontWeight: 'bold'
+                fontSize: '24'
               }
             },
             labelLine: {

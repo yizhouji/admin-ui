@@ -6,21 +6,26 @@
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
-        <a-menu-item v-if="menu" key="center" @click="handleToIndex">
-          <a-icon type="home" />
-          官网首页
-        </a-menu-item>
         <!-- <a-menu-item v-if="menu" key="center" @click="handleToCenter">
-          <a-icon type="user" />
+          <img src="@/assets/icon_user.png" alt=""/>
           个人中心
+        </a-menu-item>
+        <a-menu-item v-if="menu" key="center" @click="handleToCenter">
+          <img src="@/assets/icon_record.png" alt=""/>
+          充值记录
         </a-menu-item> -->
-        <!-- <a-menu-item v-if="menu" key="settings" @click="handleToSettings">
-          <a-icon type="setting" />
-          个人设置
+        <a-menu-item v-if="menu" key="center" @click="handleToIndex">
+          <img src="@/assets/icon_website.png" alt=""/>
+          官网网站
+        </a-menu-item>
+        <!-- <a-menu-item v-if="menu" key="center" @click="handleToIndex">
+          <img src="@/assets/icon_contect.png" alt=""/>
+          联系客服
         </a-menu-item> -->
+
         <a-menu-divider v-if="menu" />
         <a-menu-item key="logout" @click="handleLogout">
-          <a-icon type="logout" />
+          <img src="@/assets/icon_logout.png" alt=""/>
           退出登录
         </a-menu-item>
       </a-menu>
@@ -83,6 +88,14 @@ export default {
   }
   /deep/ .ant-dropdown-menu-item {
     min-width: 160px;
+    display: flex;
+    align-items: center;
+    img{
+      display: block;
+      margin-right: 10px;
+      width:16px;
+      height: 16px;
+    }
   }
 }
 </style>

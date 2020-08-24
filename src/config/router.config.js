@@ -39,13 +39,13 @@ export const asyncRouterMap = [
             name: 'ImportGoods',
             component: () => import('@/views/goods/importGoods'),
             meta: { title: '输入货物', keepAlive: true }
-          },
-          {
-            path: '/goods/transactionDetails',
-            name: 'TransactionDetails',
-            component: () => import('@/views/goods/transactionDetails'),
-            meta: { title: '交易明细', keepAlive: true }
           }
+          // {
+          //   path: '/goods/transactionDetails',
+          //   name: 'TransactionDetails',
+          //   component: () => import('@/views/goods/transactionDetails'),
+          //   meta: { title: '交易明细', keepAlive: true }
+          // }
         ]
       },
       // 票据

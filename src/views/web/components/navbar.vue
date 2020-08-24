@@ -12,7 +12,22 @@
           <a @click="linkHandle('price')">价格</a>
         </div>
         <div class="item">
-          <a>微信公众号</a>
+          <a-dropdown
+            :trigger="['hover']"
+            placement="bottomCenter"
+            :getPopupContainer="
+              triggerNode => {
+                return triggerNode.parentNode;
+              }
+            ">
+            <a
+              class="ant-dropdown-link"
+            >
+              微信公众号</a>
+            <div class="img" slot="overlay">
+              <img src="../static/img/code.png" alt="">
+            </div>
+            </a></a-dropdown>
         </div>
         <!-- <template v-if="userInfo">
           <div class="userInfo">
@@ -140,6 +155,13 @@ export default {
           color: #1890ff;
           background: rgba(221, 238, 255, 1);
           border-radius: 6px;
+        }
+        .img{
+          box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+          img{
+            width: 200px;
+            height: 200px;
+          }
         }
       }
     }

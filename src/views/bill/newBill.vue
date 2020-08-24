@@ -359,7 +359,7 @@ export default {
       addChecklists(parmas)
         .then((res) => {
           this.btnLoading = false
-          this.$message.siccess('添加清单成功')
+          this.$message.success('添加清单成功')
           this.$confirm({
             title: '温馨提示',
             content: '添加清单成功',
