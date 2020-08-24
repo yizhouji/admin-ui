@@ -80,7 +80,7 @@ export default {
   data () {
     return {
       result: {},
-
+      query: '',
       list: [],
       pagination: {
         pageSizeOptions: ['10', '20', '30'],
@@ -107,6 +107,15 @@ export default {
     }
   },
   mounted () {
+    this.query = this.$route.query
+
+    if (this.$route.query && this.$route.query.add === true) {
+      this.$refs.Add.show()
+    }
+    if (this.$route.query && this.$route.query.id) {
+      console.log(this.$route.query.id)
+      this.$refs.Details.show(this.$route.query.id)
+    }
     this.getList()
   },
   methods: {

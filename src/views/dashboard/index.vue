@@ -20,84 +20,39 @@
             </div>
             <h4>销售额</h4>
             <div>
-              <div id="chart" style="height:400px"></div>
-              <!-- <div>
-                <v-chart :force-fit="true" :height="405" :data="pieData" :scale="pieScale">
-                  <v-tooltip :show-title="true" data-key="item*percent" />
-                  <v-axis />
-                  <v-legend data-key="item" />
-                  <v-pie position="percent" color="item" :v-style="pieStyle" />
-                  <v-coord type="theta" :radius="0.75" :inner-radius="0.6" />
-                </v-chart>
-              </div>-->
+              <div id="chart" style="height:400px">
+                <div class="none">暂无数据</div>
+              </div>
             </div>
           </a-card>
         </a-col>
         <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="loading" :bordered="false" title="线上热门搜索" :style="{ height: '100%' }">
-            <a-dropdown :trigger="['click']" placement="bottomLeft" slot="extra">
-              <a class="ant-dropdown-link" href="#">
-                <a-icon type="ellipsis" />
-              </a>
-              <a-menu slot="overlay">
-                <a-menu-item>
-                  <a href="javascript:;">操作一</a>
-                </a-menu-item>
-                <a-menu-item>
-                  <a href="javascript:;">操作二</a>
-                </a-menu-item>
-              </a-menu>
-            </a-dropdown>
-            <a-row :gutter="68">
-              <a-col :xs="24" :sm="12" :style="{ marginBottom: ' 24px'}">
-                <number-info :total="12321" :sub-total="17.1">
-                  <span slot="subtitle">
-                    <span>搜索用户数</span>
-                    <a-tooltip title="指标说明" slot="action">
-                      <a-icon type="info-circle-o" :style="{ marginLeft: '8px' }" />
-                    </a-tooltip>
-                  </span>
-                </number-info>
-                <!-- miniChart -->
-                <div>
-                  <mini-smooth-area
-                    :style="{ height: '45px' }"
-                    :data-source="searchUserData"
-                    :scale="searchUserScale"
-                  />
-                </div>
-              </a-col>
-              <a-col :xs="24" :sm="12" :style="{ marginBottom: ' 24px'}">
-                <number-info :total="2.7" :sub-total="26.2" status="down">
-                  <span slot="subtitle">
-                    <span>人均搜索次数</span>
-                    <a-tooltip title="指标说明" slot="action">
-                      <a-icon type="info-circle-o" :style="{ marginLeft: '8px' }" />
-                    </a-tooltip>
-                  </span>
-                </number-info>
-                <!-- miniChart -->
-                <div>
-                  <mini-smooth-area
-                    :style="{ height: '45px' }"
-                    :data-source="searchUserData"
-                    :scale="searchUserScale"
-                  />
-                </div>
-              </a-col>
-            </a-row>
-            <div class="ant-table-wrapper">
-              <a-table
-                row-key="index"
-                size="small"
-                :columns="searchTableColumns"
-                :data-source="searchData"
-                :pagination="{ pageSize: 5 }"
-              >
-                <span slot="range" slot-scope="text, record">
-                  <trend :flag="record.status === 0 ? 'up' : 'down'">{{ text }}%</trend>
-                </span>
-              </a-table>
+          <a-card :loading="noteLoading" :bordered="false" title="记事本/图片" :style="{ height: '100%' }">
+            <div slot="extra" style="height: inherit;">
+              <div class="btnList">
+                <div class="btn active" @click="addNote">新建</div>
+                <div class="btn" @click="findNote">查看</div>
+              </div>
+            </div>
+            <div class="noteChangeBtn">
+              <a-button style="color:#f2637b;border-color:#f2637b;" @click="noteChange('1')">重要事件</a-button>
+              <a-button style="color:#3ba0ff;border-color:#3ba0ff;" @click="noteChange('2')">一般事件</a-button>
+              <a-button style="color:#999999;border-color:#999999;" @click="noteChange('3')">全部</a-button>
+            </div>
+            <div class="noteList">
+              <a-list :data-source="noteList" :pagination="pagination" item-layout="horizontal">
+                <a-list-item slot="renderItem" slot-scope="item" @click="findNote(item.notepadId)">
+                  <template>
+                    <div class="item" :key="item.notepadId">
+                      <div class="doted danger" v-if="item.significance === 1 "></div>
+                      <div class="doted info" v-if="item.significance === 2 "></div>
+                      <div class="doted gray" v-if="item.significance === 3 "></div>
+                      <div class="title">{{ item.notepadTitle }}</div>
+                      <div class="date">{{ item.createTime }}</div>
+                    </div>
+                  </template>
+                </a-list-item>
+              </a-list>
             </div>
           </a-card>
         </a-col>
@@ -154,6 +109,7 @@ import {
 } from '@/components'
 import { baseMixin } from '@/store/app-mixin'
 import { Salerooms } from '@/api/index'
+import { getNote } from '@/api/note'
 import { forEach } from 'store/storages/all'
 var echarts = require('echarts')
 
@@ -198,39 +154,6 @@ const searchUserScale = [
   }
 ]
 
-const searchTableColumns = [
-  {
-    dataIndex: 'index',
-    title: '排名',
-    width: 90
-  },
-  {
-    dataIndex: 'keyword',
-    title: '搜索关键词'
-  },
-  {
-    dataIndex: 'count',
-    title: '用户数'
-  },
-  {
-    dataIndex: 'range',
-    title: '周涨幅',
-    align: 'right',
-    sorter: (a, b) => a.range - b.range,
-    scopedSlots: { customRender: 'range' }
-  }
-]
-const searchData = []
-for (let i = 0; i < 50; i += 1) {
-  searchData.push({
-    index: i + 1,
-    keyword: `搜索关键词-${i}`,
-    count: Math.floor(Math.random() * 1000),
-    range: Math.floor(Math.random() * 100),
-    status: Math.floor((Math.random() * 10) % 2)
-  })
-}
-
 export default {
   name: 'Index',
   mixins: [baseMixin],
@@ -249,14 +172,29 @@ export default {
       // 搜索用户数
       searchUserData,
       searchUserScale,
-      searchTableColumns,
-      searchData,
-
       barData,
       barData2,
 
       saleList: [],
-      type: 1
+      type: 1,
+      noteList: [],
+      significance: '',
+      noteLoading: false,
+      pagination: {
+        current: 1,
+        pageNum: 1,
+        pageSize: 10,
+        total: 0,
+        onChange: (page) => {
+          let pagination = this.pagination
+          pagination.current = page
+          this.pagination = pagination
+           console.log(this.pagination)
+          this.$nextTick(() => {
+            this.getNoteList()
+          })
+        }
+      }
     }
   },
   created () {
@@ -266,16 +204,70 @@ export default {
   },
   mounted () {
     this.getSalerooms(this.type)
+    this.getNoteList()
   },
   methods: {
+    addNote () {
+      this.$router.push({
+        name: 'note',
+        query: {
+          add: true
+        }
+      })
+    },
+    findNote (id) {
+      if (id) {
+        this.$router.push({
+          name: 'note',
+          query: {
+            id: id
+          }
+        })
+      } else {
+        this.$router.push({
+          name: 'note'
+        })
+      }
+    },
+    noteChange (significance) {
+      let pagination = this.pagination
+      if (significance === '3') {
+        significance = ''
+      }
+      this.significance = significance
+      pagination.current = 1
+      this.pagination = pagination
+      this.$nextTick(() => {
+        this.getNoteList()
+      })
+    },
     onChange (e) {
       this.getSalerooms(e.target.value)
     },
+    // 获取销售额类别占比
     getSalerooms (type) {
       Salerooms({ type }).then((res) => {
-        if (res.result && res.result.length > 0) {
-          this.initSaleroomsChart(res.result)
-        }
+        this.saleList = res.result || []
+        this.initSaleroomsChart(res.result || [])
+      })
+    },
+    // 获取记事本
+    getNoteList () {
+      const { current, pageSize } = this.pagination
+      let obj = {
+        pageNum: current,
+        pageSize,
+        significance: this.significance
+      }
+      this.noteLoading = true
+      getNote(obj).then((res) => {
+        let pagination = this.pagination
+        pagination.total = (res.result && res.result.total) || 0
+        this.pagination = pagination
+        this.noteList = (res.result && res.result.list) || []
+        this.noteLoading = false
+      }).catch(() => {
+          this.noteLoading = false
       })
     },
     removePercent (val) {
@@ -307,15 +299,15 @@ export default {
           orient: 'vertical',
           top: 'middle',
           right: 10,
-           align: 'auto',
+          align: 'auto',
           itemWidth: 10,
           itemHeight: 10,
           formatter: function (name) {
             let val = ''
-            arr.forEach(element => {
-                if (name === element.name) {
-                  val = element.value
-                }
+            arr.forEach((element) => {
+              if (name === element.name) {
+                val = element.value
+              }
             })
             return name + '  ￥' + val
           }
@@ -391,5 +383,60 @@ export default {
   position: absolute;
   right: 54px;
   bottom: 12px;
+}
+.btnList {
+  display: flex;
+  align-items: center;
+  .btn {
+    padding: 0 10px;
+    cursor: pointer;
+  }
+  .active {
+    color: #1890ff;
+  }
+}
+/deep/ .noteChangeBtn {
+  margin-bottom: 20px;
+  button {
+    margin-right: 10px;
+  }
+}
+.doted {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  margin-right: 15px;
+}
+.info {
+  background: #3ba0ff;
+}
+.danger {
+  background: #f2637b;
+}
+.gray {
+  background: #999999;
+}
+.noteList {
+  .item {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #000000;
+    height: 20px;
+    line-height: 20px;
+    font-size: 14px;
+    .title {
+      flex: 1;
+    }
+  }
+}
+/deep/ .ant-list-item {
+  padding: 5px 0;
+  border-bottom: none;
+}
+/deep/ .ant-list-something-after-last-item .ant-spin-container > .ant-list-items > .ant-list-item:last-child {
+  border-bottom: none;
 }
 </style>
