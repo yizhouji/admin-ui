@@ -435,6 +435,7 @@ export default {
 /deep/ .ant-list-item {
   padding: 5px 0;
   border-bottom: none;
+  cursor: pointer;
 }
 /deep/ .ant-list-something-after-last-item .ant-spin-container > .ant-list-items > .ant-list-item:last-child {
   border-bottom: none;
