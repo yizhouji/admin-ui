@@ -10,28 +10,34 @@
             :style="{ height: '100%' }"
           >
             <div slot="extra" style="height: inherit;">
-              <div class="analysis-salesTypeRadio">
-                <a-radio-group v-model="type" @change="onChange">
-                  <a-radio-button value="1">本周</a-radio-button>
-                  <a-radio-button value="2">本月</a-radio-button>
-                  <a-radio-button value="3">全年</a-radio-button>
-                </a-radio-group>
+              <div class="extra-wrapper saleChange">
+                <div class="extra-item marketChange">
+                  <a @click="salaChange('1')" :class="type === '1'?'active':''">本周</a>
+                  <a @click="salaChange('2')" :class="type === '2'?'active':''">本月</a>
+                  <a @click="salaChange('3')" :class="type === '3'?'active':''">全年</a>
+                </div>
               </div>
             </div>
             <h4>销售额</h4>
-            <div>
-              <div id="chart" style="height:400px">
-                <div class="none">暂无数据</div>
-              </div>
-            </div>
+            <!-- <div v-show="saleList && saleList.length>0"> -->
+            <div id="chart" style="height:400px"></div>
+            <!-- </div> -->
+            <!-- <div v-show="!(saleList && saleList.length>0)"> -->
+            <!-- <div class="nodata">暂无数据</div> -->
+            <!-- </div> -->
           </a-card>
         </a-col>
         <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
-          <a-card :loading="noteLoading" :bordered="false" title="记事本/图片" :style="{ height: '100%' }">
+          <a-card
+            :loading="noteLoading"
+            :bordered="false"
+            title="记事本/图片"
+            :style="{ height: '100%' }"
+          >
             <div slot="extra" style="height: inherit;">
               <div class="btnList">
                 <div class="btn active" @click="addNote">新建</div>
-                <div class="btn" @click="findNote">查看</div>
+                <div class="btn" @click="findNote">更多</div>
               </div>
             </div>
             <div class="noteChangeBtn">
@@ -52,18 +58,25 @@
                     </div>
                   </template>
                 </a-list-item>
+                <div class="img">
+                  <template v-for="(item,index) in imgList">
+                    <template v-if="index < 4">
+                      <img
+                        :src="item.url"
+                        alt
+                        :key="item.notepadId"
+                        @click="findNote(item.notepadId)"
+                      />
+                    </template>
+                  </template>
+                </div>
               </a-list>
             </div>
           </a-card>
         </a-col>
       </a-row>
     </div>
-    <a-card
-      :loading="loading"
-      :bordered="false"
-      style="margin-top:24px"
-      :body-style="{padding: '0'}"
-    >
+    <a-card :bordered="false" style="margin-top:24px" :body-style="{padding: '0'}">
       <div class="salesCard">
         <a-tabs
           default-active-key="1"
@@ -71,17 +84,19 @@
           :tab-bar-style="{marginBottom: '24px', paddingLeft: '16px'}"
         >
           <div class="extra-wrapper" slot="tabBarExtraContent">
-            <div class="extra-item">
-              <a>本周</a>
-              <a>本月</a>
-              <a>全年</a>
+            <div class="extra-item marketChange">
+              <a @click="marketChange('1')" :class="marketType === '1'?'active':''">最近7天</a>
+              <a @click="marketChange('2')" :class="marketType === '2'?'active':''">最近30天</a>
+              <a @click="marketChange('3')" :class="marketType === '3'?'active':''">最近1年</a>
             </div>
-            <a-range-picker :style="{width: '256px'}" />
+            <!-- <a-range-picker :style="{width: '256px'}" /> -->
           </div>
           <a-tab-pane loading="true" tab="销售额" key="1">
             <a-row>
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
-                <bar :data="barData" title="销售额排行" />
+                <!-- <bar :data="barData" title="销售额排行" /> -->
+                <div class="title" style="padding-left:20px">销售额趋势</div>
+                <div id="marketChart" style="height:300px"></div>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="产品销售额排名" :list="rankList" />
@@ -108,51 +123,10 @@ import {
   MiniSmoothArea
 } from '@/components'
 import { baseMixin } from '@/store/app-mixin'
-import { Salerooms } from '@/api/index'
+import { Salerooms, getMarkets } from '@/api/index'
 import { getNote } from '@/api/note'
 import { forEach } from 'store/storages/all'
 var echarts = require('echarts')
-
-const barData = []
-const barData2 = []
-for (let i = 0; i < 12; i += 1) {
-  barData.push({
-    x: `${i + 1}月`,
-    y: Math.floor(Math.random() * 1000) + 200
-  })
-  barData2.push({
-    x: `${i + 1}月`,
-    y: Math.floor(Math.random() * 1000) + 200
-  })
-}
-
-const rankList = []
-for (let i = 0; i < 7; i++) {
-  rankList.push({
-    name: '白鹭岛 ' + (i + 1) + ' 号店',
-    total: 1234.56 - i * 100
-  })
-}
-
-const searchUserData = []
-for (let i = 0; i < 7; i++) {
-  searchUserData.push({
-    x: moment().add(i, 'days').format('YYYY-MM-DD'),
-    y: Math.ceil(Math.random() * 10)
-  })
-}
-const searchUserScale = [
-  {
-    dataKey: 'x',
-    alias: '时间'
-  },
-  {
-    dataKey: 'y',
-    alias: '用户数',
-    min: 0,
-    max: 10
-  }
-]
 
 export default {
   name: 'Index',
@@ -167,44 +141,35 @@ export default {
   data () {
     return {
       loading: true,
-      rankList,
-
-      // 搜索用户数
-      searchUserData,
-      searchUserScale,
-      barData,
-      barData2,
-
+      rankList: [],
       saleList: [],
-      type: 1,
+      type: '1',
       noteList: [],
       significance: '',
       noteLoading: false,
       pagination: {
         current: 1,
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 6,
         total: 0,
         onChange: (page) => {
           let pagination = this.pagination
           pagination.current = page
           this.pagination = pagination
-           console.log(this.pagination)
           this.$nextTick(() => {
             this.getNoteList()
           })
         }
-      }
+      },
+      imgList: [],
+      marketType: '1'
     }
   },
-  created () {
-    setTimeout(() => {
-      this.loading = !this.loading
-    }, 1000)
-  },
+  created () {},
   mounted () {
     this.getSalerooms(this.type)
     this.getNoteList()
+    this.getmarkets(this.marketType)
   },
   methods: {
     addNote () {
@@ -241,8 +206,13 @@ export default {
         this.getNoteList()
       })
     },
-    onChange (e) {
-      this.getSalerooms(e.target.value)
+    salaChange (val) {
+      if (val === this.type) {
+        return false
+      } else {
+        this.type = val
+        this.getSalerooms(val)
+      }
     },
     // 获取销售额类别占比
     getSalerooms (type) {
@@ -260,15 +230,32 @@ export default {
         significance: this.significance
       }
       this.noteLoading = true
-      getNote(obj).then((res) => {
-        let pagination = this.pagination
-        pagination.total = (res.result && res.result.total) || 0
-        this.pagination = pagination
-        this.noteList = (res.result && res.result.list) || []
-        this.noteLoading = false
-      }).catch(() => {
+      getNote(obj)
+        .then((res) => {
+          let pagination = this.pagination
+          pagination.total = (res.result && res.result.total) || 0
+          this.pagination = pagination
+          this.noteList = (res.result && res.result.list) || []
+          let imgArr = []
+          let list = res.result.list
+          list.forEach((element) => {
+            if (element.imgPaths && element.imgPaths.length > 0) {
+              let imgPath = element.imgPaths
+              imgPath.forEach((i) => {
+                let obj = {
+                  url: i,
+                  notepadId: element.notepadId
+                }
+                imgArr.push(obj)
+              })
+            }
+          })
+          this.imgList = imgArr
           this.noteLoading = false
-      })
+        })
+        .catch(() => {
+          this.noteLoading = false
+        })
     },
     removePercent (val) {
       if (val.indexOf('%') > -1) {
@@ -281,7 +268,7 @@ export default {
       let arr = []
       data.forEach((element) => {
         let obj = {
-          value: this.removePercent(element.money),
+          value: this.removePercent(element.percentage),
           name: element.productName
         }
         arr.push(obj)
@@ -290,49 +277,179 @@ export default {
       let box = document.getElementById('chart')
       let myChart = echarts.init(box, 'light')
       // 绘制图表
+
+    let showed = !arr.length
+    if (showed) {
+      myChart.clear()
+       myChart.setOption({
+        title: {
+          show: showed, // show 可以在上面顶一个一个 let show = null;
+            textStyle: {
+              color: '#999999',
+              fontSize: 14
+            },
+            text: '暂无数据', // 这个你可以定义一个变量，也可以直接写死'暂无数据'
+            left: 'center',
+            top: 'center'
+          }
+        })
+    } else {
+      myChart.setOption({
+        title: {
+          show: showed, // show 可以在上面顶一个一个 let show = null;
+          textStyle: {
+            color: '#000',
+            fontSize: 16
+          },
+          text: '暂无数据', // 这个你可以定义一个变量，也可以直接写死'暂无数据'
+          left: 'center',
+          top: 'center'
+        },
+
+        tooltip:
+          arr.length > 0
+            ? {
+                trigger: 'item',
+                formatter: '{a} <br/>{b}: {c} ({d}%)'
+              }
+            : '',
+        legend:
+          arr.length > 0
+            ? {
+                orient: 'vertical',
+                top: 'middle',
+                right: 10,
+                align: 'auto',
+                itemWidth: 10,
+                itemHeight: 10,
+                formatter: function (name) {
+                  let val = ''
+                  arr.forEach((element) => {
+                    if (name === element.name) {
+                      val = element.value
+                    }
+                  })
+                  return name + '  ￥' + val
+                }
+              }
+            : {},
+        series:
+          arr.length > 0
+            ? [
+                {
+                  name: '销售额',
+                  type: 'pie',
+                  radius: ['50%', '70%'],
+                  avoidLabelOverlap: false,
+                  right: 100,
+                  label: {
+                    show: false,
+                    position: 'center'
+                  },
+                  emphasis: {
+                    label: {
+                      show: true,
+                      fontSize: '24'
+                    }
+                  },
+                  labelLine: {
+                    show: false
+                  },
+                  data: arr
+                }
+              ]
+            : []
+      })
+    }
+    },
+    getmarkets (type) {
+      getMarkets({ type }).then((res) => {
+        let rankList = []
+        if (res.result && res.result.saleRankings) {
+          let saleRankings = res.result.saleRankings
+          saleRankings.forEach((element) => {
+            rankList.push({
+              name: element.productName,
+              total: element.saleroom
+            })
+          })
+          this.rankList = rankList
+        }
+        if (res.result && res.result.saleroomTendencies) {
+          this.initMarketChart(res.result.saleroomTendencies, type)
+        }
+      })
+    },
+    marketChange (type) {
+      if (this.marketType === type) {
+        return false
+      } else {
+        this.marketType = type
+        this.$nextTick(() => {
+          this.getmarkets(type)
+        })
+      }
+    },
+    initMarketChart (data, type) {
+      let timeArr = []
+      let valArr = []
+      data.forEach((element) => {
+        if (type === '1' || type === '2') {
+          let text = element.timeText
+          text = text.substr(text.length - 5, 5)
+          timeArr.push(text)
+        } else {
+          timeArr.push(element.timeText)
+        }
+
+        valArr.push(element.saleroom)
+      })
+      let box = document.getElementById('marketChart')
+      let myChart = echarts.init(box, 'light')
+      // 绘制图表
       myChart.setOption({
         tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b}: {c} ({d}%)'
-        },
-        legend: {
-          orient: 'vertical',
-          top: 'middle',
-          right: 10,
-          align: 'auto',
-          itemWidth: 10,
-          itemHeight: 10,
-          formatter: function (name) {
-            let val = ''
-            arr.forEach((element) => {
-              if (name === element.name) {
-                val = element.value
-              }
-            })
-            return name + '  ￥' + val
+          trigger: 'axis', // 触发类型，默认数据触发，见下图，可选为：'item' ¦ 'axis'
+          showDelay: 20, // 显示延迟，添加显示延迟可以避免频繁切换，单位ms
+          hideDelay: 100, // 隐藏延迟，单位ms
+          transitionDuration: 0.4, // 动画变换时间，单位s
+          backgroundColor: 'rgba(0,0,0,0.7)', // 提示背景颜色，默认为透明度为0.7的黑色
+          borderColor: '#333', // 提示边框颜色
+          borderRadius: 4, // 提示边框圆角，单位px，默认为4
+          borderWidth: 0, // 提示边框线宽，单位px，默认为0（无边框）
+          padding: 5, // 提示内边距，单位px，默认各方向内边距为5，
+          // 接受数组分别设定上右下左边距，同css
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
+            type: 'line', // 默认为直线，可选为：'line' | 'shadow'
+            lineStyle: {
+              // 直线指示器样式设置
+              color: '#48b',
+              width: 2,
+              type: 'solid'
+            },
+            shadowStyle: {
+              // 阴影指示器样式设置
+              width: 'auto', // 阴影大小
+              color: 'rgba(150,150,150,0.3)' // 阴影颜色
+            }
+          },
+          textStyle: {
+            color: '#fff'
           }
+        },
+        xAxis: {
+          type: 'category',
+          data: timeArr
+        },
+        yAxis: {
+          type: 'value'
         },
         series: [
           {
-            name: '销售额',
-            type: 'pie',
-            radius: ['50%', '70%'],
-            avoidLabelOverlap: false,
-            right: 100,
-            label: {
-              show: false,
-              position: 'center'
-            },
-            emphasis: {
-              label: {
-                show: true,
-                fontSize: '24'
-              }
-            },
-            labelLine: {
-              show: false
-            },
-            data: arr
+            data: valArr,
+            type: 'line',
+            smooth: true
           }
         ]
       })
@@ -355,7 +472,17 @@ export default {
     }
   }
 }
+/deep/ .ant-list-pagination {
+  text-align: center;
+}
 
+/deep/ .ant-pagination-item {
+  border: none;
+}
+/deep/ .ant-pagination-prev .ant-pagination-item-link,
+/deep/ .ant-pagination-next .ant-pagination-item-link {
+  border: none;
+}
 .antd-pro-pages-dashboard-analysis-twoColLayout {
   position: relative;
   display: flex;
@@ -432,6 +559,14 @@ export default {
     }
   }
 }
+.marketChange {
+  a {
+    color: #666666;
+  }
+  .active {
+    color: #1890ff;
+  }
+}
 /deep/ .ant-list-item {
   padding: 5px 0;
   border-bottom: none;
@@ -439,5 +574,22 @@ export default {
 }
 /deep/ .ant-list-something-after-last-item .ant-spin-container > .ant-list-items > .ant-list-item:last-child {
   border-bottom: none;
+}
+/deep/ .img {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  img {
+    cursor: pointer;
+    width: 80px;
+    height: 80px;
+    margin: 10px 10px 10px 0;
+  }
+}
+
+.saleChange {
+  line-height: 1;
+  padding-right: 0;
 }
 </style>

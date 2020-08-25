@@ -176,8 +176,8 @@
 
         <div class="operationBtn">
           <a-button style="color:#ffffff;background-color:#1D18FF;" @click="showModal">发送客户</a-button>
-          <a-button style="margin:0 20px;" type="primary">打印</a-button>
-          <a-button @click="reset">重置</a-button>
+          <!-- <a-button style="margin:0 20px;" type="primary">打印</a-button> -->
+          <a-button @click="reset" style="margin-left:20px;">重置</a-button>
         </div>
       </a-card>
       <a-modal v-model="visible" @ok="handleOk" width="800px">

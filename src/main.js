@@ -20,6 +20,10 @@ import './core/lazy_use'
 import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less'
+import Print from 'vue-print-nb'
+Vue.use(FormModel)
+Vue.use(VueAxios)
+Vue.use(Print)
 
 let height = document.body.offsetHeight || document.documentElement.clientHeight || document.body.offsetHeight
 
@@ -29,12 +33,10 @@ message.config({
   top: height / 2 + 'px', // 到页面顶部距离
   maxCount: 3 // 最大显示数, 超过限制时，最早的消息会被自动关闭
 })
-Vue.use(FormModel)
 
 Vue.config.productionTip = false
 
 // mount axios to `Vue.$http` and `this.$http`
-Vue.use(VueAxios)
 Vue.component('pro-layout', ProLayout)
 Vue.component('page-header-wrapper', PageHeaderWrapper)
 
