@@ -278,89 +278,89 @@ export default {
       let myChart = echarts.init(box, 'light')
       // 绘制图表
 
-    let showed = !arr.length
-    if (showed) {
+      let showed = !arr.length
       myChart.clear()
-       myChart.setOption({
-        title: {
-          show: showed, // show 可以在上面顶一个一个 let show = null;
+      if (showed) {
+        myChart.setOption({
+          title: {
+              show: showed, // show 可以在上面顶一个一个 let show = null;
+              textStyle: {
+                color: '#999999',
+                fontSize: 14
+              },
+              text: '暂无数据', // 这个你可以定义一个变量，也可以直接写死'暂无数据'
+              left: 'center',
+              top: 'center'
+            }
+        })
+      } else {
+        myChart.setOption({
+          title: {
+            show: showed, // show 可以在上面顶一个一个 let show = null;
             textStyle: {
-              color: '#999999',
-              fontSize: 14
+              color: '#000',
+              fontSize: 16
             },
             text: '暂无数据', // 这个你可以定义一个变量，也可以直接写死'暂无数据'
             left: 'center',
             top: 'center'
-          }
-        })
-    } else {
-      myChart.setOption({
-        title: {
-          show: showed, // show 可以在上面顶一个一个 let show = null;
-          textStyle: {
-            color: '#000',
-            fontSize: 16
           },
-          text: '暂无数据', // 这个你可以定义一个变量，也可以直接写死'暂无数据'
-          left: 'center',
-          top: 'center'
-        },
 
-        tooltip:
-          arr.length > 0
-            ? {
-                trigger: 'item',
-                formatter: '{a} <br/>{b}: {c} ({d}%)'
-              }
-            : '',
-        legend:
-          arr.length > 0
-            ? {
-                orient: 'vertical',
-                top: 'middle',
-                right: 10,
-                align: 'auto',
-                itemWidth: 10,
-                itemHeight: 10,
-                formatter: function (name) {
-                  let val = ''
-                  arr.forEach((element) => {
-                    if (name === element.name) {
-                      val = element.value
-                    }
-                  })
-                  return name + '  ￥' + val
+          tooltip:
+            arr.length > 0
+              ? {
+                  trigger: 'item',
+                  formatter: '{a} <br/>{b}: {c} ({d}%)'
                 }
-              }
-            : {},
-        series:
-          arr.length > 0
-            ? [
-                {
-                  name: '销售额',
-                  type: 'pie',
-                  radius: ['50%', '70%'],
-                  avoidLabelOverlap: false,
-                  right: 100,
-                  label: {
-                    show: false,
-                    position: 'center'
-                  },
-                  emphasis: {
+              : '',
+          legend:
+            arr.length > 0
+              ? {
+                  orient: 'vertical',
+                  top: 'middle',
+                  right: 10,
+                  align: 'auto',
+                  itemWidth: 10,
+                  itemHeight: 10,
+                  formatter: function (name) {
+                    let val = ''
+                    arr.forEach((element) => {
+                      if (name === element.name) {
+                        val = element.value
+                      }
+                    })
+                    return name + '  ￥' + val
+                  }
+                }
+              : {},
+          series:
+            arr.length > 0
+              ? [
+                  {
+                    name: '销售额',
+                    type: 'pie',
+                    radius: ['50%', '70%'],
+                    avoidLabelOverlap: false,
+                    right: 100,
                     label: {
-                      show: true,
-                      fontSize: '24'
-                    }
-                  },
-                  labelLine: {
-                    show: false
-                  },
-                  data: arr
-                }
-              ]
-            : []
-      })
-    }
+                      show: false,
+                      position: 'center'
+                    },
+                    emphasis: {
+                      label: {
+                        show: true,
+                        fontSize: '24'
+                      }
+                    },
+                    labelLine: {
+                      show: false
+                    },
+                    data: arr
+                  }
+                ]
+              : []
+        })
+      }
     },
     getmarkets (type) {
       getMarkets({ type }).then((res) => {
