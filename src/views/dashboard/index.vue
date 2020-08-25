@@ -96,7 +96,7 @@
               <a-col :xl="16" :lg="12" :md="12" :sm="24" :xs="24">
                 <!-- <bar :data="barData" title="销售额排行" /> -->
                 <div class="title" style="padding-left:20px">销售额趋势</div>
-                <div id="marketChart" style="height:300px"></div>
+                <div id="marketChart" style="height:400px"></div>
               </a-col>
               <a-col :xl="8" :lg="12" :md="12" :sm="24" :xs="24">
                 <rank-list title="产品销售额排名" :list="rankList" />
