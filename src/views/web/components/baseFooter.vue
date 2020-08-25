@@ -4,7 +4,7 @@
       <div class="logo">
         <img src="../static/img/logo_white@2x.png" alt />
         <div class="copyright">
-          <p>沪ICP备20024192号-1</p>
+          <p><a href="http://wap.scjgj.sh.gov.cn/businessCheck/verifKey.do?showType=extShow&serial=9031000020200721102904000006114136-SAIC_SHOW_310000-2c9be8bd73d33fb9017410ce043e62c6418&signData=MEQCIAzDUGZUGpFwnE7k0R6NKqlLlT9qMDaZTiBm8+EJ0JBvAiBgZZqqew0pAcd9tLHEZFWWVvdKRU7FIu3SDoqbROl91g=="><img src="../static/img/zhizhao.png"/>沪ICP备20024192号-1</a></p>
           <p class="companyName">上海雨瑞信息科技有限公司</p>
         </div>
       </div>
@@ -46,6 +46,18 @@ export default {}
         p {
           font-size: 18px;
           margin-bottom: 15px;
+          display: flex;
+          align-items: center;
+          a{
+             display: flex;
+            align-items: center;
+            color: #ffffff;
+            img{
+              width: 24px;
+              height: 24px;
+              margin-right: 10px;
+            }
+          }
         }
         .companyName {
           font-size: 24px;
