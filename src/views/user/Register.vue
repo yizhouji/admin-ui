@@ -132,7 +132,7 @@
         </a-button>
         <router-link
           class="login"
-          :to="{ name: 'login' }"
+          :to="{ name: 'Login' }"
         >
           使用已有账户登录
         </router-link>
@@ -375,5 +375,8 @@ export default {
       float: right;
       line-height: 40px;
     }
+  }
+  /deep/ .ant-form-item-with-help{
+    margin-bottom: 24px;
   }
 </style>

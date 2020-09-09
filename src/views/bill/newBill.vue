@@ -200,7 +200,7 @@
                 <a>{{ text }}</a>
               </template>
             </a-table-column>
-            <a-table-column key="productUnit" title="单位" data-index="productUnit" />
+            <a-table-column key="productUnit" title="公司名字" data-index="productUnit" />
             <a-table-column key="amount" title="数量" data-index="amount" />
             <a-table-column key="unitPrice" title="单价" data-index="unitPrice" />
             <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />

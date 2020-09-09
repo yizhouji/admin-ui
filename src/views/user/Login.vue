@@ -52,11 +52,11 @@
 
       <a-form-item>
         <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">自动登录</a-checkbox>
-        <!-- <router-link
-          :to="{ name: 'recover', params: { user: 'aaa'} }"
+        <router-link
+          :to="{ name: 'ForgetPwd'}"
           class="forge-password"
           style="float: right;"
-        >忘记密码</router-link> -->
+        >忘记密码</router-link>
       </a-form-item>
 
       <a-form-item style="margin-top:24px">
@@ -71,10 +71,10 @@
       </a-form-item>
       <div class="target">
         <div class="user-login-other">
-          <router-link class="register" :to="{ name: 'index' }">官网首页</router-link>
+          <router-link class="register" :to="{ name: 'Index' }">官网首页</router-link>
         </div>
         <div class="user-login-other">
-          <router-link :to="{ name: 'register' }">注册账户</router-link>
+          <router-link :to="{ name: 'Register' }">注册账户</router-link>
         </div>
       </div>
     </a-form>
@@ -94,6 +94,7 @@ import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
 
 export default {
+  name: 'Login',
   components: {
     TwoStepCaptcha
   },
@@ -255,6 +256,9 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
+  }
+    /deep/ .ant-form-item-with-help{
+    margin-bottom: 24px;
   }
 }
 </style>

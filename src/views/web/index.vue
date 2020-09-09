@@ -83,6 +83,7 @@ import navBar from './components/navbar'
 import baseFooter from './components/baseFooter'
 
 export default {
+  name: 'Index',
   components: {
     navBar,
     baseFooter

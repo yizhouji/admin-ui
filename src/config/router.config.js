@@ -114,21 +114,20 @@ export const constantRouterMap = [
     children: [
       {
         path: 'login',
-        name: 'login',
+        name: 'Login',
         meta: { title: '登录', keepAlive: true },
         component: () => import('@/views/user/Login')
       },
       {
         path: 'register',
-        name: 'register',
+        name: 'Register',
         meta: { title: '注册', keepAlive: true },
-
         component: () => import('@/views/user/Register')
       },
       {
-        path: 'recover',
-        name: 'recover',
-        component: undefined
+        path: 'forgetPwd',
+        name: 'ForgetPwd',
+        component: () => import('@/views/user/ForgetPwd')
       }
     ]
   },
@@ -140,13 +139,13 @@ export const constantRouterMap = [
     children: [
       {
         path: 'index',
-        name: 'index',
+        name: 'Index',
         meta: { title: '首页', keepAlive: true },
         component: () => import('@/views/web/index')
       },
       {
         path: 'price',
-        name: 'price',
+        name: 'Price',
         meta: { title: '价格', keepAlive: true },
         component: () => import('@/views/web/price')
       }

@@ -1,3 +1,9 @@
+/*
+ * @Author: zhaojingyu
+ * @Date: 2020-07-28 10:41:54
+ * @LastEditors: zhaojingyu
+ * @LastEditTime: 2020-09-07 10:55:54
+ */
 import router from './router'
 // import store from './store'
 import storage from 'store'
@@ -10,7 +16,7 @@ import { i18nRender } from '@/locales'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['login', 'register', 'index', 'price'] // no redirect whitelist
+const whiteList = ['Login', 'Register', 'Index', 'Price', 'ForgetPwd'] // no redirect whitelist
 const loginRoutePath = '/user/login'
 const defaultRoutePath = '/dashboard/index'
 

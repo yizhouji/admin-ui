@@ -12,8 +12,8 @@
       >
         <a-row :gutter="24">
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="单位" prop="groupName">
-              <a-input placeholder="请输入单位" v-model="form.groupName" allow-clear />
+            <a-form-model-item label="公司名字" prop="groupName">
+              <a-input placeholder="请输入公司名字" v-model="form.groupName" allow-clear />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -94,8 +94,8 @@
         <div class="table-title" slot="title">
           <div class="text">货物统计</div>
           <div class="operation">
-            <a class="item">发送</a>
-            <a class="item">打印</a>
+            <!-- <a class="item">发送</a>
+            <a class="item">打印</a> -->
             <div class="item-line">
               <a-icon type="setting" />
               <span>操作</span>

@@ -25,7 +25,9 @@
           <a-table-column key="unitPrice" title="单价" data-index="unitPrice" />
           <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />
         </a-table>
+
       </div>
+      <div class="amount">总计：{{ amount }} 元</div>
     </div>
     <template slot="footer">
       <div class="tip" style="margin:20px 0;color:#F2637B;">提示：可全部填也可只填一个(手机号则以彩信形式发送至客户手机，微信号则在双方是微信好友的前提下发送到客户微信）
@@ -72,6 +74,18 @@
         }
       }
     },
+    computed: {
+      amount () {
+        let productChecklists = this.Details.productChecklists
+        let amount = 0
+        productChecklists.forEach(element => {
+          if (element.grossAmount && typeof element.grossAmount === 'number') {
+            amount = amount + element.grossAmount
+          }
+        })
+        return amount
+      }
+    },
     methods: {
       toImg () {
         html2canvas(this.$refs.printContent, {
@@ -111,8 +125,10 @@
 </script>
 
 <style lang="less" scoped>
-  /deep/ .ant-modal-footer{
-    border-top: none;
+  .amount{
+    margin-top:10px;
+    text-align:right;
+    color:#F2637B
   }
   .part {
     display: flex;
