@@ -64,6 +64,7 @@ export default {
       display: flex;
       font-size: 14px;
       color: #666666;
+      align-items: center;
       .item {
         margin-left: 48px;
       }

@@ -38,9 +38,17 @@
         <a-radio :value="2" class="radio2">二级</a-radio>
         <a-radio :value="3" class="radio3">普通</a-radio>
       </a-radio-group>
-      <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
-        <img alt="example" style="width: 100%" :src="previewImage">
-      </a-modal>
+      <template slot="footer">
+        <a-button key="back" @click="handleClose">
+          取消
+        </a-button>
+        <a-button type="danger" key="delet" @click="deletHandle" :loading="loading">
+          删除
+        </a-button>
+        <a-button key="submit" type="primary" @click="handleOk">
+          确定
+        </a-button>
+      </template>
     </a-modal>
   </div>
 </template>
@@ -49,7 +57,8 @@
   // eslint-disable-next-line no-unused-vars
   import {
     getNoteDetails,
-    modifyNote
+    modifyNote,
+    deletNote
   } from '../../api/note'
   export default {
     data () {
@@ -66,7 +75,8 @@
         edit: true,
         notepadId: '',
         deletePics: [],
-        fileListUid: []
+        fileListUid: [],
+        loading: false
       }
     },
     methods: {
@@ -159,6 +169,9 @@
           reader.onerror = error => reject(error)
         })
       },
+      handleClose () {
+        this.visible = false
+      },
       handleCancel () {
         this.previewVisible = false
       },
@@ -214,6 +227,17 @@
             this.visible = false
             this.$emit('getList')
           }, 2000)
+        })
+      },
+      deletHandle () {
+        this.loading = true
+        deletNote(this.notepadId).then(res => {
+          this.loading = false
+          this.visible = false
+          this.$message.error('删除成功')
+          this.$emit('updateList')
+        }).catch(() => {
+          this.loading = false
         })
       }
     }

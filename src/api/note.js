@@ -4,7 +4,8 @@ const noteApi = {
   getNote: '/warehouse/notepads',
   addNote: '/warehouse/notepads',
   getNoteDetails: '/warehouse/notepads/',
-  modifyNote: '/warehouse/notepads'
+  modifyNote: '/warehouse/notepads',
+  deletNote: '/warehouse/notepads/'
 }
 export function getNote (parameter) {
   return request({
@@ -34,5 +35,12 @@ export function getNoteDetails (parameter) {
   return request({
     url: noteApi.getNoteDetails + parameter,
     method: 'get'
+  })
+}
+
+export function deletNote (parameter) {
+  return request({
+    url: noteApi.deletNote + parameter,
+    method: 'DELETE'
   })
 }
