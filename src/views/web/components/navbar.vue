@@ -6,10 +6,10 @@
       </div>
       <div class="text">
         <div class="item">
-          <a @click="linkHandle('index')">我们的服务</a>
+          <a @click="linkHandle('Index')">我们的服务</a>
         </div>
         <div class="item">
-          <a @click="linkHandle('price')">价格</a>
+          <a @click="linkHandle('Price')">价格</a>
         </div>
         <div class="item">
           <a-dropdown
@@ -50,10 +50,10 @@
         </template> -->
         <template>
           <div class="item">
-            <a @click="linkHandle('login')">登录</a>
+            <a @click="linkHandle('Login')">登录</a>
           </div>
           <div class="item">
-            <button @click="linkHandle('register')">注册</button>
+            <button @click="linkHandle('Register')">注册</button>
           </div>
         </template>
       </div>

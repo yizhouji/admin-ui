@@ -9,7 +9,7 @@
             <a class="item" @click="addHandle">新建文件</a>
             <a class="item" @click="addHandle">上传图片</a>
             <a class="item" v-if="deletList.length>0">
-              <a-button type="danger" @click="deletConfirm">确认删除</a-button>
+              <a-button type="danger" :loading="deleteLoading" @click="deletConfirm">确认删除</a-button>
             </a>
 
             <a-dropdown :trigger="['hover']" overlayClassName="drop" style="cursor: pointer;">
@@ -19,7 +19,7 @@
               </div>
               <a-menu slot="overlay" @click="onClick">
                 <a-menu-item key="1" @click="addHandle">添加</a-menu-item>
-                <!-- <a-menu-item key="2" @click="deletHandle">删除</a-menu-item> -->
+                <a-menu-item key="2" @click="deletHandle">删除</a-menu-item>
               </a-menu>
             </a-dropdown>
           </div>
@@ -76,7 +76,8 @@
 
 <script>
   import {
-    getNote
+    getNote,
+    deletNoteList
   } from '@/api/note'
   import Details from './details'
   import add from './add'
@@ -115,7 +116,8 @@
           }
         },
         checkBool: false,
-        deletList: []
+        deletList: [],
+        deleteLoading: false
       }
     },
     mounted () {
@@ -154,10 +156,16 @@
         })
       },
       deletConfirm () {
-
+          this.deleteLoading = true
+          deletNoteList({ 'notepadIds': this.deletList }).then(res => {
+            this.updateList()
+            this.deleteLoading = false
+            this.deletList = []
+          }).catch(() => {
+            this.deleteLoading = false
+          })
       },
       updateList () {
-        console.log('111')
         let pagination = this.pagination
         pagination.pageNum = 1
         pagination.pageSize = 10
@@ -311,5 +319,8 @@
     li {
       padding: 5px 20px;
     }
+  }
+  .ant-checkbox-group{
+    width: 100%;
   }
 </style>
