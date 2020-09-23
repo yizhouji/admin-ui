@@ -150,8 +150,8 @@ export default {
         this.significance = 3
         this.notepadTitle = ''
         this.notepadContent = ''
+        this.visible = false
         setTimeout(() => {
-          this.visible = false
           this.$emit('getList')
         }, 2000)
       })

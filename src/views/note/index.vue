@@ -1,7 +1,7 @@
 <template>
   <page-header-wrapper>
     <div id="table-container">
-      <a-card :bordered="false">
+      <a-card :bordered="false" class="cardBox">
         <div class="table-title" slot="title">
           <div class="text">记事列表</div>
           <div class="operation">
@@ -238,7 +238,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background: #F7F7F7;
+      background: #ffffff;
       // border:1px solid #eeeeee;
       z-index: 2;
 
@@ -272,7 +272,7 @@
   .no-img {
     .text {
       top: 0;
-
+       background: #ffffff;
       .more-text {
         color: #666666;
         font-size: 14px;
@@ -322,5 +322,10 @@
   }
   .ant-checkbox-group{
     width: 100%;
+  }
+  .cardBox {
+    .ant-card-body{
+      background: #f7f7f7;
+    }
   }
 </style>
