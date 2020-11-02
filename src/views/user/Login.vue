@@ -1,25 +1,13 @@
 <template>
   <div class="main">
-    <a-form
-      id="formLogin"
-      class="user-layout-login"
-      ref="formLogin"
-      :form="form"
-      @submit="handleSubmit"
-    >
+    <a-form id="formLogin" class="user-layout-login" ref="formLogin" :form="form" @submit="handleSubmit">
       <a-tabs
         :activeKey="customActiveKey"
         :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
         @change="handleTabClick"
       >
         <a-tab-pane key="tab1" tab="账号密码登录">
-          <a-alert
-            v-if="isLoginError"
-            type="error"
-            showIcon
-            style="margin-bottom: 24px;"
-            message="账户或密码错误"
-          />
+          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
           <a-form-item>
             <a-input
               size="large"
@@ -27,7 +15,10 @@
               placeholder="请输入用户名"
               v-decorator="[
                 'userName',
-                {rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }], validateTrigger: 'change'}
+                {
+                  rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }],
+                  validateTrigger: 'change'
+                }
               ]"
             >
               <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
@@ -41,42 +32,43 @@
               placeholder="请输入密码"
               v-decorator="[
                 'password',
-                {rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur'}
+                { rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur' }
               ]"
             >
               <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
             </a-input>
           </a-form-item>
         </a-tab-pane>
+        <a-tab-pane key="tab2" tab="微信扫码登录">
+          <div id="weixin"></div>
+        </a-tab-pane>
       </a-tabs>
+      <template v-if="customActiveKey === 'tab1'">
+        <a-form-item>
+          <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">自动登录</a-checkbox>
+          <router-link :to="{ name: 'ForgetPwd' }" class="forge-password" style="float: right;">忘记密码</router-link>
+        </a-form-item>
 
-      <a-form-item>
-        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">自动登录</a-checkbox>
-        <router-link
-          :to="{ name: 'ForgetPwd'}"
-          class="forge-password"
-          style="float: right;"
-        >忘记密码</router-link>
-      </a-form-item>
-
-      <a-form-item style="margin-top:24px">
-        <a-button
-          size="large"
-          type="primary"
-          htmlType="submit"
-          class="login-button"
-          :loading="state.loginBtn"
-          :disabled="state.loginBtn"
-        >确定</a-button>
-      </a-form-item>
-      <div class="target">
-        <div class="user-login-other">
-          <router-link class="register" :to="{ name: 'Index' }">官网首页</router-link>
+        <a-form-item style="margin-top:24px">
+          <a-button
+            size="large"
+            type="primary"
+            htmlType="submit"
+            class="login-button"
+            :loading="state.loginBtn"
+            :disabled="state.loginBtn"
+          >确定</a-button
+          >
+        </a-form-item>
+        <div class="target">
+          <div class="user-login-other">
+            <router-link class="register" :to="{ name: 'Index' }">官网首页</router-link>
+          </div>
+          <div class="user-login-other">
+            <router-link :to="{ name: 'Register' }">注册账户</router-link>
+          </div>
         </div>
-        <div class="user-login-other">
-          <router-link :to="{ name: 'Register' }">注册账户</router-link>
-        </div>
-      </div>
+      </template>
     </a-form>
 
     <two-step-captcha
@@ -92,7 +84,7 @@
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix } from '@/utils/util'
-
+import { Wechat } from '@/api/login'
 export default {
   name: 'Login',
   components: {
@@ -127,6 +119,25 @@ export default {
     //   })
     // // this.requiredTwoStepCaptcha = true
   },
+  mounted () {
+    console.log(this.$route.query)
+    let query = this.$route.query
+    if (query.state) {
+      if (query.code) {
+        this.customActiveKey = 'tab2'
+        Wechat({ code: query.code })
+          .then(res => {
+            console.log(res)
+          })
+      } else {
+        this.$notification['error']({
+          message: '错误',
+          description: '您已拒绝授权微信登录',
+          duration: 4
+        })
+      }
+    }
+  },
   methods: {
     ...mapActions(['Login', 'Logout']),
     // handler
@@ -142,7 +153,24 @@ export default {
     },
     handleTabClick (key) {
       this.customActiveKey = key
+      this.$nextTick(() => {
+        if (key === 'tab2') {
+          this.wechatInit()
+        }
+      })
+
       // this.form.resetFields()
+    },
+    wechatInit () {
+      // eslint-disable-next-line no-undef
+      var obj = new WxLogin({
+        self_redirect: false,
+        id: 'weixin',
+        appid: 'wx7d195ad515c18bf5',
+        scope: 'snsapi_login',
+        response_type: 'code',
+        redirect_uri: 'http://yizhouji17.com/user/login'
+      })
     },
     handleSubmit (e) {
       e.preventDefault()
@@ -252,13 +280,18 @@ export default {
   /deep/ .ant-tabs-ink-bar {
     width: 0 !important;
   }
-  .target{
+  .target {
     display: flex;
     align-items: center;
     justify-content: space-between;
   }
-    /deep/ .ant-form-item-with-help{
+  /deep/ .ant-form-item-with-help {
     margin-bottom: 24px;
+  }
+  #weixin {
+    width: 300px;
+    height: 400px;
+    margin: 0 auto;
   }
 }
 </style>

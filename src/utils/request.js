@@ -1,3 +1,9 @@
+/*
+ * @Author: zhaojingyu
+ * @Date: 2020-07-28 10:41:56
+ * @LastEditors: zhaojingyu
+ * @LastEditTime: 2020-11-02 17:17:51
+ */
 import axios from 'axios'
 import store from '@/store'
 import storage from 'store'
@@ -49,7 +55,7 @@ const errorHandler = (error) => {
       }
     }
   }
-  return Promise.reject(error)
+  return Promise.reject(error.response)
 }
 
 // request interceptor
