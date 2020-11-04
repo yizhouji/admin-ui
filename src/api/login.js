@@ -2,14 +2,16 @@
  * @Author: zhaojingyu
  * @Date: 2020-07-28 10:41:54
  * @LastEditors: zhaojingyu
- * @LastEditTime: 2020-11-02 17:13:03
+ * @LastEditTime: 2020-11-04 14:58:08
  */
 import request from '@/utils/request'
 
 const userApi = {
   Login: '/warehouse/login',
   Logout: '/warehouse/logout',
-  Wechat: '/warehouse/weChat/login'
+  GetQrcode: '/warehouse/weChat/qrcode',
+  CheckLogin: '/warehouse/weChat/checkLogin'
+
 }
 
 /**
@@ -42,10 +44,16 @@ export function logout () {
  * get user 2step code open?
  * @param parameter {*}
  */
-export function Wechat (code) {
+export function getQrcode () {
   return request({
-    url: userApi.Wechat,
-    method: 'get',
-    params: code
+    url: userApi.GetQrcode,
+    method: 'get'
+  })
+}
+
+export function checkLogin (parameter) {
+  return request({
+    url: userApi.CheckLogin + '?sceneStr=' + parameter,
+    method: 'post'
   })
 }

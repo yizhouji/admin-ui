@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     handleToIndex () {
-      this.$router.push({ name: 'index' })
+      this.$router.push({ path: '/' })
     },
     handleToCenter () {
       this.$router.push({ path: '/account/center' })

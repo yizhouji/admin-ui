@@ -125,6 +125,12 @@ export const constantRouterMap = [
         component: () => import('@/views/user/Register')
       },
       {
+        path: 'bindMobile',
+        name: 'BindMobile',
+        meta: { title: '绑定手机号码', keepAlive: false },
+        component: () => import('@/views/user/BindMobile')
+      },
+      {
         path: 'forgetPwd',
         name: 'ForgetPwd',
         component: () => import('@/views/user/ForgetPwd')

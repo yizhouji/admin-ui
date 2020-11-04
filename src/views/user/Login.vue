@@ -40,7 +40,10 @@
           </a-form-item>
         </a-tab-pane>
         <a-tab-pane key="tab2" tab="微信扫码登录">
-          <div id="weixin"></div>
+          <div id="weixin">
+            <img :src="qrCodeUrl" alt="" />
+            <p>请打开微信扫码登录</p>
+          </div>
         </a-tab-pane>
       </a-tabs>
       <template v-if="customActiveKey === 'tab1'">
@@ -81,10 +84,13 @@
 </template>
 
 <script>
+import storage from 'store'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
-import { timeFix } from '@/utils/util'
-import { Wechat } from '@/api/login'
+import { timeFix, welcome } from '@/utils/util'
+import { getQrcode, checkLogin } from '@/api/login'
+import { ACCESS_TOKEN } from '@/store/mutation-types'
+var timer
 export default {
   name: 'Login',
   components: {
@@ -106,40 +112,58 @@ export default {
         // login type: 0 email, 1 username, 2 telephone
         loginType: 0,
         smsSendBtn: false
-      }
+      },
+      qrCodeUrl: '',
+      sceneStr: '',
+      isRequest: false
     }
   },
-  created () {
-    // get2step({})
-    //   .then(res => {
-    //     this.requiredTwoStepCaptcha = res.result.stepCode
-    //   })
-    //   .catch(() => {
-    //     this.requiredTwoStepCaptcha = false
-    //   })
-    // // this.requiredTwoStepCaptcha = true
-  },
+  created () {},
   mounted () {
     console.log(this.$route.query)
     let query = this.$route.query
-    if (query.state) {
-      if (query.code) {
-        this.customActiveKey = 'tab2'
-        Wechat({ code: query.code })
-          .then(res => {
-            console.log(res)
-          })
-      } else {
-        this.$notification['error']({
-          message: '错误',
-          description: '您已拒绝授权微信登录',
-          duration: 4
-        })
-      }
-    }
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
+    getCode () {
+      getQrcode()
+        .then()
+        .then(res => {
+          this.qrCodeUrl = res.result.qrCodeUrl
+          this.sceneStr = res.result.sceneStr
+          this.$nextTick(() => {
+            timer = setInterval(() => {
+              console.log('this.isRequest:', this.isRequest)
+            if (!this.isRequest) {
+              this.getStatus()
+            }
+            }, 1000)
+          })
+        })
+    },
+
+    getStatus () {
+      this.isRequest = true
+      checkLogin(this.sceneStr)
+        .then(res => {
+          if (res.result) {
+            this.isRequest = false
+            clearInterval(timer)
+            const result = res.result
+            storage.set(ACCESS_TOKEN, result.userId, 7 * 24 * 60 * 60 * 1000)
+            this.$store.commit('SET_USER', result)
+            this.$store.commit('SET_TOKEN', result.userId)
+            this.$store.commit('SET_NAME', { name: result.name, welcome: welcome() })
+            storage.set('USERINFO', result)
+            this.$router.push('/')
+          } else {
+            this.isRequest = false
+          }
+        })
+        .catch(() => {
+          this.isRequest = true
+        })
+    },
     // handler
     handleUsernameOrEmail (rule, value, callback) {
       const { state } = this
@@ -155,23 +179,13 @@ export default {
       this.customActiveKey = key
       this.$nextTick(() => {
         if (key === 'tab2') {
-          this.wechatInit()
+          this.getCode()
+        } else {
+          clearInterval(timer)
         }
       })
+    },
 
-      // this.form.resetFields()
-    },
-    wechatInit () {
-      // eslint-disable-next-line no-undef
-      var obj = new WxLogin({
-        self_redirect: false,
-        id: 'weixin',
-        appid: 'wx7d195ad515c18bf5',
-        scope: 'snsapi_login',
-        response_type: 'code',
-        redirect_uri: 'http://yizhouji17.com/user/login'
-      })
-    },
     handleSubmit (e) {
       e.preventDefault()
       const {
@@ -289,9 +303,19 @@ export default {
     margin-bottom: 24px;
   }
   #weixin {
-    width: 300px;
-    height: 400px;
     margin: 0 auto;
+    img {
+      display: block;
+      width: 200px;
+      height: 200px;
+      margin: 0 auto;
+    }
+    p {
+      font-size: 14px;
+      margin-top: 20px;
+      color: #999999;
+      text-align: center;
+    }
   }
 }
 </style>

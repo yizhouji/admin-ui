@@ -1,3 +1,9 @@
+/*
+ * @Author: zhaojingyu
+ * @Date: 2020-07-28 10:41:56
+ * @LastEditors: zhaojingyu
+ * @LastEditTime: 2020-11-02 22:02:28
+ */
 import storage from 'store'
 import { login, logout } from '@/api/login'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
@@ -30,7 +36,6 @@ const user = {
           .then(response => {
             //  console.log(response)
             const result = response.result
-
             storage.set(ACCESS_TOKEN, result.userId, 7 * 24 * 60 * 60 * 1000)
             commit('SET_USER', result)
             commit('SET_TOKEN', result.userId)

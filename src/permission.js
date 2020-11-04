@@ -2,10 +2,10 @@
  * @Author: zhaojingyu
  * @Date: 2020-07-28 10:41:54
  * @LastEditors: zhaojingyu
- * @LastEditTime: 2020-09-07 10:55:54
+ * @LastEditTime: 2020-11-04 15:41:36
  */
 import router from './router'
-// import store from './store'
+import store from './store'
 import storage from 'store'
 import NProgress from 'nprogress' // progress bar
 import '@/components/NProgress/nprogress.less' // progress bar custom style
@@ -16,7 +16,7 @@ import { i18nRender } from '@/locales'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['Login', 'Register', 'Index', 'Price', 'ForgetPwd'] // no redirect whitelist
+const whiteList = ['Login', 'Register', 'Index', 'Price', 'ForgetPwd', 'BindMobile'] // no redirect whitelist
 const loginRoutePath = '/user/login'
 const defaultRoutePath = '/dashboard/index'
 
@@ -24,20 +24,33 @@ router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`))
   /* has token */
-  if (storage.get(ACCESS_TOKEN)) {
+  console.log(store.state.user)
+  if (store.state.user.token) {
     if (to.path === loginRoutePath) {
       next({ path: defaultRoutePath })
       NProgress.done()
     } else {
-      next()
+      let user = store.state.user.user
+      user.telephone = ''
+      if (user.telephone) {
+          next()
+      } else {
+        // next()
+        if (to.path === '/user/bindMobile') {
+          next()
+        } else {
+          next({ path: '/user/bindMobile' })
+        }
+        NProgress.done()
+        console.log(router)
+      }
     }
   } else {
     if (whiteList.includes(to.name)) {
-      // 在免登录白名单，直接进入
       next()
     } else {
       next({ path: loginRoutePath, query: { redirect: to.fullPath } })
-      NProgress.done() // if current page is login will not trigger afterEach hook, so manually handle it
+      NProgress.done()
     }
   }
 })

@@ -1,7 +1,7 @@
 <template>
   <div :class="wrpCls">
     <div class="part">
-      <a href="#" class="buy">VIP购买/低至每月8元</a>
+      <a href="/price" class="buy">VIP购买/低至每月8元</a>
     </div>
     <div class="part" @click="backHome">
       <div class="link">
