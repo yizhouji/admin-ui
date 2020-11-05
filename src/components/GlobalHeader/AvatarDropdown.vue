@@ -1,22 +1,22 @@
 <template>
   <a-dropdown v-if="currentUser && currentUser.nickname" placement="bottomRight">
     <span class="ant-pro-account-avatar">
-      <a-avatar size="small" src="https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png" class="antd-pro-global-header-index-avatar" />
+      <a-avatar size="small" :src="currentUser.headImgUrl || 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'" class="antd-pro-global-header-index-avatar" />
       <span>{{ currentUser.nickname }}</span>
     </span>
     <template v-slot:overlay>
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
-        <!-- <a-menu-item v-if="menu" key="center" @click="handleToCenter">
+        <a-menu-item v-if="menu" key="center" @click="handleToCenter">
           <img src="@/assets/icon_user.png" alt=""/>
           个人中心
         </a-menu-item>
-        <a-menu-item v-if="menu" key="center" @click="handleToCenter">
+        <!-- <a-menu-item v-if="menu" key="center" @click="handleToCenter">
           <img src="@/assets/icon_record.png" alt=""/>
           充值记录
         </a-menu-item> -->
-        <a-menu-item v-if="menu" key="center" @click="handleToIndex">
+        <a-menu-item v-if="menu" key="website" @click="handleToIndex">
           <img src="@/assets/icon_website.png" alt=""/>
-          官网网站
+          官放网站
         </a-menu-item>
         <!-- <a-menu-item v-if="menu" key="center" @click="handleToIndex">
           <img src="@/assets/icon_contect.png" alt=""/>
@@ -57,6 +57,7 @@ export default {
       this.$router.push({ path: '/' })
     },
     handleToCenter () {
+      console.log(this.$router)
       this.$router.push({ path: '/account/center' })
     },
     handleToSettings () {

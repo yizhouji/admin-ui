@@ -2,7 +2,7 @@
  * @Author: zhaojingyu
  * @Date: 2020-07-28 10:41:54
  * @LastEditors: zhaojingyu
- * @LastEditTime: 2020-11-04 15:41:36
+ * @LastEditTime: 2020-11-05 15:05:59
  */
 import router from './router'
 import store from './store'
@@ -22,28 +22,16 @@ const defaultRoutePath = '/dashboard/index'
 
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
-  to.meta && (typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`))
+  to.meta && typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`)
   /* has token */
-  console.log(store.state.user)
-  if (store.state.user.token) {
+
+  if (storage.get('Access-Token')) {
     if (to.path === loginRoutePath) {
       next({ path: defaultRoutePath })
       NProgress.done()
     } else {
-      let user = store.state.user.user
-      user.telephone = ''
-      if (user.telephone) {
-          next()
-      } else {
-        // next()
-        if (to.path === '/user/bindMobile') {
-          next()
-        } else {
-          next({ path: '/user/bindMobile' })
-        }
-        NProgress.done()
-        console.log(router)
-      }
+      next()
+      NProgress.done()
     }
   } else {
     if (whiteList.includes(to.name)) {
