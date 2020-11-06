@@ -134,9 +134,9 @@ export default {
           this.$nextTick(() => {
             timer = setInterval(() => {
               console.log('this.isRequest:', this.isRequest)
-            if (!this.isRequest) {
-              this.getStatus()
-            }
+              if (!this.isRequest) {
+                this.getStatus()
+              }
             }, 1000)
           })
         })
@@ -155,7 +155,7 @@ export default {
             this.$store.commit('SET_TOKEN', result.userId)
             this.$store.commit('SET_NAME', { name: result.name, welcome: welcome() })
             storage.set('USERINFO', result)
-            this.$router.push('/')
+            this.$router.push('/dashboard')
           } else {
             this.isRequest = false
           }

@@ -116,7 +116,7 @@ export default {
       let baseList = this.baseList
       let Base64 = await this.getBase64(file)
       // console.log(Base64)
-      let a = Base64.replace('data:image/png;base64,', '')
+      let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
       baseList.push(a)
       this.baseList = baseList
       this.fileList = fileList

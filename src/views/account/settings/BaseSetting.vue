@@ -106,6 +106,13 @@ export default {
       this.$refs.bindMobile.show()
     },
     setavatar (url) {
+      console.log('setavatar:', url)
+      let user = this.user
+      user.headImgUrl = url
+      // this.user = user
+      // console.log('user:', user)
+      this.$store.commit('SET_USER', user)
+      storage.set('USERINFO', user)
       this.option.img = url
     }
   }

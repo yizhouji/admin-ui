@@ -1,3 +1,9 @@
+/*
+ * @Author: zhaojingyu
+ * @Date: 2020-07-28 10:41:56
+ * @LastEditors: zhaojingyu
+ * @LastEditTime: 2020-11-06 10:19:24
+ */
 export function timeFix () {
   const time = new Date()
   const hour = time.getHours()
@@ -85,4 +91,13 @@ export function getJson (obj) {
     }
   }
   return object
+}
+
+export function getBase64 (file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result)
+    reader.onerror = (error) => reject(error)
+  })
 }
