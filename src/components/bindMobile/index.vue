@@ -11,7 +11,7 @@
         <img src="../../assets/logo.png" alt="" />
       </div>
       <div class="input">
-        <a-input ref="userNameInput" class="inputItem" v-model.trim="phone" placeholder="请输入手机号">
+        <a-input ref="userNameInput" class="inputItem" v-model.trim="phone" :maxLength="11" placeholder="请输入手机号">
           <a-icon slot="prefix" type="mobile" :style="{ color: '#d9d9d9' }" />
         </a-input>
       </div>
@@ -23,7 +23,7 @@
         <a-button type="info" disabled v-else>{{ smsTime }}s</a-button>
       </div>
       <div class="submit">
-        <a-button type="primary" block>绑定</a-button>
+        <a-button type="primary" block @click="bind">绑定</a-button>
       </div>
       <div class="tip">
         <span>温馨提示</span>：根据相关法律规定，用户需绑定真实手机号进行实名认证，壹周记将对用户隐私信息给予严格保密
@@ -49,7 +49,7 @@
         visible: false,
         phone: '',
         code: '',
-        smsTime: 10,
+        smsTime: 60,
         hasSend: true,
         txt: '发送验证码',
         timer: null
@@ -86,7 +86,7 @@
             if (this.smsTime > 0) {
               this.smsTime--
             } else {
-              this.smsTime = 10
+              this.smsTime = 60
               this.hasSend = true
               this.txt = '重新发送'
               window.clearInterval(this.timer)
@@ -103,6 +103,10 @@
           code: this.code,
           telephone: this.phone
         }).then(res => {
+          this.smsTime = 60
+              this.hasSend = true
+          this.visible = false
+          this.txt = '发送验证码'
           this.$message.success('修改成功')
           let user = this.user
           user.telephone = this.telephone

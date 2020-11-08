@@ -66,6 +66,7 @@ export default {
       } else {
         user = storage.get('USERINFO')
       }
+      console.log('user:', user)
       return user
     },
 

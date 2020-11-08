@@ -11,18 +11,18 @@
             <a-col :md="24" :lg="16">
               <a-form layout="vertical">
                 <a-form-item label="昵称">
-                  <a-input placeholder="请输入昵称" v-model="user.nickname" />
+                  <a-input placeholder="请输入昵称" :maxLength="10" v-model.trim="info.nickname" />
                 </a-form-item>
 
                 <a-form-item label="手机号" :required="false">
-                  <template v-if="user.telephone">
-                    <span class="telephone">{{ user.telephone }}</span>
+                  <template v-if="info.telephone">
+                    <span class="telephone">{{ info.telephone }}</span>
                     <a-button type="primary" @click="bindMobile">更换手机号</a-button>
                   </template>
                   <a-button type="primary" v-else @click="bindMobile">绑定手机号</a-button>
                 </a-form-item>
                 <a-form-item label="邮箱" :required="false">
-                  <a-input placeholder="请输入邮箱" v-model="user.email" />
+                  <a-input placeholder="请输入邮箱" v-model.trim="info.email" />
                 </a-form-item>
                 <a-form-item label="微信" :required="false">
                   <div class="qrCode">
@@ -45,7 +45,7 @@
                   <a-icon type="plus" />
                 </div>
                 <img
-                  :src="user.headImgUrl || 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'" />
+                  :src="info.headImgUrl || 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'" />
               </div>
             </a-col>
           </a-row>
@@ -92,22 +92,31 @@
           // 开启宽度和高度比例
           fixed: true,
           fixedNumber: [1, 1]
-        }
+
+        },
+        info: ''
       }
     },
     computed: {
-      user () {
-        let user = ''
-        if (this.$store.state.user.user) {
-          user = this.$store.state.user.user
-        } else {
-          user = storage.get('USERINFO')
-        }
-        return user
-      }
+      // info () {
+      //   let user = ''
+      //   if (this.$store.state.user.user) {
+      //     user = this.$store.state.user.user
+      //   } else {
+      //     user = storage.get('USERINFO')
+      //   }
+      //   console.log(this.$store.state.user)
+      //   return user
+      // }
     },
     mounted () {
-      console.log(this.user)
+      let user = ''
+      if (this.$store.state.user.user) {
+        user = this.$store.state.user.user
+      } else {
+        user = storage.get('USERINFO')
+      }
+      this.info = user
     },
     methods: {
       bindMobile () {
@@ -115,25 +124,30 @@
       },
       changeInfo () {
         let obj = {
-          email: this.user.email,
-          nickname: this.user.nickname
+          email: this.info.email,
+          nickname: this.info.nickname
         }
-        if (!this.user.nickname) {
+        if (!this.info.nickname) {
           this.$message.error('请输入昵称')
           return
         }
-        if (!regStr(this.user.nickname)) {
+        if (!regStr(this.info.nickname)) {
           this.$message.error('昵称不可包含特殊字符')
           return
         }
-        if (this.user.email && !regEmail(this.user.email)) {
+        if (this.info.nickname.length > 10) {
+          this.$message.error('昵称不可超过10个字符')
+          return
+        }
+        if (this.info.email && !regEmail(this.info.email)) {
           this.$message.error('邮箱格式不正确')
+          return
         }
 
         modifyInfo(obj).then(res => {
-          let user = this.user
-          user.nickname = this.user.nickname
-          user.email = this.user.email
+          let user = this.info
+          user.nickname = this.info.nickname
+          user.email = this.info.email
           this.$store.commit('SET_USER', user)
           storage.set('USERINFO', user)
           this.$message.success('修改成功')
@@ -142,11 +156,8 @@
         })
       },
       setavatar (url) {
-        console.log('setavatar:', url)
         let user = this.user
         user.headImgUrl = url
-        // this.user = user
-        // console.log('user:', user)
         this.$store.commit('SET_USER', user)
         storage.set('USERINFO', user)
         this.option.img = url
