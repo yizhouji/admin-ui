@@ -11,7 +11,7 @@
         <img src="../../assets/logo.png" alt="" />
       </div>
       <div class="input">
-        <a-input ref="userNameInput" class="inputItem" v-model="phone" placeholder="请输入手机号">
+        <a-input ref="userNameInput" class="inputItem" v-model.trim="phone" placeholder="请输入手机号">
           <a-icon slot="prefix" type="mobile" :style="{ color: '#d9d9d9' }" />
         </a-input>
       </div>
@@ -19,7 +19,8 @@
         <a-input ref="userNameInput" class="inputItem" v-model="code" placeholder="请输入验证码">
           <a-icon slot="prefix" type="lock" :style="{ color: '#d9d9d9' }" />
         </a-input>
-        <a-button type="primary" ghost>发送验证码</a-button>
+        <a-button type="primary" ghost v-if="hasSend" @click="sendCode">{{ txt }}</a-button>
+        <a-button type="info" disabled v-else>{{ smsTime }}s</a-button>
       </div>
       <div class="submit">
         <a-button type="primary" block>绑定</a-button>
@@ -32,64 +33,141 @@
 </template>
 
 <script>
-export default {
-  name: 'BindMobile',
-  data () {
-    return {
-      visible: false,
-      phone: '',
-      code: ''
-    }
-  },
-  methods: {
-    show () {
-      this.visible = true
+  import {
+    bindMobile,
+    getMsgCode
+  } from '@/api/user'
+  import {
+    regMobile
+  } from '@/utils/util'
+  import storage from 'store'
+
+  export default {
+    name: 'BindMobile',
+    data () {
+      return {
+        visible: false,
+        phone: '',
+        code: '',
+        smsTime: 10,
+        hasSend: true,
+        txt: '发送验证码',
+        timer: null
+      }
+    },
+    user () {
+      let user = ''
+      if (this.$store.state.user.user) {
+        user = this.$store.state.user.user
+      } else {
+        user = storage.get('USERINFO')
+      }
+      return user
+    },
+    methods: {
+      show () {
+        this.visible = true
+      },
+      sendCode () {
+        if (!this.phone) {
+          this.$message.error('请输入手机号码')
+          return
+        }
+        if (!regMobile(this.phone)) {
+          this.$message.error('请输入正确的手机号码')
+          return
+        }
+
+        getMsgCode({
+          telephone: this.phone
+        }).then(res => {
+          this.hasSend = false
+          this.timer = setInterval(() => {
+            if (this.smsTime > 0) {
+              this.smsTime--
+            } else {
+              this.smsTime = 10
+              this.hasSend = true
+              this.txt = '重新发送'
+              window.clearInterval(this.timer)
+              console.log(this.timer)
+              this.timer = null
+            }
+          }, 1000)
+        }).catch(error => {
+          this.$message.error(error.data.message)
+        })
+      },
+      bind () {
+        bindMobile({
+          code: this.code,
+          telephone: this.phone
+        }).then(res => {
+          this.$message.success('修改成功')
+          let user = this.user
+          user.telephone = this.telephone
+          this.$store.commit('SET_USER', user)
+          storage.set('USERINFO', user)
+        }).catch(error => {
+          this.$message.error(error.data.message)
+        })
+      }
+
     }
   }
-}
 </script>
 
 <style lang="less" scoped>
-.bindMobile{
-    padding-bottom:20px ;
-}
-.logo {
-  margin-bottom: 40px;
-  img {
-    width: 130px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
+  .bindMobile {
+    padding-bottom: 20px;
   }
-}
-.input {
-  display: flex;
-  .inputItem {
-    height: 40px;
-    margin-bottom: 24px;
-    /deep/ input {
-      border-radius: 5px;
+
+  .logo {
+    margin-bottom: 40px;
+
+    img {
+      width: 130px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+  }
+
+  .input {
+    display: flex;
+
+    .inputItem {
+      height: 40px;
+      margin-bottom: 24px;
+
+      /deep/ input {
+        border-radius: 5px;
+      }
+
     }
 
-  }
-  /deep/ button {
+    /deep/ button {
       height: 40px;
       margin-left: 24px;
       border-radius: 5px;
     }
-}
-.submit{
+  }
+
+  .submit {
     margin-bottom: 20px;
-   /deep/ button {
+
+    /deep/ button {
       height: 40px;
       border-radius: 5px;
     }
-}
-.tip{
+  }
+
+  .tip {
     color: #666666;
     font-size: 16px;
-    span{
-        color: #FFB200;
+
+    span {
+      color: #FFB200;
     }
-}
+  }
 </style>

@@ -82,9 +82,7 @@
     productsImport,
     productsImportApi
   } from '@/api/product'
-  import {
-    setTimeout
-  } from 'timers'
+
   // import { mapActions } from 'vuex'
   // import { log } from 'util'
 

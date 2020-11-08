@@ -30,7 +30,7 @@ export function handleScrollHeader (callback) {
   let timer = 0
 
   let beforeScrollTop = window.pageYOffset
-  callback = callback || function () { }
+  callback = callback || function () {}
   window.addEventListener(
     'scroll',
     event => {
@@ -100,4 +100,26 @@ export function getBase64 (file) {
     reader.onload = () => resolve(reader.result)
     reader.onerror = (error) => reject(error)
   })
+}
+
+export function regMobile (mobile) {
+  let myreg = /^[1][3,4,5,6,7,8,9][0-9]{9}$/
+  return myreg.test(mobile)
+}
+
+export function regStr (str) {
+  // eslint-disable-next-line no-useless-escape
+  var regEn = /[`~!@#$%^&*()_+<>?:"{},.\/;'[\]]/im
+  var regCn = /[·！#￥（——）：；“”‘、，|《。》？、【】[\]]/im
+  if (regEn.test(str) || regCn.test(str)) {
+    return false
+  } else {
+    return true
+  }
+}
+
+export function regEmail (email) {
+  // eslint-disable-next-line no-useless-escape
+  let myreg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+  return myreg.test(email)
 }
