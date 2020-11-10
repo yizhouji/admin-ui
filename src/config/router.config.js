@@ -147,6 +147,7 @@ export const constantRouterMap = [
   },
   {
     path: '/cargoList',
+    name: 'CargoList',
     component: () => import('@/views/cargoList'),
     hidden: true
   },

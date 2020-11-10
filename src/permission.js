@@ -2,7 +2,7 @@
  * @Author: zhaojingyu
  * @Date: 2020-07-28 10:41:54
  * @LastEditors: zhaojingyu
- * @LastEditTime: 2020-11-05 15:05:59
+ * @LastEditTime: 2020-11-10 18:32:56
  */
 import router from './router'
 import store from './store'
@@ -16,11 +16,12 @@ import { i18nRender } from '@/locales'
 
 NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
-const whiteList = ['Login', 'Register', 'Index', 'Price', 'ForgetPwd', 'BindMobile'] // no redirect whitelist
+const whiteList = ['Login', 'Register', 'Index', 'Price', 'ForgetPwd', 'BindMobile', 'CargoList'] // no redirect whitelist
 const loginRoutePath = '/user/login'
 const defaultRoutePath = '/dashboard/index'
 
 router.beforeEach((to, from, next) => {
+  console.log(to)
   NProgress.start() // start progress bar
   to.meta && typeof to.meta.title !== 'undefined' && setDocumentTitle(`${i18nRender(to.meta.title)} - ${domTitle}`)
   /* has token */
@@ -35,6 +36,7 @@ router.beforeEach((to, from, next) => {
     }
   } else {
     if (whiteList.includes(to.name)) {
+      console.log(to.name)
       next()
     } else {
       next({ path: loginRoutePath, query: { redirect: to.fullPath } })
