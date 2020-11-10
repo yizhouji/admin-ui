@@ -96,7 +96,7 @@ export const asyncRouterMap = [
         component: () => import('@/views/account/settings/BaseSetting'),
         name: 'account',
         hidden: true,
-        meta: { title: '个人中心', icon: 'user', keepAlive: true }
+        meta: { title: '个人中心', icon: 'user', keepAlive: false }
       }
     ]
   },

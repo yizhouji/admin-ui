@@ -110,6 +110,11 @@
       // }
     },
     mounted () {
+      console.log('mounted:', this.$route.query.bind)
+      let query = this.$route.query
+      if (query && query.bind) {
+        this.$refs.bindMobile.show()
+      }
       let user = ''
       if (this.$store.state.user.user) {
         user = this.$store.state.user.user

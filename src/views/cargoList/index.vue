@@ -11,6 +11,10 @@
         <p>销货清单</p>
       </div>
       <div class="mainBox">
+        <div class="topImg">
+          <img src="../../assets/topImg.png" alt="" />
+
+        </div>
         <div class="mainInfo">
           <div class="item">
             <div class="left">
@@ -125,6 +129,7 @@ export default {
   },
   methods: {
     save () {
+      document.body.scrollTop = document.documentElement.scrollTop = 0
       html2canvas(this.$refs.canvas).then(canvas => {
         // 转成图片，生成图片地址
         console.log('canvas：', canvas)
@@ -146,7 +151,10 @@ export default {
 
 <style lang="less" scoped>
 .cargoList {
-  background: #f5f5f5;
+  .canvas{
+    background: #f5f5f5;
+
+  }
   .title {
     text-align: center;
     font-size: 0.6rem;
@@ -154,7 +162,6 @@ export default {
     line-height: 4rem;
     display: flex;
     justify-content: center;
-    background: #28b9fc;
     font-weight: bold;
     color: #ffffff;
   }
@@ -162,6 +169,14 @@ export default {
     padding: 0 0.4rem;
     margin-top: -1.5rem;
     padding-bottom: 1.8rem;
+    .topImg{
+      img{
+        width: 90%;
+        height: auto;
+        display: block;
+        margin: 0 auto
+      }
+    }
   }
   .mainInfo {
     background: #ffffff;
@@ -193,7 +208,7 @@ export default {
         span {
           font-size: 0.45rem;
           color: #222222;
-          font-weight: 600;
+          font-weight: bold;
         }
       }
       .right {
@@ -210,6 +225,9 @@ export default {
       z-index: 2;
       position: absolute;
       bottom: 0;
+    }
+    .item:last-child::after {
+      height: 0px;
     }
   }
   .detailTitle {
