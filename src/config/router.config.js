@@ -146,6 +146,11 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/cargoList',
+    component: () => import('@/views/cargoList'),
+    hidden: true
+  },
+  {
     path: '/',
     component: BlankLayout,
     redirect: '/index',
