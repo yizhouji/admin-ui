@@ -8,49 +8,51 @@
       >
         <a-tab-pane key="tab1" tab="账号密码登录">
           <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
-          <a-form-item>
-            <a-input
-              size="large"
-              type="text"
-              placeholder="请输入用户名"
-              v-decorator="[
-                'userName',
-                {
-                  rules: [{ required: true, message: '请输入用户名' }, { validator: handleUsernameOrEmail }],
-                  validateTrigger: 'change'
-                }
-              ]"
-            >
-              <a-icon slot="prefix" type="user" :style="{ color: 'rgba(0,0,0,.25)' }" />
-            </a-input>
-          </a-form-item>
-
-          <a-form-item>
-            <a-input
-              size="large"
-              type="password"
-              placeholder="请输入密码"
-              v-decorator="[
-                'password',
-                { rules: [{ required: true, message: '请输入密码' }], validateTrigger: 'blur' }
-              ]"
-            >
-              <a-icon slot="prefix" type="lock" :style="{ color: 'rgba(0,0,0,.25)' }" />
-            </a-input>
-          </a-form-item>
+          <
+          <div class="bindMobile">
+            <div class="logo">
+              <img src="../../assets/logo.png" alt="" />
+            </div>
+            <div class="input">
+              <a-input
+                ref="userNameInput"
+                class="inputItem"
+                v-model.trim="phone"
+                :maxLength="11"
+                placeholder="请输入手机号"
+              >
+                <a-icon slot="prefix" type="mobile" :style="{ color: '#d9d9d9' }" />
+              </a-input>
+            </div>
+            <div class="input">
+              <a-input ref="userNameInput" class="inputItem" v-model="code" placeholder="请输入验证码">
+                <a-icon slot="prefix" type="lock" :style="{ color: '#d9d9d9' }" />
+              </a-input>
+              <a-button type="primary" ghost v-if="hasSend" @click="sendCode">{{ txt }}</a-button>
+              <a-button type="info" disabled v-else>{{ smsTime }}s</a-button>
+            </div>
+            <a-form-item>
+              <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">自动登录</a-checkbox>
+              <!-- <router-link
+                :to="{ name: 'ForgetPwd' }"
+                class="forge-password"
+                style="float: right;"
+              >忘记密码</router-link
+              > -->
+            </a-form-item>
+            <div class="submit">
+              <a-button type="primary" block @click="bind">登录</a-button>
+            </div>
+          </div>
         </a-tab-pane>
-        <a-tab-pane key="tab2" tab="微信扫码登录">
+        <!-- <a-tab-pane key="tab2" tab="微信扫码登录">
           <div id="weixin">
             <img :src="qrCodeUrl" alt="" />
             <p>请打开微信扫码登录</p>
           </div>
-        </a-tab-pane>
+        </a-tab-pane> -->
       </a-tabs>
-      <template v-if="customActiveKey === 'tab1'">
-        <a-form-item>
-          <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">自动登录</a-checkbox>
-          <router-link :to="{ name: 'ForgetPwd' }" class="forge-password" style="float: right;">忘记密码</router-link>
-        </a-form-item>
+      <!-- <template v-if="customActiveKey === 'tab1'">
 
         <a-form-item style="margin-top:24px">
           <a-button
@@ -71,7 +73,7 @@
             <router-link :to="{ name: 'Register' }">注册账户</router-link>
           </div>
         </div>
-      </template>
+      </template> -->
     </a-form>
 
     <two-step-captcha
@@ -87,8 +89,9 @@
 import storage from 'store'
 import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
-import { timeFix, welcome } from '@/utils/util'
+import { timeFix, welcome, regMobile } from '@/utils/util'
 import { getQrcode, checkLogin } from '@/api/login'
+import { bindMobile, getMsgCode } from '@/api/user'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 var timer
 export default {
@@ -115,7 +118,14 @@ export default {
       },
       qrCodeUrl: '',
       sceneStr: '',
-      isRequest: false
+      isRequest: false,
+
+      phone: '',
+      code: '',
+      smsTime: 60,
+      hasSend: true,
+      txt: '发送验证码',
+      timer: null
     }
   },
   created () {},
@@ -141,7 +151,38 @@ export default {
           })
         })
     },
+    sendCode () {
+      if (!this.phone) {
+        this.$message.error('请输入手机号码')
+        return
+      }
+      if (!regMobile(this.phone)) {
+        this.$message.error('请输入正确的手机号码')
+        return
+      }
 
+      getMsgCode({
+        telephone: this.phone
+      })
+        .then(res => {
+          this.hasSend = false
+          this.timer = setInterval(() => {
+            if (this.smsTime > 0) {
+              this.smsTime--
+            } else {
+              this.smsTime = 60
+              this.hasSend = true
+              this.txt = '重新发送'
+              window.clearInterval(this.timer)
+              console.log(this.timer)
+              this.timer = null
+            }
+          }, 1000)
+        })
+        .catch(error => {
+          this.$message.error(error.data.message)
+        })
+    },
     getStatus () {
       this.isRequest = true
       checkLogin(this.sceneStr)
@@ -291,30 +332,46 @@ export default {
       float: right;
     }
   }
-  /deep/ .ant-tabs-ink-bar {
-    width: 0 !important;
+  .bindMobile {
+    padding-bottom: 20px;
   }
-  .target {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  /deep/ .ant-form-item-with-help {
-    margin-bottom: 24px;
-  }
-  #weixin {
-    margin: 0 auto;
+
+  .logo {
+    margin-bottom: 40px;
+
     img {
+      width: 130px;
+      height: auto;
       display: block;
-      width: 200px;
-      height: 200px;
       margin: 0 auto;
     }
-    p {
-      font-size: 14px;
-      margin-top: 20px;
-      color: #999999;
-      text-align: center;
+  }
+
+  .input {
+    display: flex;
+
+    .inputItem {
+      height: 40px;
+      margin-bottom: 24px;
+
+      /deep/ input {
+        border-radius: 5px;
+      }
+    }
+
+    /deep/ button {
+      height: 40px;
+      margin-left: 24px;
+      border-radius: 5px;
+    }
+  }
+
+  .submit {
+    margin-bottom: 20px;
+
+    /deep/ button {
+      height: 40px;
+      border-radius: 5px;
     }
   }
 }

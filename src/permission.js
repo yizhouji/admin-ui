@@ -2,7 +2,7 @@
  * @Author: zhaojingyu
  * @Date: 2020-07-28 10:41:54
  * @LastEditors: zhaojingyu
- * @LastEditTime: 2020-11-10 18:32:56
+ * @LastEditTime: 2020-11-11 09:57:57
  */
 import router from './router'
 import store from './store'
@@ -45,7 +45,6 @@ router.beforeEach((to, from, next) => {
       NProgress.done()
     } else {
       let user = storage.get('USERINFO')
-      user.telephone = ''
       if (user.telephone) {
         next()
         NProgress.done()

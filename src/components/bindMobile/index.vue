@@ -2,10 +2,10 @@
  * @Author: zhaojingyu
  * @Date: 2020-11-05 14:19:48
  * @LastEditors: zhaojingyu
- * @LastEditTime: 2020-11-05 15:04:58
+ * @LastEditTime: 2020-11-11 10:04:15
 -->
 <template>
-  <a-modal :footer="null" :closable="false" centered v-model="visible" :width="360">
+  <a-modal :footer="null" :maskClosable="false" centered v-model="visible" :width="360">
     <div class="bindMobile">
       <div class="logo">
         <img src="../../assets/logo.png" alt="" />
