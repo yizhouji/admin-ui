@@ -1,113 +1,70 @@
 <template>
   <div class="main">
-    <a-form id="formLogin" class="user-layout-login" ref="formLogin" :form="form" @submit="handleSubmit">
-      <a-tabs
-        :activeKey="customActiveKey"
-        :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }"
-        @change="handleTabClick"
-      >
-        <a-tab-pane key="tab1" tab="账号密码登录">
-          <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="账户或密码错误" />
-          <
-          <div class="bindMobile">
-            <div class="logo">
-              <img src="../../assets/logo.png" alt="" />
-            </div>
-            <div class="input">
-              <a-input
-                ref="userNameInput"
-                class="inputItem"
-                v-model.trim="phone"
-                :maxLength="11"
-                placeholder="请输入手机号"
-              >
-                <a-icon slot="prefix" type="mobile" :style="{ color: '#d9d9d9' }" />
-              </a-input>
-            </div>
-            <div class="input">
-              <a-input ref="userNameInput" class="inputItem" v-model="code" placeholder="请输入验证码">
-                <a-icon slot="prefix" type="lock" :style="{ color: '#d9d9d9' }" />
-              </a-input>
-              <a-button type="primary" ghost v-if="hasSend" @click="sendCode">{{ txt }}</a-button>
-              <a-button type="info" disabled v-else>{{ smsTime }}s</a-button>
-            </div>
-            <a-form-item>
-              <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">自动登录</a-checkbox>
-              <!-- <router-link
-                :to="{ name: 'ForgetPwd' }"
-                class="forge-password"
-                style="float: right;"
-              >忘记密码</router-link
-              > -->
-            </a-form-item>
-            <div class="submit">
-              <a-button type="primary" block @click="bind">登录</a-button>
-            </div>
-          </div>
-        </a-tab-pane>
-        <!-- <a-tab-pane key="tab2" tab="微信扫码登录">
-          <div id="weixin">
-            <img :src="qrCodeUrl" alt="" />
-            <p>请打开微信扫码登录</p>
-          </div>
-        </a-tab-pane> -->
-      </a-tabs>
-      <!-- <template v-if="customActiveKey === 'tab1'">
+    <div class="title">{{ title }}</div>
+    <a-alert v-if="isLoginError" type="error" showIcon style="margin-bottom: 24px;" message="验证码错误" />
 
-        <a-form-item style="margin-top:24px">
-          <a-button
-            size="large"
-            type="primary"
-            htmlType="submit"
-            class="login-button"
-            :loading="state.loginBtn"
-            :disabled="state.loginBtn"
-          >确定</a-button
-          >
-        </a-form-item>
-        <div class="target">
-          <div class="user-login-other">
-            <router-link class="register" :to="{ name: 'Index' }">官网首页</router-link>
-          </div>
-          <div class="user-login-other">
-            <router-link :to="{ name: 'Register' }">注册账户</router-link>
+    <div class="mobileLogin" v-if="showMobileLogin">
+      <div class="input">
+        <a-input
+          ref="userNameInput"
+          class="inputItem"
+          v-model.trim="phone"
+          :maxLength="11"
+          placeholder="请输入手机号"
+        >
+          <a-icon slot="prefix" type="mobile" :style="{ color: '#d9d9d9' }" />
+        </a-input>
+      </div>
+      <div class="input">
+        <a-input ref="userNameInput" class="inputItem" v-model="code" placeholder="请输入验证码">
+          <a-icon slot="prefix" type="lock" :style="{ color: '#d9d9d9' }" />
+        </a-input>
+        <a-button type="primary" v-if="hasSend" @click="sendCode">{{ txt }}</a-button>
+        <a-button type="info" disabled v-else>{{ smsTime }}s</a-button>
+      </div>
+      <div class="check">
+        <a-checkbox v-decorator="['rememberMe', { valuePropName: 'checked' }]">自动登录</a-checkbox>
+        <span @click="loginType(1)">微信扫码登录</span>
+      </div>
+      <div class="submit">
+        <a-button type="primary" block @click="loginHandle">登录</a-button>
+      </div>
+    </div>
+    <div class="wechatLogin" v-else>
+      <div id="weixin">
+        <div class="img">
+          <img :src="qrCodeUrl" alt="" />
+        </div>
+        <a-divider>
+          <span class="skip">其他方式登录</span>
+        </a-divider>
+        <div class="changeLogin">
+          <div class="item">
+            <img src="../../assets/wechatLogin.png" alt="" />
+            <p @click="loginType(2)">手机号登陆</p>
           </div>
         </div>
-      </template> -->
-    </a-form>
-
-    <two-step-captcha
-      v-if="requiredTwoStepCaptcha"
-      :visible="stepCaptchaVisible"
-      @success="stepCaptchaSuccess"
-      @cancel="stepCaptchaCancel"
-    ></two-step-captcha>
+      </div>
+    </div>
+    <!-- </a-form> -->
   </div>
 </template>
 
 <script>
 import storage from 'store'
-import TwoStepCaptcha from '@/components/tools/TwoStepCaptcha'
 import { mapActions } from 'vuex'
 import { timeFix, welcome, regMobile } from '@/utils/util'
 import { getQrcode, checkLogin } from '@/api/login'
 import { bindMobile, getMsgCode } from '@/api/user'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
-var timer
+var timer = null
 export default {
   name: 'Login',
-  components: {
-    TwoStepCaptcha
-  },
+  components: {},
   data () {
     return {
-      customActiveKey: 'tab1',
+      title: '手机号登录',
       loginBtn: false,
-      // login type: 0 email, 1 username, 2 telephone
-      loginType: 0,
-      isLoginError: false,
-      requiredTwoStepCaptcha: false,
-      stepCaptchaVisible: false,
       form: this.$form.createForm(this),
       state: {
         time: 60,
@@ -125,7 +82,9 @@ export default {
       smsTime: 60,
       hasSend: true,
       txt: '发送验证码',
-      timer: null
+      timer: null,
+      showMobileLogin: true,
+      isLoginError: false
     }
   },
   created () {},
@@ -135,6 +94,17 @@ export default {
   },
   methods: {
     ...mapActions(['Login', 'Logout']),
+    loginType (type) {
+      if (type === 1) {
+        this.title = '微信扫码登录'
+        this.showMobileLogin = false
+        this.getCode()
+      } else {
+        this.title = '手机号登录'
+        this.showMobileLogin = true
+        clearInterval(timer)
+      }
+    },
     getCode () {
       getQrcode()
         .then()
@@ -227,7 +197,7 @@ export default {
       })
     },
 
-    handleSubmit (e) {
+    loginHandle (e) {
       e.preventDefault()
       const {
         form: { validateFields },
@@ -237,22 +207,15 @@ export default {
 
       state.loginBtn = true
 
-      const validateFieldsKey = ['userName', 'password']
-
-      validateFields(validateFieldsKey, { force: true }, (err, values) => {
-        if (!err) {
-          Login(values)
-            .then(res => this.loginSuccess(res))
-            .catch(err => this.requestFailed(err))
-            .finally(() => {
-              state.loginBtn = false
-            })
-        } else {
-          setTimeout(() => {
-            state.loginBtn = false
-          }, 600)
-        }
+      Login({
+        userName: this.phone,
+        password: this.code
       })
+        .then(res => this.loginSuccess(res))
+        .catch(err => this.requestFailed(err))
+        .finally(() => {
+          state.loginBtn = false
+        })
     },
 
     stepCaptchaSuccess () {
@@ -288,90 +251,107 @@ export default {
 </script>
 
 <style lang="less" scoped>
-.user-layout-login {
-  label {
-    font-size: 14px;
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #40a9ff;
+  font-size: 14px;
+}
+.check {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #40a9ff;
+  margin-bottom: 20px;
+  span {
+    cursor: pointer;
   }
+}
 
-  .getCaptcha {
+.mobileLogin {
+  padding-bottom: 20px;
+}
+
+.logo {
+  margin-bottom: 40px;
+
+  img {
+    width: 130px;
+    height: auto;
     display: block;
-    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+.input {
+  display: flex;
+
+  .inputItem {
     height: 40px;
-  }
+    margin-bottom: 24px;
 
-  .forge-password {
-    font-size: 14px;
-  }
-
-  button.login-button {
-    padding: 0 15px;
-    font-size: 16px;
-    height: 40px;
-    width: 100%;
-  }
-
-  .user-login-other {
-    text-align: left;
-    // margin-top: 24px;
-    line-height: 22px;
-
-    .item-icon {
-      font-size: 24px;
-      color: rgba(0, 0, 0, 0.2);
-      margin-left: 16px;
-      vertical-align: middle;
-      cursor: pointer;
-      transition: color 0.3s;
-
-      &:hover {
-        color: #1890ff;
-      }
-    }
-
-    .register {
-      float: right;
+    /deep/ input {
+      border-radius: 5px;
     }
   }
-  .bindMobile {
-    padding-bottom: 20px;
+
+  /deep/ button {
+    border: #40a9ff;
+    color: #ffffff;
+    background: #40a9ff;
+    height: 40px;
+    margin-left: 24px;
+    border-radius: 5px;
   }
+}
 
-  .logo {
-    margin-bottom: 40px;
+.submit {
+  margin-bottom: 20px;
 
+  /deep/ button {
+    height: 40px;
+    border-radius: 5px;
+  }
+}
+
+#weixin {
+  .img {
+    width: 190px;
+    height: 190px;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 0 auto;
     img {
-      width: 130px;
-      height: auto;
+      width: 190px;
+      height: 190px;
       display: block;
-      margin: 0 auto;
     }
   }
 
-  .input {
+  /deep/ .skip {
+    color: #40a9ff;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  .changeLogin {
     display: flex;
-
-    .inputItem {
-      height: 40px;
-      margin-bottom: 24px;
-
-      /deep/ input {
-        border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    .item {
+      img {
+        width: 35px;
+        height: 35px;
+        display: block;
+        margin: 0 auto;
       }
-    }
-
-    /deep/ button {
-      height: 40px;
-      margin-left: 24px;
-      border-radius: 5px;
-    }
-  }
-
-  .submit {
-    margin-bottom: 20px;
-
-    /deep/ button {
-      height: 40px;
-      border-radius: 5px;
+      p {
+        margin-top: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: #40a9ff;
+        cursor: pointer;
+      }
     }
   }
 }

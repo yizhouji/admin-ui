@@ -2,7 +2,7 @@
  * @Author: zhaojingyu
  * @Date: 2020-07-28 10:41:56
  * @LastEditors: zhaojingyu
- * @LastEditTime: 2020-11-02 17:17:51
+ * @LastEditTime: 2020-11-12 15:10:16
  */
 import axios from 'axios'
 import store from '@/store'
@@ -15,13 +15,15 @@ import { ACCESS_TOKEN } from '@/store/mutation-types'
 const axiosConfig = {
   // API 请求的默认前缀
 
-  timeout: 6000 // 请求超时时间
+  timeout: 60000 // 请求超时时间
 }
 // if (process.env.NODE_ENV === 'production') {
 //    axiosConfig.baseURL = 'http://47.101.190.37:8080'
 // }
 
 const request = axios.create(axiosConfig)
+
+let list = ['/warehouse/infos/bind']
 
 // 异常拦截处理器
 const errorHandler = (error) => {
@@ -30,10 +32,22 @@ const errorHandler = (error) => {
     // 从 localstorage 获取 token
     const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 500) {
-      notification.error({
-        message: '请求失败',
-        description: data.message
+      console.log(error.response)
+      let url = error.response.request.responseURL
+      let bool = false
+      list.forEach(element => {
+          if (url.indexOf(url) > -1) {
+            bool = true
+          }
       })
+      if (!bool) {
+        notification.error({
+          message: '请求失败',
+          description: data.message
+        })
+      } else {
+        return Promise.reject(error.response)
+      }
     }
     if (error.response.status === 403) {
       notification.error({

@@ -25,12 +25,9 @@
                   <a-input placeholder="请输入邮箱" v-model.trim="info.email" />
                 </a-form-item>
                 <a-form-item label="微信" :required="false">
-                  <div class="qrCode">
-                    <div class="img">
-                      <img :src="qrCode" alt="" v-if="qrCode" />
-                    </div>
-                    <p>扫描二维码绑定微信</p>
-                    <p>方便下次登录</p>
+                  <div class="refresh">
+                    <wechat ref="wechat" :key="keyComponents" v-if="show"></wechat>
+                    <div class="refreshBox" @click="refreshHandle"></div>
                   </div>
                 </a-form-item>
                 <a-form-item>
@@ -45,7 +42,10 @@
                   <a-icon type="plus" />
                 </div>
                 <img
-                  :src="info.headImgUrl || 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'" />
+                  :src="
+                    info.headImgUrl || 'https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png'
+                  "
+                />
               </div>
             </a-col>
           </a-row>
@@ -58,215 +58,295 @@
 </template>
 
 <script>
-  import AvatarModal from './AvatarModal'
-  import storage from 'store'
-  import BindMobile from '@/components/bindMobile'
-  import {
-    modifyInfo
-  } from '@/api/user'
-  import {
-    regStr,
-    regEmail
-  } from '@/utils/util'
-  export default {
-    components: {
-      AvatarModal,
-      BindMobile
-    },
-    data () {
-      return {
-        // cropper
-        preview: {},
-        qrCode: '',
-        option: {
-          img: '/avatar2.jpg',
-          info: true,
-          size: 1,
-          outputType: 'jpeg',
-          canScale: false,
-          autoCrop: true,
-          // 只有自动截图开启 宽度高度才生效
-          autoCropWidth: 180,
-          autoCropHeight: 180,
-          fixedBox: true,
-          // 开启宽度和高度比例
-          fixed: true,
-          fixedNumber: [1, 1]
+import AvatarModal from './AvatarModal'
+import wechat from './wechat'
 
-        },
-        info: ''
-      }
-    },
-    computed: {
-      // info () {
-      //   let user = ''
-      //   if (this.$store.state.user.user) {
-      //     user = this.$store.state.user.user
-      //   } else {
-      //     user = storage.get('USERINFO')
-      //   }
-      //   console.log(this.$store.state.user)
-      //   return user
-      // }
-    },
-    mounted () {
-      console.log('mounted:', this.$route.query.bind)
-      let query = this.$route.query
-      if (query && query.bind) {
-        this.$refs.bindMobile.show()
-      }
-      let user = ''
-      if (this.$store.state.user.user) {
-        user = this.$store.state.user.user
-      } else {
-        user = storage.get('USERINFO')
-      }
-      this.info = user
-    },
-    methods: {
-      bindMobile () {
-        this.$refs.bindMobile.show()
+import storage from 'store'
+import BindMobile from '@/components/bindMobile'
+import { modifyInfo, getQrCode, getBindStatus } from '@/api/user'
+import { regStr, regEmail } from '@/utils/util'
+export default {
+  components: {
+    AvatarModal,
+    BindMobile,
+    wechat
+  },
+  data () {
+    return {
+      // cropper
+
+      preview: {},
+      qrCode: '',
+      option: {
+        img: '/avatar2.jpg',
+        info: true,
+        size: 1,
+        outputType: 'jpeg',
+        canScale: false,
+        autoCrop: true,
+        // 只有自动截图开启 宽度高度才生效
+        autoCropWidth: 180,
+        autoCropHeight: 180,
+        fixedBox: true,
+        // 开启宽度和高度比例
+        fixed: true,
+        fixedNumber: [1, 1]
       },
-      changeInfo () {
-        let obj = {
-          email: this.info.email,
-          nickname: this.info.nickname
+      info: '',
+      qrCodeUrl: '',
+      sceneStr: '',
+      timer: null,
+      isRequest: false,
+      refresh: false,
+      keyComponents: new Date().getTime(),
+      show: true
+    }
+  },
+  computed: {
+    // info () {
+    //   let user = ''
+    //   if (this.$store.state.user.user) {
+    //     user = this.$store.state.user.user
+    //   } else {
+    //     user = storage.get('USERINFO')
+    //   }
+    //   console.log(this.$store.state.user)
+    //   return user
+    // }
+  },
+  mounted () {
+    console.log('mounted')
+    let query = this.$route.query
+    if (query && query.bind) {
+      this.$refs.bindMobile.show()
+    }
+    let user = ''
+    if (this.$store.state.user.user) {
+      user = this.$store.state.user.user
+    } else {
+      user = storage.get('USERINFO')
+    }
+    // user.wechatInfo = ''
+    console.log(user)
+    this.$refs.wechat.init(user)
+    this.info = user
+    // this.getCodeImg(0)
+  },
+  methods: {
+    refreshHandle () {
+      console.log('111')
+      this.show = false
+      this.keyComponents = new Date().getTime()
+      this.show = true
+      this.$nextTick(() => {
+        this.$refs.wechat.init(this.info)
+      })
+    },
+    getCodeImg (type) {
+      getQrCode().then(res => {
+        this.qrCodeUrl = res.result.qrCodeUrl
+        this.sceneStr = res.result.sceneStr
+        if (!this.info.wechatInfo) {
+          this.getStatus(type)
         }
-        if (!this.info.nickname) {
-          this.$message.error('请输入昵称')
-          return
-        }
-        if (!regStr(this.info.nickname)) {
-          this.$message.error('昵称不可包含特殊字符')
-          return
-        }
-        if (this.info.nickname.length > 10) {
-          this.$message.error('昵称不可超过10个字符')
-          return
-        }
-        if (this.info.email && !regEmail(this.info.email)) {
-          this.$message.error('邮箱格式不正确')
-          return
-        }
+      })
+    },
+    getStatus () {
+      getBindStatus({ sceneStr: this.sceneStr })
+        .then(res => {
+          let user = this.user
+          user.wechatInfo = res.result.data
+          this.$store.commit('SET_USER', user)
+          storage.set('USERINFO', user)
+        })
+        .catch(error => {
+          if (error.data.code === 'A0111') {
+            this.$message.error('扫码的微信已绑定其他账号')
+          } else if (error.data.code === 'A0112') {
+            this.getStatus()
+          } else {
+            this.$notification.error({
+              message: '请求失败',
+              description: error.data.message
+            })
+          }
+        })
+    },
+    bindMobile () {
+      this.$refs.bindMobile.show()
+    },
+    changeInfo () {
+      let obj = {
+        email: this.info.email,
+        nickname: this.info.nickname
+      }
+      if (!this.info.nickname) {
+        this.$message.error('请输入昵称')
+        return
+      }
+      if (!regStr(this.info.nickname)) {
+        this.$message.error('昵称不可包含特殊字符')
+        return
+      }
+      if (this.info.nickname.length > 10) {
+        this.$message.error('昵称不可超过10个字符')
+        return
+      }
+      if (this.info.email && !regEmail(this.info.email)) {
+        this.$message.error('邮箱格式不正确')
+        return
+      }
 
-        modifyInfo(obj).then(res => {
+      modifyInfo(obj)
+        .then(res => {
           let user = this.info
           user.nickname = this.info.nickname
           user.email = this.info.email
           this.$store.commit('SET_USER', user)
           storage.set('USERINFO', user)
           this.$message.success('修改成功')
-        }).catch(error => {
+        })
+        .catch(error => {
           this.$message.error(error.data.message)
         })
-      },
-      setavatar (url) {
-        let user = this.user
-        user.headImgUrl = url
-        this.$store.commit('SET_USER', user)
-        storage.set('USERINFO', user)
-        this.option.img = url
-      }
+    },
+    setavatar (url) {
+      let user = this.user
+      user.headImgUrl = url
+      this.$store.commit('SET_USER', user)
+      storage.set('USERINFO', user)
+      this.option.img = url
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
-  .main {
-    padding: 0 40px;
+.refresh {
+  position: relative;
+  .refreshBox {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+  }
+}
+.main {
+  padding: 0 40px;
 
-    .title {
-      font-size: 24px;
-      color: #333333;
-      margin-bottom: 20px;
-    }
+  .title {
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 20px;
+  }
 
-    /deep/ .ant-form-item {
-      height: auto;
-    }
+  /deep/ .ant-form-item {
+    height: auto;
+  }
 
-    .telephone {
-      display: inline-block;
-      margin-right: 20px;
-    }
+  .telephone {
+    display: inline-block;
+    margin-right: 20px;
+  }
 
-    .qrCode {
-      .img {
+  .qrCode {
+    .img {
+      width: 126px;
+      height: 126px;
+      position: relative;
+
+      img {
         width: 126px;
         height: 126px;
-
-        img {
-          width: 126px;
-          height: 126px;
-        }
-
-        border-radius: 5px;
-        background: #d8d8d8;
-        display: block;
-        margin: 0 auto 20px;
       }
 
-      p {
-        text-align: center;
-        font-size: 14px;
-        color: #666666;
-      }
+      border-radius: 5px;
+      background: #d8d8d8;
+      display: block;
+      margin: 0 auto 20px;
+    }
+
+    p {
+      text-align: center;
+      font-size: 14px;
+      color: #666666;
+    }
+    .bg {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 2;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+    }
+  }
+}
+
+.avatar-upload-wrapper {
+  height: 200px;
+  width: 100%;
+}
+
+.ant-upload-preview {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  max-width: 180px;
+  border-radius: 50%;
+  box-shadow: 0 0 4px #ccc;
+
+  .upload-icon {
+    position: absolute;
+    top: 0;
+    right: 10px;
+    font-size: 1.4rem;
+    padding: 0.5rem;
+    background: rgba(222, 221, 221, 0.7);
+    border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+  .mask {
+    opacity: 0;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    transition: opacity 0.4s;
+
+    &:hover {
+      opacity: 1;
+    }
+
+    i {
+      font-size: 2rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-left: -1rem;
+      margin-top: -1rem;
+      color: #d6d6d6;
     }
   }
 
-  .avatar-upload-wrapper {
-    height: 200px;
-    width: 100%;
-  }
-
-  .ant-upload-preview {
-    position: relative;
-    margin: 0 auto;
+  img,
+  .mask {
     width: 100%;
     max-width: 180px;
+    height: 100%;
     border-radius: 50%;
-    box-shadow: 0 0 4px #ccc;
-
-    .upload-icon {
-      position: absolute;
-      top: 0;
-      right: 10px;
-      font-size: 1.4rem;
-      padding: 0.5rem;
-      background: rgba(222, 221, 221, 0.7);
-      border-radius: 50%;
-      border: 1px solid rgba(0, 0, 0, 0.2);
-    }
-
-    .mask {
-      opacity: 0;
-      position: absolute;
-      background: rgba(0, 0, 0, 0.4);
-      cursor: pointer;
-      transition: opacity 0.4s;
-
-      &:hover {
-        opacity: 1;
-      }
-
-      i {
-        font-size: 2rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        margin-left: -1rem;
-        margin-top: -1rem;
-        color: #d6d6d6;
-      }
-    }
-
-    img,
-    .mask {
-      width: 100%;
-      max-width: 180px;
-      height: 100%;
-      border-radius: 50%;
-      overflow: hidden;
-    }
+    overflow: hidden;
   }
+}
 </style>
