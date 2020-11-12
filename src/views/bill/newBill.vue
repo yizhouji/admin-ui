@@ -10,9 +10,9 @@
       >
         <a-row :gutter="24">
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="单位">
+            <a-form-model-item label="公司名字">
               <a-input
-                placeholder="请输入单位"
+                placeholder="请输入公司名字"
                 v-model="form.groupName"
                 allow-clear
                 name="groupName"
@@ -386,6 +386,7 @@ export default {
           })
         })
         .catch((error) => {
+          console.log(error)
           this.btnLoading = false
           this.$message.error(error.message || '添加清单失败')
         })

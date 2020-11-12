@@ -32,7 +32,7 @@
           @pageSizeChange="pageSizeChange"
           @onSelectChange="onSelectChange"
         >
-          <a-table-column key="货物类型" title="货物类型" data-index="货物类型" />
+          <a-table-column key="货物类型" title="货物类型" data-index="categoryName" />
           <a-table-column key="productName" title="货物名称" data-index="productName" />
           <a-table-column key="productTotal" title="总库存" data-index="productTotal" />
           <a-table-column key="hasSold" title="已卖出" data-index="hasSold" />
