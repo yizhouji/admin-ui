@@ -2,7 +2,7 @@
  * @Author: zhaojingyu
  * @Date: 2020-07-28 10:41:54
  * @LastEditors: zhaojingyu
- * @LastEditTime: 2020-11-04 14:58:08
+ * @LastEditTime: 2020-11-13 10:26:25
  */
 import request from '@/utils/request'
 
@@ -10,7 +10,9 @@ const userApi = {
   Login: '/warehouse/login',
   Logout: '/warehouse/logout',
   GetQrcode: '/warehouse/weChat/qrcode',
-  CheckLogin: '/warehouse/weChat/checkLogin'
+  CheckLogin: '/warehouse/weChat/checkLogin',
+  telLogin: '/warehouse/telLogin',
+  telLoginCode: '/warehouse/telLogin/code'
 
 }
 
@@ -55,5 +57,21 @@ export function checkLogin (parameter) {
   return request({
     url: userApi.CheckLogin + '?sceneStr=' + parameter,
     method: 'post'
+  })
+}
+
+export function telLoginCode (parameter) {
+  return request({
+    url: userApi.telLoginCode,
+    method: 'get',
+    params: parameter
+  })
+}
+
+export function telLogin (parameter) {
+  return request({
+    url: userApi.telLogin,
+    method: 'post',
+    data: parameter
   })
 }

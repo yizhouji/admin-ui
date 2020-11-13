@@ -76,13 +76,16 @@
     },
     computed: {
       amount () {
-        let productChecklists = this.Details.productChecklists
         let amount = 0
-        productChecklists.forEach(element => {
-          if (element.grossAmount && typeof element.grossAmount === 'number') {
-            amount = amount + element.grossAmount
-          }
-        })
+        if (this.Details && this.Details.productChecklists) {
+          let productChecklists = this.Details.productChecklists
+
+          productChecklists.forEach(element => {
+            if (element.grossAmount && typeof element.grossAmount === 'number') {
+              amount = amount + element.grossAmount
+            }
+          })
+        }
         return amount
       }
     },

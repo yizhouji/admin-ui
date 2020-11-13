@@ -5,13 +5,7 @@
 
     <div class="mobileLogin" v-if="showMobileLogin">
       <div class="input">
-        <a-input
-          ref="userNameInput"
-          class="inputItem"
-          v-model.trim="phone"
-          :maxLength="11"
-          placeholder="请输入手机号"
-        >
+        <a-input ref="userNameInput" class="inputItem" v-model.trim="phone" :maxLength="11" placeholder="请输入手机号">
           <a-icon slot="prefix" type="mobile" :style="{ color: '#d9d9d9' }" />
         </a-input>
       </div>
@@ -19,7 +13,7 @@
         <a-input ref="userNameInput" class="inputItem" v-model="code" placeholder="请输入验证码">
           <a-icon slot="prefix" type="lock" :style="{ color: '#d9d9d9' }" />
         </a-input>
-        <a-button type="primary" v-if="hasSend" @click="sendCode">{{ txt }}</a-button>
+        <a-button type="primary" class="send" v-if="hasSend" @click="sendCode">{{ txt }}</a-button>
         <a-button type="info" disabled v-else>{{ smsTime }}s</a-button>
       </div>
       <div class="check">
@@ -54,7 +48,7 @@
 import storage from 'store'
 import { mapActions } from 'vuex'
 import { timeFix, welcome, regMobile } from '@/utils/util'
-import { getQrcode, checkLogin } from '@/api/login'
+import { getQrcode, checkLogin, telLoginCode, telLogin } from '@/api/login'
 import { bindMobile, getMsgCode } from '@/api/user'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 var timer = null
@@ -130,8 +124,7 @@ export default {
         this.$message.error('请输入正确的手机号码')
         return
       }
-
-      getMsgCode({
+      telLoginCode({
         telephone: this.phone
       })
         .then(res => {
@@ -186,16 +179,6 @@ export default {
       }
       callback()
     },
-    handleTabClick (key) {
-      this.customActiveKey = key
-      this.$nextTick(() => {
-        if (key === 'tab2') {
-          this.getCode()
-        } else {
-          clearInterval(timer)
-        }
-      })
-    },
 
     loginHandle (e) {
       e.preventDefault()
@@ -207,11 +190,28 @@ export default {
 
       state.loginBtn = true
 
-      Login({
-        userName: this.phone,
-        password: this.code
+      // Login({
+      //   userName: this.phone,
+      //   password: this.code
+      // })
+      //   .then(res => this.loginSuccess(res))
+      //   .catch(err => this.requestFailed(err))
+      //   .finally(() => {
+      //     state.loginBtn = false
+      //   })
+      telLogin({
+        telephone: this.phone,
+        code: this.code
       })
-        .then(res => this.loginSuccess(res))
+        .then(res => {
+          const result = res.result
+          storage.set(ACCESS_TOKEN, result.userId, 7 * 24 * 60 * 60 * 1000)
+          this.$store.commit('SET_USER', result)
+          this.$store.commit('SET_TOKEN', result.userId)
+          this.$store.commit('SET_NAME', { name: result.name, welcome: welcome() })
+          storage.set('USERINFO', result)
+          this.loginSuccess(res)
+        })
         .catch(err => this.requestFailed(err))
         .finally(() => {
           state.loginBtn = false
@@ -239,6 +239,7 @@ export default {
       this.isLoginError = false
     },
     requestFailed (err) {
+      console.log(err)
       this.isLoginError = true
       this.$notification['error']({
         message: '错误',
@@ -296,12 +297,14 @@ export default {
   }
 
   /deep/ button {
-    border: #40a9ff;
-    color: #ffffff;
-    background: #40a9ff;
     height: 40px;
     margin-left: 24px;
     border-radius: 5px;
+  }
+  /deep/ .send {
+    border: #40a9ff;
+    color: #ffffff;
+    background: #40a9ff;
   }
 }
 

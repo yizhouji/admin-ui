@@ -134,7 +134,9 @@ export default {
   },
   methods: {
     refreshHandle () {
-      console.log('111')
+      if (this.info && this.info.wechatInfo) {
+        return false
+      }
       this.show = false
       this.keyComponents = new Date().getTime()
       this.show = true
