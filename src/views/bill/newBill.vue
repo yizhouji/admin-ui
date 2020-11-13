@@ -22,13 +22,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="开票人">
-              <a-input
-                name="drawer"
-                v-model="form.drawer"
-                placeholder="请输入开票人"
-                allow-clear
-                :maxLength="10"
-              />
+              <a-input name="drawer" v-model="form.drawer" placeholder="请输入开票人" allow-clear :maxLength="10" />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -102,13 +96,11 @@
                 placeholder="请选择"
                 style="width:100%"
                 allow-clear
-                @change="productChange(record,index)"
+                @change="productChange(record, index)"
               >
-                <a-select-option
-                  v-for="item in product"
-                  :key="item.productId"
-                  :value="item.productId"
-                >{{ item.productName }}</a-select-option>
+                <a-select-option v-for="item in product" :key="item.productId" :value="item.productId">{{
+                  item.productName
+                }}</a-select-option>
               </a-select>
             </template>
             <template v-else>{{ text }}</template>
@@ -155,11 +147,11 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.remark"
-              @change="e => handleChange(e.target.value, record.key ,'remark')"
+              @change="e => handleChange(e.target.value, record.key, 'remark')"
             />
             <template v-else>{{ text }}</template>
           </template>
-          <template slot="remove" slot-scope="text,record,index">
+          <template slot="remove" slot-scope="text, record, index">
             <template>
               <div class="remove" @click="removeHandle(index)">
                 <a-icon type="minus-circle" />
@@ -187,13 +179,13 @@
           <li>开票人联系方式：{{ form.drawerPhone }}</li>
           <li>客户联系方式：{{ form.customer }}</li>
           <li>客户名字：{{ form.customerPhone }}</li>
-          <li>是否已付款：{{ form.payment?'是':'否' }}</li>
+          <li>是否已付款：{{ form.payment ? '是' : '否' }}</li>
           <li></li>
         </ul>
         <div class="table" style="max-height:400px;overflow-y: auto;">
           <a-table :data-source="list" bordered :pagination="pagination">
             <a-table-column key="index" title="序号">
-              <template slot-scope="text, record,index">{{ index + 1 }}</template>
+              <template slot-scope="text, record, index">{{ index + 1 }}</template>
             </a-table-column>
             <a-table-column key="productName" title="品名" data-index="productName">
               <template slot-scope="text">
@@ -206,11 +198,11 @@
             <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />
           </a-table>
         </div>
+        <div class="amount">总计：{{ amount }} 元</div>
         <template slot="footer">
-          <div
-            class="tip"
-            style="margin:20px 0;color:#F2637B;"
-          >提示：可全部填也可只填一个(手机号则以彩信形式发送至客户手机，微信号则在双方是微信好友的前提下发送到客户微信）</div>
+          <div class="tip" style="margin:20px 0;color:#F2637B;">
+            提示：可全部填也可只填一个(手机号则以彩信形式发送至客户手机，微信号则在双方是微信好友的前提下发送到客户微信）
+          </div>
           <div class="input">
             <div class="item">
               <label>手机号：</label>
@@ -317,9 +309,22 @@ export default {
       product: []
     }
   },
-  computed: {},
+  computed: {
+    amount () {
+      let amount = 0
+      if (this.list.length > 0) {
+        this.list.forEach(element => {
+          if (element.grossAmount) {
+            amount = amount + Number(element.grossAmount)
+          }
+        })
+      }
+      console.log('amount:', amount)
+      return amount
+    }
+  },
   created () {
-    getProductsInfo().then((res) => {
+    getProductsInfo().then(res => {
       this.product = res.result
     })
   },
@@ -343,7 +348,7 @@ export default {
       //   return
       // }
       let arr = []
-      this.list.forEach((element) => {
+      this.list.forEach(element => {
         let obj = {
           amount: element.amount,
           grossAmount: element.grossAmount,
@@ -357,7 +362,7 @@ export default {
       this.btnLoading = true
       let self = this
       addChecklists(parmas)
-        .then((res) => {
+        .then(res => {
           this.btnLoading = false
           this.$message.success('添加清单成功')
           this.$confirm({
@@ -385,16 +390,15 @@ export default {
             }
           })
         })
-        .catch((error) => {
-          console.log(error)
+        .catch(error => {
           this.btnLoading = false
-          this.$message.error(error.message || '添加清单失败')
+          this.$message.error(error.data.message || '添加清单失败')
         })
     },
     printHandle () {},
     handleChange (value, key, column) {
       const newData = [...this.list]
-      const target = newData.filter((item) => key === item.key)[0]
+      const target = newData.filter(item => key === item.key)[0]
       if (target) {
         target[column] = value
         this.list = newData
@@ -463,19 +467,8 @@ export default {
       this.list.splice(index, 1)
     },
     showModal () {
-      // form: {
-      //   customer: '',
-      //   customerPhone: '',
-      //   drawer: '',
-      //   drawerPhone: '',
-      //   groupName: '',
-      //   payment: undefined,
-      //   telephone: '',
-      //   wechatNo: ''
-      // },
-
       if (!this.form.groupName) {
-        this.$message.error('请输入单位')
+        this.$message.error('请输入公司名称')
         return
       }
       if (!this.form.customer) {
@@ -563,6 +556,11 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.amount {
+  margin-top: 10px;
+  text-align: right;
+  color: #f2637b;
+}
 .bottom {
   padding: 30px 0;
   display: flex;
