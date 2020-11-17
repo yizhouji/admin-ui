@@ -44,43 +44,23 @@ router.beforeEach((to, from, next) => {
       })
       NProgress.done()
     } else {
-      let user = storage.get('USERINFO')
-      if (user.telephone) {
-        next()
-        NProgress.done()
-      } else {
-        if (to.path !== '/account/center') {
-          console.log('222222222:', to)
-          next({
-            path: '/account/center',
-            query: {
-              bind: new Date().getTime()
-            }
-          })
-          NProgress.done()
-        } else {
-          console.log(to)
-          next()
-          NProgress.done()
-        }
-
-        // NProgress.done()
-      }
-    }
-  } else {
-    if (whiteList.includes(to.name)) {
-      console.log(to.name)
       next()
-    } else {
-      next({
-        path: loginRoutePath,
-        query: {
-          redirect: to.fullPath
-        }
-      })
       NProgress.done()
     }
+} else {
+  if (whiteList.includes(to.name)) {
+    console.log(to.name)
+    next()
+  } else {
+    next({
+      path: loginRoutePath,
+      query: {
+        redirect: to.fullPath
+      }
+    })
+    NProgress.done()
   }
+}
 })
 
 router.afterEach(() => {

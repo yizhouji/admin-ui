@@ -96,33 +96,21 @@
           <a-table-column key="stock" title="剩余库存" data-index="stock" />
           <a-table-column key="remark" title="备注" data-index="remark">
             <template slot-scope="text, record">
-              <a v-if="text" @click="showDialog(record.categoryId)">{{ text }}</a>
-              <a v-else @click="showDialog(record.categoryId)">{{ '备注' }}</a>
+              <a v-if="text" @click="showDialog(record)">{{ text }}</a>
+              <a v-else @click="showDialog(record)">{{ '备注' }}</a>
             </template>
           </a-table-column>
         </BaseTable>
       </a-card>
-      <a-modal v-model="visible" width="600px" footer centered destroy-on-close>
-        <div slot="title" class="modal-title text-center">备注</div>
-        <a-list
-          class="listpart"
-          item-layout="horizontal"
-          :data-source="noteList"
-          :loading="listLoading"
-          :pagination="pagination">
-          <a-list-item slot="renderItem" slot-scope="item">
-            <div class="text" v-if="item.remar" style="color:#000000;">{{ item.remark || '未添加备注' }}</div>
-            <div class="text" v-else style="color:#666666;">{{ '未添加备注' }}</div>
-            <div class="date" style="padding-left:30px;color:#666666;font-size:12px;">{{ item.createTime }}</div>
-          </a-list-item>
-        </a-list>
-      </a-modal>
+
+      <EditRemark ref="editRemark"></EditRemark>
     </div>
   </page-header-wrapper>
 </template>
 
 <script>
   import BaseTable from '@/components/BaseTable'
+  import EditRemark from './editRemark'
   import {
     getProducts,
     productsDownload,
@@ -137,7 +125,8 @@ import { login } from '@/api/login'
   export default {
     name: 'GoodManage',
     components: {
-      BaseTable
+      BaseTable,
+      EditRemark
     },
     filters: {
       unit: function (value) {
@@ -265,9 +254,10 @@ import { login } from '@/api/login'
       handleOk () {
         this.visible = false
       },
-      showDialog (id) {
-        this.getRecords(id)
+      showDialog (data) {
         this.visible = true
+        console.log(data)
+        this.$refs.editRemark.show(data)
       },
       updated () {
         // console.log('updated')

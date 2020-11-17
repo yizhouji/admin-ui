@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="antd-pro-pages-dashboard-analysis-twoColLayout" :class="!isMobile && 'desktop'">
-      <a-row :gutter="24" type="flex" :style="{ marginTop: '24px' }">
+      <a-row :gutter="24" type="flex" >
         <a-col :xl="12" :lg="24" :md="24" :sm="24" :xs="24">
           <a-card
             class="antd-pro-pages-dashboard-analysis-salesCard"
@@ -151,6 +151,7 @@ export default {
         current: 1,
         pageNum: 1,
         pageSize: 6,
+        hideOnSinglePage: true,
         total: 0,
         onChange: (page) => {
           let pagination = this.pagination

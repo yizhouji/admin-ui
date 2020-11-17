@@ -183,7 +183,7 @@
           <li></li>
         </ul>
         <div class="table" style="max-height:400px;overflow-y: auto;">
-          <a-table :data-source="list" bordered :pagination="pagination">
+          <a-table :data-source="modelList" bordered :pagination="pagination">
             <a-table-column key="index" title="序号">
               <template slot-scope="text, record, index">{{ index + 1 }}</template>
             </a-table-column>
@@ -274,7 +274,41 @@ export default {
           scopedSlots: { customRender: 'remove' }
         }
       ],
-      list: [],
+      list: [
+        {
+          key: 0,
+          productId: null,
+          productName: '',
+          productUnit: '',
+          amount: '',
+          unitPrice: '',
+          grossAmount: '',
+          remark: '',
+          editable: true
+        },
+        {
+          key: 1,
+          productId: null,
+          productName: '',
+          productUnit: '',
+          amount: '',
+          unitPrice: '',
+          grossAmount: '',
+          remark: '',
+          editable: true
+        },
+        {
+          key: 2,
+          productId: null,
+          productName: '',
+          productUnit: '',
+          amount: '',
+          unitPrice: '',
+          grossAmount: '',
+          remark: '',
+          editable: true
+        }
+      ],
       labelCol: {
         xs: {
           span: 24
@@ -306,14 +340,15 @@ export default {
       },
       noteList: [],
       count: 0,
-      product: []
+      product: [],
+      modelList: []
     }
   },
   computed: {
     amount () {
       let amount = 0
-      if (this.list.length > 0) {
-        this.list.forEach(element => {
+      if (this.modelList.length > 0) {
+        this.modelList.forEach(element => {
           if (element.grossAmount) {
             amount = amount + Number(element.grossAmount)
           }
@@ -348,7 +383,7 @@ export default {
       //   return
       // }
       let arr = []
-      this.list.forEach(element => {
+      this.modelList.forEach(element => {
         let obj = {
           amount: element.amount,
           grossAmount: element.grossAmount,
@@ -452,7 +487,7 @@ export default {
       const newData = {
         key: this.count,
         productId: null,
-        productName: this.count,
+        productName: '',
         productUnit: '',
         amount: '',
         unitPrice: '',
@@ -497,6 +532,7 @@ export default {
         return
       }
       let bool = true
+      let arr = []
       for (let index = 0; index < this.list.length; index++) {
         const element = this.list[index]
         if (
@@ -507,16 +543,32 @@ export default {
           element.unitPrice &&
           element.grossAmount
         ) {
-          //  console.log()
-        } else {
+          arr.push(element)
+          bool = true
+        } else if (
+          element.productId ||
+          element.productName ||
+          element.productUnit ||
+          element.amount ||
+          element.unitPrice ||
+          element.grossAmount
+        ) {
           this.$message.error('第' + (index + 1) + '行数据请补充完整')
           bool = false
           break
+        } else {
+          console.log(index)
         }
       }
       if (!bool) {
         return
       }
+      console.log(arr)
+      if (arr.length === 0) {
+          this.$message.error('请添加货物数据')
+          return
+      }
+      this.modelList = arr
       this.visible = true
     },
 

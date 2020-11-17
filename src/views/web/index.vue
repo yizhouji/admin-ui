@@ -93,7 +93,7 @@ export default {
   },
   methods: {
     linkHandle () {
-      this.$router.push({ name: 'login' })
+      this.$router.push({ name: 'dashboard' })
     }
   }
 }
