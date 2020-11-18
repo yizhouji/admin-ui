@@ -256,7 +256,6 @@ import { login } from '@/api/login'
       },
       showDialog (data) {
         this.visible = true
-        console.log(data)
         this.$refs.editRemark.show(data)
       },
       updated () {

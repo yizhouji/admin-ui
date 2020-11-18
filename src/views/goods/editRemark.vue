@@ -1,7 +1,7 @@
 <template>
   <a-modal v-model="visible" width="600px" footer centered destroy-on-close>
     <div slot="title" class="modal-title text-center">备注</div>
-    <div class="editRemake" v-if="show">
+    <div class="editRemake">
       <a-form-model
         class="ant-advanced-search-form"
         ref="ruleForm"
@@ -88,7 +88,7 @@ export default {
   methods: {
     show (data) {
       console.log(data)
-      this.form = data
+      this.form = JSON.parse(JSON.stringify(data))
       this.visible = true
     },
     confirm (e) {
