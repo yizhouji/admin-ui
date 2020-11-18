@@ -1,21 +1,27 @@
 <template>
   <div class="noteAdd">
-    <a-modal v-model="visible" width="734px" centered destroy-on-close @ok="handleOk">
+    <a-modal
+      v-model="visible"
+      width="734px"
+      centered
+      :destroyOnClose="true"
+      @ok="handleOk"
+      @cancel="cancel">
       <div slot="title" class="modal-title text-left">
-        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />新建文件
+        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right: 5px" />新建文件
       </div>
       <div class="form">
         <a-input
-          v-model="notepadTitle "
+          v-model="notepadTitle"
           placeholder="请输入标题"
-          style="border:none;margin-bottom:10px;font-weight:bold;font-size:14px;"
+          style="border: none; margin-bottom: 10px; font-weight: bold; font-size: 14px"
         />
         <p></p>
         <a-textarea
-          v-model="notepadContent "
+          v-model="notepadContent"
           placeholder="请输入描述"
           :auto-size="{ minRows: 5, maxRows: 5 }"
-          style="border:none;margin-bottom:20px;"
+          style="border: none; margin-bottom: 20px"
         />
         <div class="clearfix">
           <a-upload
@@ -34,18 +40,14 @@
         </div>
       </div>
       <div class="title">
-        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />选择事件重要级
+        <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right: 5px" />选择事件重要级
       </div>
-      <a-radio-group
-        v-model="significance"
-        name="radioGroup"
-        :default-value="radio"
-        @change="radioChange"
-      >
+      <a-radio-group v-model="significance" name="radioGroup" :default-value="radio" @change="radioChange">
         <a-radio :value="1" class="radio1">重要</a-radio>
         <a-radio :value="2" class="radio2">二级</a-radio>
         <a-radio :value="3" class="radio3">普通</a-radio>
       </a-radio-group>
+
       <a-modal :visible="previewVisible" :footer="null" @cancel="handleCancel">
         <img alt="example" style="width: 100%" :src="previewImage" />
       </a-modal>
@@ -75,7 +77,7 @@ export default {
       this.radio = e.target.value
     },
     show () {
-        this.visible = true
+      this.visible = true
     },
     beforeUpload (file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
@@ -154,6 +156,20 @@ export default {
         setTimeout(() => {
           this.$emit('getList')
         }, 2000)
+      })
+    },
+    cancel () {
+      this.radio = 3
+
+      this.significance = 3
+      this.notepadTitle = ''
+      this.notepadContent = ''
+      this.previewVisible = false
+      this.previewImage = ''
+      this.fileList = []
+      this.baseList = []
+      this.$nextTick(() => {
+           this.visible = false
       })
     }
   }

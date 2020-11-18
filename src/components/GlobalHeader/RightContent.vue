@@ -58,6 +58,11 @@ export default {
       showMenu: true
     }
   },
+  watch: {
+    user (newName, oldName) {
+        console.log(newName, oldName)
+    }
+  },
   computed: {
     currentUser () {
       let user = ''
@@ -66,7 +71,6 @@ export default {
       } else {
         user = storage.get('USERINFO')
       }
-      console.log('user:', user)
       return user
     },
 

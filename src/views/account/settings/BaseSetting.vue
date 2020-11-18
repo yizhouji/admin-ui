@@ -92,7 +92,7 @@ export default {
         fixed: true,
         fixedNumber: [1, 1]
       },
-      info: '',
+      // info: '',
       qrCodeUrl: '',
       sceneStr: '',
       timer: null,
@@ -103,34 +103,22 @@ export default {
     }
   },
   computed: {
-    // info () {
-    //   let user = ''
-    //   if (this.$store.state.user.user) {
-    //     user = this.$store.state.user.user
-    //   } else {
-    //     user = storage.get('USERINFO')
-    //   }
-    //   console.log(this.$store.state.user)
-    //   return user
-    // }
+    info () {
+      let user = ''
+      if (this.$store.state.user.user) {
+        user = this.$store.state.user.user
+      } else {
+        user = storage.get('USERINFO')
+      }
+      return user
+    }
   },
   mounted () {
-    console.log('mounted')
     let query = this.$route.query
     if (query && query.bind) {
       this.$refs.bindMobile.show()
     }
-    let user = ''
-    if (this.$store.state.user.user) {
-      user = this.$store.state.user.user
-    } else {
-      user = storage.get('USERINFO')
-    }
-    // user.wechatInfo = ''
-    console.log(user)
-    this.$refs.wechat.init(user)
-    this.info = user
-    // this.getCodeImg(0)
+    this.$refs.wechat.init(this.info)
   },
   methods: {
     refreshHandle () {

@@ -33,54 +33,53 @@
 </template>
 
 <script>
-  import {
-    bindMobile,
-    getMsgCode
-  } from '@/api/user'
-  import {
-    regMobile
-  } from '@/utils/util'
-  import storage from 'store'
+import { bindMobile, getMsgCode } from '@/api/user'
+import { regMobile } from '@/utils/util'
+import storage from 'store'
 
-  export default {
-    name: 'BindMobile',
-    data () {
-      return {
-        visible: false,
-        phone: '',
-        code: '',
-        smsTime: 60,
-        hasSend: true,
-        txt: '发送验证码',
-        timer: null
-      }
-    },
-    user () {
-      let user = ''
-      if (this.$store.state.user.user) {
-        user = this.$store.state.user.user
-      } else {
-        user = storage.get('USERINFO')
-      }
-      return user
-    },
-    methods: {
-      show () {
-        this.visible = true
-      },
-      sendCode () {
-        if (!this.phone) {
-          this.$message.error('请输入手机号码')
-          return
+export default {
+  name: 'BindMobile',
+  data () {
+    return {
+      visible: false,
+      phone: '',
+      code: '',
+      smsTime: 60,
+      hasSend: true,
+      txt: '发送验证码',
+      timer: null
+    }
+  },
+  computed: {
+     user () {
+        let user = ''
+        if (this.$store.state.user.user) {
+          user = this.$store.state.user.user
+        } else {
+          user = storage.get('USERINFO')
         }
-        if (!regMobile(this.phone)) {
-          this.$message.error('请输入正确的手机号码')
-          return
-        }
+        return user
+      }
+  },
 
-        getMsgCode({
-          telephone: this.phone
-        }).then(res => {
+  methods: {
+    show () {
+      this.visible = true
+    },
+    sendCode () {
+      if (!this.phone) {
+        this.$message.error('请输入手机号码')
+        return
+      }
+      if (!regMobile(this.phone)) {
+        this.$message.error('请输入正确的手机号码')
+        return
+      }
+
+      getMsgCode({
+        telephone: this.phone
+      })
+        .then((res) => {
           this.hasSend = false
           this.timer = setInterval(() => {
             if (this.smsTime > 0) {
@@ -94,84 +93,86 @@
               this.timer = null
             }
           }, 1000)
-        }).catch(error => {
+        })
+        .catch((error) => {
           this.$message.error(error.data.message)
         })
-      },
-      bind () {
-        bindMobile({
-          code: this.code,
-          telephone: this.phone
-        }).then(res => {
+    },
+    bind () {
+      bindMobile({
+        code: this.code,
+        telephone: this.phone
+      })
+        .then((res) => {
           this.smsTime = 60
-              this.hasSend = true
+          this.hasSend = true
           this.visible = false
           this.txt = '发送验证码'
           this.$message.success('修改成功')
           let user = this.user
-          user.telephone = this.telephone
+          user.telephone = this.phone
           this.$store.commit('SET_USER', user)
           storage.set('USERINFO', user)
-        }).catch(error => {
+        })
+        .catch((error) => {
+          console.log(error)
           this.$message.error(error.data.message)
         })
-      }
-
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
-  .bindMobile {
-    padding-bottom: 20px;
+.bindMobile {
+  padding-bottom: 20px;
+}
+
+.logo {
+  margin-bottom: 40px;
+
+  img {
+    width: 130px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
   }
+}
 
-  .logo {
-    margin-bottom: 40px;
+.input {
+  display: flex;
 
-    img {
-      width: 130px;
-      height: auto;
-      display: block;
-      margin: 0 auto;
-    }
-  }
+  .inputItem {
+    height: 40px;
+    margin-bottom: 24px;
 
-  .input {
-    display: flex;
-
-    .inputItem {
-      height: 40px;
-      margin-bottom: 24px;
-
-      /deep/ input {
-        border-radius: 5px;
-      }
-
-    }
-
-    /deep/ button {
-      height: 40px;
-      margin-left: 24px;
+    /deep/ input {
       border-radius: 5px;
     }
   }
 
-  .submit {
-    margin-bottom: 20px;
-
-    /deep/ button {
-      height: 40px;
-      border-radius: 5px;
-    }
+  /deep/ button {
+    height: 40px;
+    margin-left: 24px;
+    border-radius: 5px;
   }
+}
 
-  .tip {
-    color: #666666;
-    font-size: 16px;
+.submit {
+  margin-bottom: 20px;
 
-    span {
-      color: #FFB200;
-    }
+  /deep/ button {
+    height: 40px;
+    border-radius: 5px;
   }
+}
+
+.tip {
+  color: #666666;
+  font-size: 16px;
+
+  span {
+    color: #ffb200;
+  }
+}
 </style>

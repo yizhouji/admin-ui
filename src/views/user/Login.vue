@@ -33,9 +33,9 @@
           <span class="skip">其他方式登录</span>
         </a-divider>
         <div class="changeLogin">
-          <div class="item">
+          <div class="item" @click="loginType(2)">
             <img src="../../assets/wechatLogin.png" alt="" />
-            <p @click="loginType(2)">手机号登陆</p>
+            <p >手机号登陆</p>
           </div>
         </div>
       </div>
@@ -73,7 +73,7 @@
     components: {},
     data () {
       return {
-        title: '手机号登录',
+        title: '微信扫码登录',
         loginBtn: false,
         form: this.$form.createForm(this),
         state: {
@@ -373,6 +373,7 @@
       margin-top: 40px;
 
       .item {
+        cursor: pointer;
         img {
           width: 35px;
           height: 35px;

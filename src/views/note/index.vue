@@ -8,16 +8,17 @@
             <a-input-search placeholder="请输入查询条件" style="width: 200px" @search="onSearch" />
             <a class="item" @click="addHandle">新建文件</a>
             <a class="item" @click="addHandle">上传图片</a>
+
             <a class="item" v-if="deletList.length>0">
               <a-button type="danger" :loading="deleteLoading" @click="deletConfirm">确认删除</a-button>
             </a>
-
+            <a-button type="primary" style="margin-left:48px" v-if="checkBool" @click="canceHandle">取消删除</a-button>
             <a-dropdown :trigger="['hover']" overlayClassName="drop" style="cursor: pointer;">
               <div class="item-line">
                 <a-icon type="setting" />
                 <span>操作</span>
               </div>
-              <a-menu slot="overlay" @click="onClick">
+              <a-menu slot="overlay">
                 <a-menu-item key="1" @click="addHandle">添加</a-menu-item>
                 <a-menu-item key="2" @click="deletHandle">删除</a-menu-item>
               </a-menu>
@@ -188,7 +189,10 @@
       linkDetails (id) {
         this.$refs.Details.show(id)
       },
-      onClick () {}
+      canceHandle () {
+        this.deletList = []
+        this.checkBool = false
+      }
     }
   }
 </script>
