@@ -379,7 +379,7 @@ import { login } from '@/api/login'
       line-height: 20px;
       position: absolute;
       top: -15px;
-      right: -0%;
+      left: 80%;
       margin-right: -50%;
     }
   }
