@@ -31,6 +31,7 @@
             @preview="handlePreview"
             :before-upload="beforeUpload"
             @change="handleChange"
+            @remove="remove"
           >
             <div v-if="fileList.length < 8">
               <a-icon type="plus" />
@@ -56,6 +57,7 @@
 </template>
 
 <script>
+import { forEach } from 'store/storages/all'
 // eslint-disable-next-line no-unused-vars
 import { addNote, getNoteDetails } from '../../api/note'
 export default {
@@ -99,7 +101,7 @@ export default {
         const reader = new FileReader()
         reader.readAsDataURL(file)
         reader.onload = () => resolve(reader.result)
-        reader.onerror = (error) => reject(error)
+        reader.onerror = error => reject(error)
       })
     },
     handleCancel () {
@@ -115,13 +117,31 @@ export default {
       this.previewVisible = true
     },
     async handleChange ({ file, fileList }) {
-      let baseList = this.baseList
-      let Base64 = await this.getBase64(file)
-      // console.log(Base64)
-      let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
-      baseList.push(a)
-      this.baseList = baseList
-      this.fileList = fileList
+      if (file.status === 'removed') {
+          this.fileList = fileList
+          let baseList = []
+          fileList.forEach(element => {
+            let reader = new FileReader()
+            reader.readAsDataURL(element.originFileObj)
+            reader.onload = () => {
+                let Base64 = reader.result
+                let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
+                baseList.push(a)
+            }
+          })
+          this.baseList = baseList
+          console.log(fileList)
+          console.log(baseList)
+      } else {
+        console.log('1111')
+        let baseList = this.baseList
+        let Base64 = await this.getBase64(file)
+        // console.log(Base64)
+        let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
+        baseList.push(a)
+        this.baseList = baseList
+        this.fileList = fileList
+      }
     },
     handleOk () {
       const { baseList, fileList, significance, notepadTitle, notepadContent } = this
@@ -142,9 +162,8 @@ export default {
         // console.log()
       } else {
         this.$message.error('请输入内容')
-        return
       }
-      addNote(formData).then((res) => {
+      addNote(formData).then(res => {
         this.$message.success('提交成功')
         this.previewImage = ''
         this.fileList = []
@@ -169,8 +188,11 @@ export default {
       this.fileList = []
       this.baseList = []
       this.$nextTick(() => {
-           this.visible = false
+        this.visible = false
       })
+    },
+    remove (data) {
+        console.log(data)
     }
   }
 }

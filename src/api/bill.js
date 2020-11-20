@@ -3,7 +3,9 @@ import request from '@/utils/request'
 const billApi = {
   getChecklists: '/warehouse/checklists',
   addChecklists: '/warehouse/checklists',
-  getCheckDetails: '/warehouse/checklists/'
+  getCheckDetails: '/warehouse/checklists/',
+  getCode: '/warehouse/checklists/qrcode/',
+  sceneStr: '/warehouse/checklists/sceneStr'
 }
 
 export function getCheckDetails (id) {
@@ -23,7 +25,22 @@ export function getChecklists (parameter) {
 export function addChecklists (parameter) {
   return request({
     url: billApi.addChecklists,
-    method: 'post',
+    method: 'get',
     data: parameter
+  })
+}
+
+export function getCode (parameter) {
+  return request({
+    url: billApi.getCode + parameter,
+    method: 'get'
+  })
+}
+
+export function sceneStr (parameter) {
+  return request({
+    url: billApi.sceneStr,
+    method: 'get',
+    params: parameter
   })
 }

@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import { remark } from '@/api/product'
 export default {
   name: 'ImportGoods',
   data () {
@@ -99,26 +100,20 @@ export default {
           this.iconLoading = true
 
           let obj = {
-            productCategory: this.form.productCategory || this.form.productCategoryName,
-            productName: this.form.productName,
-            amount: this.form.amount,
-            productUnit: this.form.productUnit,
+            productId: this.form.productId,
             remark: this.form.remark
           }
 
-          // addProducts(obj)
-          //   .then((res) => {
-          //     this.$message.success(res.result)
-          //     setTimeout(() => {
-          //       this.iconLoading = false
-          //       this.$router.push({
-          //         name: 'GoodsManage'
-          //       })
-          //     }, 2000)
-          //   })
-          //   .catch(() => {
-          //     this.iconLoading = false
-          //   })
+          remark(obj)
+            .then((res) => {
+              this.$message.success(res.result)
+                this.iconLoading = false
+                this.visible = false
+                this.$emit('getList')
+            })
+            .catch(() => {
+              this.iconLoading = false
+            })
         } else {
           //  console.log(this.form)
           return false

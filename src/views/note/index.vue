@@ -99,6 +99,7 @@
           pageNum: 1,
           pageSize: 10,
           total: 0,
+          hideOnSinglePage: true,
           showQuickJumper: true,
           showSizeChanger: true,
           onChange: page => {

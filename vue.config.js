@@ -113,6 +113,7 @@ const vueConfig = {
     proxy: {
       '/warehouse': {
         target: 'http://47.101.190.37:8080',
+        // target: 'http://yizhouji17.com',
         changeOrigin: true,
         secure: true,
         pathRewrite: { // 路径重写，

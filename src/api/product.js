@@ -7,7 +7,9 @@ const productApi = {
   import: '/warehouse/products/import',
   units: '/warehouse/products/units',
   productsInfo: '/warehouse/products/info',
-  records: '/warehouse/products/records'
+  records: '/warehouse/products/records',
+  remark: '/warehouse/products/remark'
+
 }
 
 /**
@@ -87,5 +89,13 @@ export function records (parameter) {
     url: productApi.records,
     method: 'get',
     params: parameter
+  })
+}
+
+export function remark (parameter) {
+  return request({
+    url: productApi.remark,
+    method: 'put',
+    data: parameter
   })
 }

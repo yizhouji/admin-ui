@@ -96,14 +96,14 @@
           <a-table-column key="stock" title="剩余库存" data-index="stock" />
           <a-table-column key="remark" title="备注" data-index="remark">
             <template slot-scope="text, record">
-              <a v-if="text" @click="showDialog(record)">{{ text }}</a>
+              <a v-if="text" @click="showDialog(record)">{{ text | formatStr(8) }}</a>
               <a v-else @click="showDialog(record)">{{ '备注' }}</a>
             </template>
           </a-table-column>
         </BaseTable>
       </a-card>
 
-      <EditRemark ref="editRemark"></EditRemark>
+      <EditRemark ref="editRemark" @getList="getList"></EditRemark>
     </div>
   </page-header-wrapper>
 </template>
