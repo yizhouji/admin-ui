@@ -25,7 +25,7 @@ export function getChecklists (parameter) {
 export function addChecklists (parameter) {
   return request({
     url: billApi.addChecklists,
-    method: 'get',
+    method: 'post',
     data: parameter
   })
 }
@@ -34,13 +34,5 @@ export function getCode (parameter) {
   return request({
     url: billApi.getCode + parameter,
     method: 'get'
-  })
-}
-
-export function sceneStr (parameter) {
-  return request({
-    url: billApi.sceneStr,
-    method: 'get',
-    params: parameter
   })
 }

@@ -61,7 +61,6 @@
           </div>
         </div>
       </div>
-      a
       <div class="bottom">
         <a-button type="primary" @click="confirmHandle" :loading="btnLoading">确定</a-button>
         <!-- <a-button type="danger" @click="printHandle" :loading="btnLoading">打印</a-button> -->
@@ -78,6 +77,9 @@
 import html2canvas from 'html2canvas'
 import printJS from 'print-js'
 import { downloadIamge } from '@/utils/util'
+  import {
+    getCode
+  } from '@/api/bill'
 export default {
   name: 'GoodManage',
   components: {},
@@ -95,7 +97,7 @@ export default {
         // extraCss: 'https://www.google.com,https://www.google.com', // 用逗号分隔的附加链接连接
         extraHead: '<meta http-equiv="Content-Language" content="zh-cn"/>'
       },
-      codeImgUrl: 'https://ss1.bdstatic.com/70cFvXSh_Q1YnxGkpoWK1HF6hhy/it/u=167741595,2706197548&fm=26&gp=0.jpg'
+      codeImgUrl: ''
     }
   },
   computed: {
@@ -118,6 +120,13 @@ export default {
     zoom () {
       this.imgPreview = true
     },
+     getQrcode (id) {
+          getCode(id).then(res => {
+            this.codeImgUrl = res.result
+          }).catch(error => {
+            this.$message.error(error.data.message || '获取二维码失败')
+          })
+      },
     // 下载二维码
     download () {
       downloadIamge(this.codeImgUrl, '销货清单')
@@ -143,6 +152,7 @@ export default {
       this.visible = true
       this.createTime = createTime
       this.Details = data
+      this.getQrcode(data.checkId)
     },
     confirmHandle () {
       this.btnLoading = true

@@ -8,8 +8,7 @@
         :wrapper-col="wrapperCol"
         :model="form"
         ref="ruleForm"
-        @submit="handleSearch"
-      >
+        @submit="handleSearch">
         <a-row :gutter="24">
           <a-col :md="8" :sm="24">
             <a-form-model-item label="公司名字" prop="groupName">
@@ -18,42 +17,18 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="开票时间" prop="groupName">
-              <a-range-picker
-                @change="onChange"
-                v-model="date"
-                allowClear
-                style="width:100%"
-                allow-clea
-              />
+              <a-range-picker @change="onChange" v-model="date" allowClear style="width:100%" allow-clea />
             </a-form-model-item>
           </a-col>
 
           <a-col :md="8" :sm="24">
             <a-form-model-item label="数量">
-              <a-form-model-item
-                :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }"
-                prop="startAmount"
-              >
-                <a-input-number
-                  placeholder="最小数量"
-                  :min="1"
-                  allowClear
-                  v-model="form.startAmount"
-                  style="width:100%"
-                />
+              <a-form-model-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }" prop="startAmount">
+                <a-input-number placeholder="最小数量" :min="1" allowClear v-model="form.startAmount" style="width:100%" />
               </a-form-model-item>
               <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }">-</span>
-              <a-form-model-item
-                :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }"
-                prop="endAmount"
-              >
-                <a-input-number
-                  placeholder="最大数量"
-                  :min="1"
-                  allowClear
-                  v-model="form.endAmount"
-                  style="width:100%"
-                />
+              <a-form-model-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }" prop="endAmount">
+                <a-input-number placeholder="最大数量" :min="1" allowClear v-model="form.endAmount" style="width:100%" />
               </a-form-model-item>
             </a-form-model-item>
           </a-col>
@@ -64,12 +39,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户联系方式" prop="customerPhone">
-              <a-input
-                placeholder="请输入客户联系方式"
-                :maxLength="11"
-                v-model="form.customerPhone"
-                allow-clear
-              />
+              <a-input placeholder="请输入客户联系方式" :maxLength="11" v-model="form.customerPhone" allow-clear />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -117,8 +87,7 @@
           @getList="getList"
           @pageNumChange="pageNumChange"
           @pageSizeChange="pageSizeChange"
-          @onSelectChange="onSelectChange"
-        >
+          @onSelectChange="onSelectChange">
           <a-table-column key="customer" title="客户名字" data-index="customer" />
           <a-table-column key="customerPhone" title="客户联系方式" data-index="customerPhone" />
           <a-table-column key="payment" title="是否已付款" data-index="payment">
@@ -138,148 +107,155 @@
 </template>
 
 <script>
-import BaseTable from '@/components/BaseTable'
-import Details from './components/details'
-import { getChecklists, getCheckDetails } from '@/api/bill'
-import { getJson } from '@/utils/util'
+  import BaseTable from '@/components/BaseTable'
+  import Details from './components/details'
+  import {
+    getChecklists,
+    getCheckDetails
+  } from '@/api/bill'
+  import {
+    getJson
+  } from '@/utils/util'
 
-export default {
-  name: 'GoodManage',
-  components: {
-    BaseTable,
-    Details
-  },
-  data () {
-    return {
-      visible: false,
-      list: [],
-      labelCol: {
-        xs: {
-          span: 24
+  export default {
+    name: 'GoodManage',
+    components: {
+      BaseTable,
+      Details
+    },
+    data () {
+      return {
+        visible: false,
+        list: [],
+        labelCol: {
+          xs: {
+            span: 24
+          },
+          sm: {
+            span: 10
+          }
         },
-        sm: {
-          span: 10
-        }
-      },
-      wrapperCol: {
-        xs: {
-          span: 24
+        wrapperCol: {
+          xs: {
+            span: 24
+          },
+          sm: {
+            span: 14
+          }
         },
-        sm: {
-          span: 14
+        queryParam: {},
+        expand: false,
+        selectedRowKeys: [],
+        tableLoading: false,
+        date: undefined,
+        form: {
+          customer: '',
+          customerPhone: '',
+          endAmount: '',
+          endTime: '',
+          groupName: '',
+          pageNum: 1,
+          pageSize: 20,
+          payment: undefined,
+          startAmount: '',
+          startTime: ''
+        },
+        noteList: []
+      }
+    },
+    computed: {},
+    created () {
+
+    },
+    methods: {
+      detailHandle (data, checkId) {
+        getCheckDetails(checkId).then((res) => {
+          this.$refs.Details.show(res.result, data.createTime)
+        }).catch(error => {
+          this.$message.error(error.data.message || '获取清单信息失败')
+        })
+      },
+      getList () {
+        this.tableLoading = true
+        getChecklists(getJson(this.form))
+          .then((res) => {
+            this.list = res.result.list
+            this.$refs.BaseTable.getData(res.result)
+            this.tableLoading = false
+          })
+          .catch(() => {
+            this.tableLoading = false
+          })
+      },
+      handleOk () {
+        this.visible = false
+      },
+      showDialog (id) {
+        //  console.log('id:', id)
+        this.visible = true
+      },
+      updated () {
+        //  console.log('updated')
+      },
+      handleSearch (e) {
+        e.preventDefault()
+        this.form.pageNum = 1
+        this.form.pageSize = 20
+        if (this.form.minStock > this.form.maxStock) {
+          this.$message.error('库存量输入有误')
+          return
         }
+        this.getList(this.form)
       },
-      queryParam: {},
-      expand: false,
-      selectedRowKeys: [],
-      tableLoading: false,
-      date: undefined,
-      form: {
-        customer: '',
-        customerPhone: '',
-        endAmount: '',
-        endTime: '',
-        groupName: '',
-        pageNum: 1,
-        pageSize: 20,
-        payment: undefined,
-        startAmount: '',
-        startTime: ''
+      handleReset () {
+        this.form = {
+          customer: '',
+          customerPhone: '',
+          endAmount: '',
+          endTime: '',
+          groupName: '',
+          pageNum: 1,
+          pageSize: 20,
+          payment: undefined,
+          startAmount: '',
+          startTime: ''
+        }
+        this.date = undefined
+        this.$refs.ruleForm.resetFields()
+
+        this.$nextTick(() => {
+          this.getList()
+        })
       },
-      noteList: []
-    }
-  },
-  computed: {},
-  created () {
-
-  },
-  methods: {
-    detailHandle (data, checkId) {
-      getCheckDetails(checkId).then((res) => {
-        this.$refs.Details.show(res.result, data.createTime)
-      })
-    },
-    getList () {
-      this.tableLoading = true
-      getChecklists(getJson(this.form))
-        .then((res) => {
-          this.list = res.result.list
-          this.$refs.BaseTable.getData(res.result)
-          this.tableLoading = false
-        })
-        .catch(() => {
-          this.tableLoading = false
-        })
-    },
-    handleOk () {
-      this.visible = false
-    },
-    showDialog (id) {
-      //  console.log('id:', id)
-      this.visible = true
-    },
-    updated () {
-      //  console.log('updated')
-    },
-    handleSearch (e) {
-      e.preventDefault()
-      this.form.pageNum = 1
-      this.form.pageSize = 20
-      if (this.form.minStock > this.form.maxStock) {
-        this.$message.error('库存量输入有误')
-        return
-      }
-      this.getList(this.form)
-    },
-    handleReset () {
-      this.form = {
-        customer: '',
-        customerPhone: '',
-        endAmount: '',
-        endTime: '',
-        groupName: '',
-        pageNum: 1,
-        pageSize: 20,
-        payment: undefined,
-        startAmount: '',
-        startTime: ''
-      }
-      this.date = undefined
-      this.$refs.ruleForm.resetFields()
-
-      this.$nextTick(() => {
+      toggle () {
+        this.expand = !this.expand
+      },
+      onSelectChange (selectedRowKeys) {
+        //  console.log('selectedRowKeys changed: ', selectedRowKeys)
+        this.selectedRowKeys = selectedRowKeys
+      },
+      onChange (date, dateString) {
+        let form = this.form
+        this.date = dateString
+        form.startTime = dateString[0]
+        form.endTime = dateString[1]
+        this.form = form
+      },
+      pageNumChange (e) {
+        let form = this.form
+        form.pageNum = e.current
+        this.form = form
         this.getList()
-      })
-    },
-    toggle () {
-      this.expand = !this.expand
-    },
-    onSelectChange (selectedRowKeys) {
-      //  console.log('selectedRowKeys changed: ', selectedRowKeys)
-      this.selectedRowKeys = selectedRowKeys
-    },
-    onChange (date, dateString) {
-      let form = this.form
-      this.date = dateString
-      form.startTime = dateString[0]
-      form.endTime = dateString[1]
-      this.form = form
-    },
-    pageNumChange (e) {
-      let form = this.form
-      form.pageNum = e.current
-      this.form = form
-      this.getList()
-    },
-    pageSizeChange (e) {
-      let form = this.form
-      form.pageNum = 1
-      form.pageSize = e.pageSize
-      this.form = form
-      this.getList()
+      },
+      pageSizeChange (e) {
+        let form = this.form
+        form.pageNum = 1
+        form.pageSize = e.pageSize
+        this.form = form
+        this.getList()
+      }
     }
   }
-}
 </script>
 
 <style>

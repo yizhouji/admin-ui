@@ -29,6 +29,7 @@
     "nprogress": "^0.2.0",
     "print-js": "^1.0.63",
     "store": "^2.0.12",
+    "vconsole": "^3.3.4",
     "viser-vue": "^2.4.6",
     "vue": "^2.6.10",
     "vue-clipboard2": "^0.2.1",
