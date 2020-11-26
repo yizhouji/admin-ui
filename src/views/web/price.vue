@@ -10,70 +10,22 @@
         </div>
       </div>
       <div class="list">
-        <div class="item">
-          <div class="title">试用版</div>
+        <div class="item" :class="'item_'+ index" v-for="(item,index) in list" :key="item.originalCost">
+          <div class="title">{{ item.commodityName }}</div>
           <div class="content">
             <div class="txt">
-              <p>想试一试，果断选它</p>
-              <p>不到一瓶水的价格</p>
+              <p v-html="item.commodityDetail"></p>
             </div>
             <div class="btm">
               <div class="priceBox">
-                <span>¥1.88/</span>
-                <span class="unit">月</span>
+                <span class="old">¥{{ item.originalCost }}</span>
+                <span>¥{{ item.actualCost }}</span>
               </div>
-              <button>立即使用</button>
+              <button @click="buy(item.commodityId)">立即使用</button>
             </div>
           </div>
         </div>
-        <div class="item item_1">
-          <div class="title">三个月</div>
-          <div class="content">
-            <div class="txt">
-              <p>试一个月意犹未尽</p>
-              <p>直接选三个月的使用</p>
-            </div>
-            <div class="btm">
-              <div class="priceBox">
-                <span class="old">¥58</span>
-                <span>¥36</span>
-              </div>
-              <button>立即使用</button>
-            </div>
-          </div>
-        </div>
-        <div class="item item_2">
-          <div class="title">12个月</div>
-          <div class="content">
-            <div class="txt">
-              <p>一年仅一百多块钱</p>
-              <p>就可以享受四大针对性功能</p>
-            </div>
-            <div class="btm">
-              <div class="priceBox">
-                <span class="old">¥218</span>
-                <span>¥118</span>
-              </div>
-              <button>立即使用</button>
-            </div>
-          </div>
-        </div>
-        <div class="item item_3">
-          <div class="title">24+12个月</div>
-          <div class="content">
-            <div class="txt">
-              <p>买两年送一年</p>
-              <p>每天不到8块钱，超划算</p>
-            </div>
-            <div class="btm">
-              <div class="priceBox">
-                <span class="old">¥438</span>
-                <span>¥288</span>
-              </div>
-              <button>立即使用</button>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
     <div class="dsc">
@@ -159,198 +111,375 @@
         </div>
       </div>
     </div>
+    <a-modal
+      centered
+      v-model="visible"
+      width="300px"
+      okText="立即登录"
+      title="提示"
+      @ok="handleOk">
+      <div class="body" style="text-align:center">您尚未登录或登录已超时</div>
+    </a-modal>
     <baseFooter></baseFooter>
   </div>
 </template>
 
 <script>
-import navBar from './components/navbar'
-import baseFooter from './components/baseFooter'
-
-export default {
-  name: 'Price',
-  components: {
-    navBar,
-    baseFooter
-  }
-}
-</script>
-<style lang="less" scoped>
-.price {
-  padding-top: 80px;
-  min-width: 1200px;
-
-  .banner {
-    height: 556px;
-    background-image: url('./static/img/price_bg.jpg');
-    background-repeat: no-repeat;
-    background-position: center;
-
-    .part {
-      padding-top: 103px;
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-
-      .title {
-        font-size: 48px;
-        font-family: Microsoft YaHei;
-        font-weight: bold;
-        color: #ffffff;
-        line-height: 48px;
-        padding: 0 0 26px;
-        position: relative;
-        margin-bottom: 35px;
+  import navBar from './components/navbar'
+  import baseFooter from './components/baseFooter'
+  import {
+    price,
+    wechatPay
+  } from '@/api/price'
+  export default {
+    name: 'Price',
+    components: {
+      navBar,
+      baseFooter
+    },
+    data () {
+      return {
+        list: [],
+        visible: false
       }
-
-      .title:after {
-        content: '';
-        position: absolute;
-        left: 50%;
-        bottom: 0;
-        transform: translateX(-50%);
-        width: 33px;
-        height: 4px;
-        background: #ffffff;
-        border-radius: 2px;
-      }
-
-      p {
-        font-size: 20px;
-        color: #ffffff;
-        margin-bottom: 0;
-      }
-
-      button {
-        width: 174px;
-        height: 54px;
-        background: rgba(255, 255, 255, 1);
-        border-radius: 10px;
-        color: #1890ff;
-        font-weight: bold;
-        font-size: 20px;
-        border: none;
-        outline: none;
-        cursor: pointer;
+    },
+    mounted () {
+      price().then(res => {
+        if (res.result) {
+          this.list = res.result
+        }
+      })
+    },
+    methods: {
+      buy (commodityId) {
+        wechatPay({
+          commodityId
+        }).then(res => {
+          console.log(res)
+        }).catch(error => {
+          console.log('buy:', error)
+          if (error.status === 401) {
+              this.visible = true
+          }
+        })
+      },
+      handleOk () {
+        this.$router.push('/user/login')
+        localStorage.setItem('link', '/price')
       }
     }
+  }
+</script>
+<style lang="less" scoped>
+  .price {
+    padding-top: 80px;
+    min-width: 1200px;
 
-    .list {
-      margin: 85px auto 0;
-      width: 1200px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+    .banner {
+      height: 556px;
+      background-image: url('./static/img/price_bg.jpg');
+      background-repeat: no-repeat;
+      background-position: center;
 
-      .item {
-        width: 282px;
-        height: 420px;
-        background: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(221, 221, 221, 1);
-        border-radius: 30px;
-        overflow: hidden;
+      .part {
+        padding-top: 103px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         text-align: center;
 
         .title {
-          background: #e1e1e1;
-          color: #6f6f6f;
-          height: 86px;
-          line-height: 86px;
-          font-size: 24px;
+          font-size: 48px;
+          font-family: Microsoft YaHei;
           font-weight: bold;
+          color: #ffffff;
+          line-height: 48px;
+          padding: 0 0 26px;
+          position: relative;
+          margin-bottom: 35px;
         }
 
-        .content {
-          padding: 0 20px;
+        .title:after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          transform: translateX(-50%);
+          width: 33px;
+          height: 4px;
+          background: #ffffff;
+          border-radius: 2px;
+        }
 
-          .txt {
-            margin: 0 auto;
-            padding: 36px 0 107px;
+        p {
+          font-size: 20px;
+          color: #ffffff;
+          margin-bottom: 0;
+        }
 
-            p {
-              color: #333333;
-              font-size: 18px;
-              line-height: 18px;
-              margin-bottom: 13px;
-            }
+        button {
+          width: 174px;
+          height: 54px;
+          background: rgba(255, 255, 255, 1);
+          border-radius: 10px;
+          color: #1890ff;
+          font-weight: bold;
+          font-size: 20px;
+          border: none;
+          outline: none;
+          cursor: pointer;
+        }
+      }
 
-            p:last-child {
-              margin-bottom: 0;
-            }
+      .list {
+        margin: 85px auto 0;
+        width: 1200px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .item {
+          width: 282px;
+          height: 420px;
+          background: rgba(255, 255, 255, 1);
+          border: 1px solid rgba(221, 221, 221, 1);
+          border-radius: 30px;
+          overflow: hidden;
+          text-align: center;
+
+          .title {
+            background: #e1e1e1;
+            color: #6f6f6f;
+            height: 86px;
+            line-height: 86px;
+            font-size: 24px;
+            font-weight: bold;
           }
 
-          .btm {
-            border-top: 1px dashed #eeeeee;
-            padding-top: 26px;
+          .content {
+            padding: 0 20px;
 
-            .priceBox {
-              color: #f88204;
-              font-size: 30px;
-              line-height: 30px;
-              margin-bottom: 20px;
+            .txt {
+              margin: 0 auto;
+              padding: 36px 0 87px;
 
-              .old {
-                color: #666666;
-                font-size: 24px;
-                display: inline-block;
-                margin-right: 13px;
-                text-decoration: line-through;
-              }
-
-              .unit {
+              p {
+                color: #333333;
                 font-size: 18px;
+                line-height: 24px;
+                margin-bottom: 13px;
+              }
+
+              p:last-child {
+                margin-bottom: 0;
               }
             }
 
-            button {
-              width: 116px;
-              height: 36px;
-              line-height: 36px;
-              border: none;
-              color: #ffffff;
-              background: rgba(24, 144, 255, 1);
-              border-radius: 4px;
+            .btm {
+              border-top: 1px dashed #eeeeee;
+              padding-top: 26px;
+
+              .priceBox {
+                color: #f88204;
+                font-size: 30px;
+                line-height: 30px;
+                margin-bottom: 20px;
+
+                .old {
+                  color: #666666;
+                  font-size: 24px;
+                  display: inline-block;
+                  margin-right: 13px;
+                  text-decoration: line-through;
+                }
+
+                .unit {
+                  font-size: 18px;
+                }
+              }
+
+              button {
+                width: 116px;
+                height: 36px;
+                line-height: 36px;
+                border: none;
+                color: #ffffff;
+                background: rgba(24, 144, 255, 1);
+                border-radius: 4px;
+                cursor: pointer;
+              }
             }
           }
         }
-      }
 
-      .item_1 {
-        .title {
-          background: #ffce8e;
-          color: #da800a;
+        .item_1 {
+          .title {
+            background: #ffce8e;
+            color: #da800a;
+          }
         }
-      }
 
-      .item_2 {
-        .title {
-          background: #a9d6ff;
-          color: #096ec9;
+        .item_2 {
+          .title {
+            background: #a9d6ff;
+            color: #096ec9;
+          }
         }
-      }
 
-      .item_3 {
-        .title {
-          color: #2f0eda;
-          background: linear-gradient(55deg, rgba(181, 169, 255, 1), rgba(174, 158, 255, 1));
+        .item_3 {
+          .title {
+            color: #2f0eda;
+            background: linear-gradient(55deg, rgba(181, 169, 255, 1), rgba(174, 158, 255, 1));
+          }
         }
       }
     }
-  }
 
-  .dsc {
-    height: 800px;
-    background: #ffffff;
+    .dsc {
+      height: 800px;
+      background: #ffffff;
 
-    .part {
-      padding-top: 320px;
+      .part {
+        padding-top: 320px;
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+
+        .title {
+          font-size: 48px;
+          font-family: Microsoft YaHei;
+          font-weight: bold;
+          color: #121212;
+          line-height: 48px;
+          padding: 0 0 26px;
+          position: relative;
+          margin-bottom: 35px;
+        }
+
+        .title:after {
+          content: '';
+          position: absolute;
+          left: 50%;
+          bottom: 0;
+          transform: translateX(-50%);
+          width: 33px;
+          height: 4px;
+          background: #1890ff;
+          border-radius: 2px;
+        }
+
+        p {
+          font-size: 20px;
+          color: #666666;
+          margin-bottom: 0;
+        }
+
+        button {
+          width: 174px;
+          height: 54px;
+          background: rgba(255, 255, 255, 1);
+          border-radius: 10px;
+          color: #1890ff;
+          font-weight: bold;
+          font-size: 20px;
+          border: none;
+          outline: none;
+          cursor: pointer;
+        }
+      }
+
+      .list {
+        margin: 84px auto 0;
+        width: 1200px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .item {
+          text-align: center;
+
+          .img {
+            margin-bottom: 30px;
+            height: 80px;
+
+            img {
+              width: auto;
+              height: 80px;
+            }
+          }
+
+          .title {
+            color: #121212;
+            font-size: 24px;
+            line-height: 24px;
+            margin-bottom: 11px;
+          }
+
+          p {
+            font-size: 18px;
+            color: #666666;
+            line-height: 18px;
+          }
+        }
+      }
+    }
+
+    .question {
+      height: 470px;
+      background: rgba(246, 246, 246, 1);
+      padding-top: 60px;
       box-sizing: border-box;
+
+      .title {
+        text-align: center;
+        font-size: 48px;
+        font-weight: bold;
+        color: #121212;
+        margin-bottom: 38px;
+      }
+
+      .list {
+        width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .item {
+          // width: 50%;
+          margin-bottom: 36px;
+
+          .q {
+            color: #121212;
+            font-size: 18px;
+            line-height: 1;
+            margin-bottom: 20px;
+          }
+
+          p {
+            color: #666666;
+            line-height: 1;
+            margin-bottom: 0;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    .code {
+      height: 529px;
+      background: #ffffff;
+      text-align: center;
       display: flex;
       align-items: center;
       justify-content: center;
-      text-align: center;
+
+      .content {
+        flex: 1;
+      }
 
       .title {
         font-size: 48px;
@@ -381,145 +510,14 @@ export default {
         margin-bottom: 0;
       }
 
-      button {
-        width: 174px;
-        height: 54px;
-        background: rgba(255, 255, 255, 1);
-        border-radius: 10px;
-        color: #1890ff;
-        font-weight: bold;
-        font-size: 20px;
-        border: none;
-        outline: none;
-        cursor: pointer;
-      }
-    }
+      .img {
+        margin-top: 34px;
 
-    .list {
-      margin: 84px auto 0;
-      width: 1200px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .item {
-        text-align: center;
-
-        .img {
-          margin-bottom: 30px;
-          height: 80px;
-
-          img {
-            width: auto;
-            height: 80px;
-          }
-        }
-
-        .title {
-          color: #121212;
-          font-size: 24px;
-          line-height: 24px;
-          margin-bottom: 11px;
-        }
-
-        p {
-          font-size: 18px;
-          color: #666666;
-          line-height: 18px;
+        img {
+          width: 260px;
+          height: 260px;
         }
       }
     }
   }
-
-  .question {
-    height: 470px;
-    background: rgba(246, 246, 246, 1);
-    padding-top: 60px;
-    box-sizing: border-box;
-
-    .title {
-      text-align: center;
-      font-size: 48px;
-      font-weight: bold;
-      color: #121212;
-      margin-bottom: 38px;
-    }
-
-    .list {
-      width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .item {
-        // width: 50%;
-        margin-bottom: 36px;
-
-        .q {
-          color: #121212;
-          font-size: 18px;
-          line-height: 1;
-          margin-bottom: 20px;
-        }
-
-        p {
-          color: #666666;
-          line-height: 1;
-          margin-bottom: 0;
-          font-size: 16px;
-        }
-      }
-    }
-  }
-
-  .code {
-    height: 529px;
-    background: #ffffff;
-    text-align: center;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .content {
-      flex: 1;
-    }
-
-    .title {
-      font-size: 48px;
-      font-family: Microsoft YaHei;
-      font-weight: bold;
-      color: #121212;
-      line-height: 48px;
-      padding: 0 0 26px;
-      position: relative;
-      margin-bottom: 35px;
-    }
-
-    .title:after {
-      content: '';
-      position: absolute;
-      left: 50%;
-      bottom: 0;
-      transform: translateX(-50%);
-      width: 33px;
-      height: 4px;
-      background: #1890ff;
-      border-radius: 2px;
-    }
-
-    p {
-      font-size: 20px;
-      color: #666666;
-      margin-bottom: 0;
-    }
-    .img {
-      margin-top: 34px;
-      img {
-        width: 260px;
-        height: 260px;
-      }
-    }
-  }
-}
 </style>

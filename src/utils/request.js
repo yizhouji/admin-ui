@@ -58,7 +58,7 @@ const errorHandler = (error) => {
     if (error.response.status === 401 && !(data.result && data.result.isLogin)) {
       notification.error({
         message: '未登录',
-        description: '登录已过期，请重新登录'
+        description: error.response.data.message || '登录已过期，请重新登录'
       })
       if (token) {
         store.dispatch('Logout').then(() => {

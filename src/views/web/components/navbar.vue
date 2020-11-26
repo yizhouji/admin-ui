@@ -169,7 +169,7 @@ export default {
   .ant-dropdown-link {
     font-size: 16px;
     font-weight: bold;
-    margin-left: 30px;
+    // margin-left: 30px;
   }
 }
 </style>

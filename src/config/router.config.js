@@ -123,13 +123,13 @@ export const constantRouterMap = [
       {
         path: 'login',
         name: 'Login',
-        meta: { title: '登录', keepAlive: true },
+        meta: { title: '登录', keepAlive: false },
         component: () => import('@/views/user/Login')
       },
       {
         path: 'register',
         name: 'Register',
-        meta: { title: '注册', keepAlive: true },
+        meta: { title: '注册', keepAlive: false },
         component: () => import('@/views/user/Register')
       },
       {
@@ -160,13 +160,13 @@ export const constantRouterMap = [
       {
         path: 'index',
         name: 'Index',
-        meta: { title: '首页', keepAlive: true },
+        meta: { title: '首页', keepAlive: false },
         component: () => import('@/views/web/index')
       },
       {
         path: 'price',
         name: 'Price',
-        meta: { title: '价格', keepAlive: true },
+        meta: { title: '价格', keepAlive: false },
         component: () => import('@/views/web/price')
       }
     ]

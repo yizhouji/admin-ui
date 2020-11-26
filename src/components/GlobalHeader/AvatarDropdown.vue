@@ -16,7 +16,7 @@
         </a-menu-item> -->
         <a-menu-item v-if="menu" key="website" @click="handleToIndex">
           <img src="@/assets/icon_website.png" alt=""/>
-          官放网站
+          官方网站
         </a-menu-item>
         <!-- <a-menu-item v-if="menu" key="center" @click="handleToIndex">
           <img src="@/assets/icon_contect.png" alt=""/>

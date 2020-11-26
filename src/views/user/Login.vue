@@ -35,7 +35,7 @@
         <div class="changeLogin">
           <div class="item" @click="loginType(2)">
             <img src="../../assets/wechatLogin.png" alt="" />
-            <p >手机号登陆</p>
+            <p>手机号登陆</p>
           </div>
         </div>
       </div>
@@ -100,6 +100,9 @@
     created () {},
     mounted () {
       this.getCode()
+    },
+    destroyed () {
+      clearInterval(timer)
     },
     methods: {
       ...mapActions(['Login', 'Logout']),
@@ -177,6 +180,12 @@
               })
               storage.set('USERINFO', result)
               this.loginSuccess(result)
+              let link = localStorage.getItem('link')
+              if (link) {
+                localStorage.removeItem('link')
+                this.$router.push(link)
+                return
+              }
               if (result.telephone && result.telephone.length > 0) {
                 this.$router.push('/dashboard')
               } else {
@@ -374,6 +383,7 @@
 
       .item {
         cursor: pointer;
+
         img {
           width: 35px;
           height: 35px;
