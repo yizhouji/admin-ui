@@ -121,12 +121,15 @@
       <div class="body" style="text-align:center">您尚未登录或登录已超时</div>
     </a-modal>
     <baseFooter></baseFooter>
+    <Pay ref="pay"></Pay>
   </div>
 </template>
 
 <script>
   import navBar from './components/navbar'
   import baseFooter from './components/baseFooter'
+  import Pay from './components/pay'
+
   import {
     price,
     wechatPay
@@ -135,7 +138,8 @@
     name: 'Price',
     components: {
       navBar,
-      baseFooter
+      baseFooter,
+      Pay
     },
     data () {
       return {
@@ -152,16 +156,7 @@
     },
     methods: {
       buy (commodityId) {
-        wechatPay({
-          commodityId
-        }).then(res => {
-          console.log(res)
-        }).catch(error => {
-          console.log('buy:', error)
-          if (error.status === 401) {
-              this.visible = true
-          }
-        })
+        this.$refs.pay.show(commodityId)
       },
       handleOk () {
         this.$router.push('/user/login')
