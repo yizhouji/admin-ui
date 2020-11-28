@@ -17,7 +17,7 @@
                 </div>
               </div>
             </div>
-            <h4>销售额</h4>
+            <h4><span>销售额</span><span class="count"><i>合计：￥</i><em>{{ amount }}</em></span></h4>
             <!-- <div v-show="saleList && saleList.length>0"> -->
             <div id="chart" style="height:300px"></div>
             <!-- </div> -->
@@ -158,6 +158,15 @@
         },
         imgList: [],
         marketType: '1'
+      }
+    },
+    computed: {
+      amount () {
+        let val = 0
+        this.saleList.forEach((element) => {
+          val = Number(element.value) + val
+        })
+        return val
       }
     },
     created () {},
@@ -352,7 +361,7 @@
                     formatter: function (name) {
                       let val = 0
                       arr.forEach((element) => {
-                          val = Number(element.value) + val
+                        val = Number(element.value) + val
                       })
                       return ' 销售额\n' + '￥' + val
                     }
@@ -464,6 +473,31 @@
 </script>
 
 <style lang="less" scoped>
+  h4{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    .count{
+      font-size: 18px;
+      display: flex;
+    align-items: flex-end;
+      i{
+        display: inline-block;
+        font-style: normal;
+        color: #000000;
+        line-height: 18px;
+      }
+       em{
+        display: inline-block;
+        font-style: normal;
+        font-size: 30px;
+        color:#F2637B;
+        line-height: 30px;
+        position: relative;
+        top: 2px;
+      }
+    }
+  }
   .extra-wrapper {
     line-height: 55px;
     padding-right: 24px;
