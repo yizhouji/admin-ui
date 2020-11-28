@@ -69,10 +69,10 @@
               <a class="item">
                 <a-spin v-if="showUploading" />导入表格</a>
             </a-upload>
-            <div class="item-line">
+            <!-- <div class="item-line">
               <a-icon type="setting" />
               <span>操作</span>
-            </div>
+            </div> -->
           </div>
         </div>
 
