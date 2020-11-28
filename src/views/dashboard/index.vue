@@ -55,7 +55,7 @@
                 <div class="img">
                   <template v-for="(item,index) in imgList">
                     <template v-if="index < 4">
-                      <img :src="item.url" alt :key="item.notepadId" @click="findNote(item.notepadId)" />
+                      <img :src="item.url" alt :key="index" @click="findNote(item.notepadId)" />
                     </template>
                   </template>
                 </div>
@@ -273,7 +273,6 @@
           }
           arr.push(obj)
         })
-        console.log('initSaleroomsChart:', arr)
         this.saleList = arr
         let box = document.getElementById('chart')
         let myChart = echarts.init(box, 'light')

@@ -99,6 +99,7 @@
           </template>
           <template slot="amount" slot-scope="text, record">
             <a-input
+              type="number"
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.amount"
@@ -107,6 +108,7 @@
           </template>
           <template slot="unitPrice" slot-scope="text, record">
             <a-input
+              type="number"
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.unitPrice"
@@ -115,6 +117,7 @@
           </template>
           <template slot="grossAmount" slot-scope="text, record">
             <a-input
+              type="number"
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.grossAmount"
@@ -364,15 +367,15 @@
         expand: false,
         selectedRowKeys: [],
         form: {
-          customer: '李四',
-          customerPhone: '15239088356',
-          drawer: '李四',
-          drawerPhone: '15239088356',
-          groupName: '贸易公司',
-          payment: 1
+          customer: '',
+          customerPhone: '',
+          drawer: '',
+          drawerPhone: '',
+          groupName: '',
+          payment: undefined
         },
         noteList: [],
-        count: 0,
+        count: 3,
         product: [],
         modelList: [],
         telephone: '',
@@ -389,7 +392,6 @@
             }
           })
         }
-        console.log('amount:', amount)
         return amount
       }
     },
@@ -500,9 +502,13 @@
       printHandle () {},
       handleChange (value, key, column) {
         const newData = [...this.list]
+
         const target = newData.filter(item => key === item.key)[0]
         if (target) {
           target[column] = value
+          if (column === 'amount' || column === 'unitPrice') {
+              target['grossAmount'] = Number(target['amount']) * Number(target['unitPrice'])
+          }
           this.list = newData
         }
       },

@@ -131,18 +131,15 @@
     mounted () {
       let params = this.$route.query.sceneStr
       let ua = window.navigator.userAgent.toLowerCase()
-      console.log('ua:', ua.match(/MicroMessenger/i))
       // eslint-disable-next-line eqeqeq
       if (ua.match(/MicroMessenger/i) == 'micromessenger') {
         this.isWeixin = true
       } else {
         this.isWeixin = false
       }
-      console.log('isWeixin:', this.isWeixin)
       sceneStr({
         'sceneStr': params
       }).then(res => {
-        console.log(res)
         this.info = res.result
         let list = res.result.productChecklists
         let amount = 0

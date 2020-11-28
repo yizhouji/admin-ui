@@ -21,7 +21,7 @@
                 <span class="old">¥{{ item.originalCost }}</span>
                 <span>¥{{ item.actualCost }}</span>
               </div>
-              <button @click="buy(item.commodityId)">立即使用</button>
+              <button @click="buy(item)">立即使用</button>
             </div>
           </div>
         </div>
@@ -111,15 +111,7 @@
         </div>
       </div>
     </div>
-    <a-modal
-      centered
-      v-model="visible"
-      width="300px"
-      okText="立即登录"
-      title="提示"
-      @ok="handleOk">
-      <div class="body" style="text-align:center">您尚未登录或登录已超时</div>
-    </a-modal>
+
     <baseFooter></baseFooter>
     <Pay ref="pay"></Pay>
   </div>
@@ -143,8 +135,7 @@
     },
     data () {
       return {
-        list: [],
-        visible: false
+        list: []
       }
     },
     mounted () {
@@ -155,8 +146,8 @@
       })
     },
     methods: {
-      buy (commodityId) {
-        this.$refs.pay.show(commodityId)
+      buy (data) {
+        this.$refs.pay.show(data)
       },
       handleOk () {
         this.$router.push('/user/login')

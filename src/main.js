@@ -21,7 +21,6 @@ import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less'
 import Print from 'vue-print-nb'
-
 require('./utils/log')
 
 Vue.use(FormModel)
