@@ -66,10 +66,10 @@
           <div class="operation">
             <!-- <a class="item">发送</a>
             <a class="item">打印</a> -->
-            <div class="item-line">
+            <!-- <div class="item-line">
               <a-icon type="setting" />
               <span>操作</span>
-            </div>
+            </div> -->
           </div>
         </div>
         <!-- <a-table
