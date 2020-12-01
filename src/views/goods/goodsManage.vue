@@ -70,8 +70,15 @@
                 <a-spin v-if="showUploading" />导入表格</a>
             </a-upload>
             <div class="item-line">
-              <a-icon type="setting" />
-              <span>操作</span>
+              <a-dropdown :trigger="['hover']" overlayClassName="drop" style="cursor: pointer;">
+                <div class="item-line">
+                  <a-icon type="setting" />
+                  <span>操作</span>
+                </div>
+                <a-menu slot="overlay">
+                  <a-menu-item key="1" @click="addHandle">添加</a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </div>
           </div>
         </div>
@@ -96,8 +103,13 @@
           <a-table-column key="stock" title="剩余库存" data-index="stock" />
           <a-table-column key="remark" title="备注" data-index="remark">
             <template slot-scope="text, record">
-              <a v-if="text" @click="showDialog(record)">{{ text | formatStr(8) }}</a>
-              <a v-else @click="showDialog(record)">{{ '备注' }}</a>
+              <span v-if="text" @click="showDialog(record)">{{ text | formatStr(8) }}</span>
+              <span v-else @click="showDialog(record)">{{ '备注' }}</span>
+            </template>
+          </a-table-column>
+          <a-table-column key="operation" title="操作" data-index="operation">
+            <template slot-scope="text, record">
+              <a-button type="primary" size="small" @click="showDialog(record)">编辑</a-button>
             </template>
           </a-table-column>
         </BaseTable>
@@ -239,6 +251,9 @@ import { login } from '@/api/login'
           document.body.removeChild(link)
           // }
         })
+      },
+      addHandle () {
+        this.$router.push('/goods/importGoods')
       },
       getList () {
         this.$refs.BaseTable.loading()
