@@ -163,8 +163,9 @@
     computed: {
       amount () {
         let val = 0
+        console.log(this.saleList)
         this.saleList.forEach((element) => {
-          val = Number(element.value) + val
+          val = Number(element.money) + val
         })
         return val
       }
@@ -282,7 +283,7 @@
           }
           arr.push(obj)
         })
-        this.saleList = arr
+        // this.saleList = arr
         let box = document.getElementById('chart')
         let myChart = echarts.init(box, 'light')
         // 绘制图表
@@ -329,11 +330,11 @@
                 align: 'auto',
                 itemWidth: 10,
                 itemHeight: 10,
-                formatter: function (name) {
+                formatter: (name) => {
                   let val = ''
-                  arr.forEach((element) => {
-                    if (name === element.name) {
-                      val = element.value
+                  data.forEach((element) => {
+                    if (name === element.productName) {
+                      val = element.money
                     }
                   })
                   return name + '  ￥' + val
@@ -360,8 +361,8 @@
                     align: 'center',
                     formatter: function (name) {
                       let val = 0
-                      arr.forEach((element) => {
-                        val = Number(element.value) + val
+                      data.forEach((element) => {
+                        val = Number(element.money) + val
                       })
                       return ' 销售额\n' + '￥' + val
                     }

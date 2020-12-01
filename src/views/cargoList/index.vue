@@ -135,7 +135,7 @@
       if (ua.match(/MicroMessenger/i) == 'micromessenger') {
         this.isWeixin = true
       } else {
-        this.isWeixin = false
+        this.isWeixin = true
       }
       sceneStr({
         'sceneStr': params
@@ -152,9 +152,9 @@
           this.total = amount
         }
         this.$nextTick(() => {
-          if (this.isWeixin) {
-            this.save()
-          }
+          // if (this.isWeixin) {
+            this.saveImg()
+          // }
         })
       }).catch(error => {
         this.$message.error(error.data.message || '获取清单信息失败')
@@ -162,24 +162,19 @@
     },
     methods: {
 
-      save () {
+      saveImg () {
         document.body.scrollTop = document.documentElement.scrollTop = 0
         html2canvas(this.$refs.canvas).then(canvas => {
-          // 转成图片，生成图片地址
-          console.log('canvas:', canvas)
-
           let imgUrl = canvas.toDataURL('image/jpeg')
           this.imgUrl = imgUrl
 
-          var eleLink = document.createElement('a')
-          eleLink.href = imgUrl // 转换后的图片地址
-          eleLink.download = '壹周记-' + this.getNowFormatDate() + '.jpg'
-          // 触发点击
-          document.body.appendChild(eleLink)
-          console.log('eleLink:', eleLink)
-          eleLink.click()
-          // 然后移除
-          document.body.removeChild(eleLink)
+          // var eleLink = document.createElement('a')
+          // eleLink.href = imgUrl // 转换后的图片地址
+          // eleLink.download = '壹周记-' + this.getNowFormatDate() + '.jpg'
+          // // 触发点击
+          // document.body.appendChild(eleLink)
+
+          // document.body.removeChild(eleLink)
         })
       },
        getNowFormatDate () {
