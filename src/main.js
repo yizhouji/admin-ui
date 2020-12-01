@@ -21,7 +21,7 @@ import './permission' // permission control
 import './utils/filter' // global filter
 import './global.less'
 import Print from 'vue-print-nb'
-require('./utils/log')
+// require('./utils/log')
 
 Vue.use(FormModel)
 Vue.use(VueAxios)
@@ -33,7 +33,7 @@ Vue.prototype.$message = message
 message.config({
   duration: 2, // 持续时间
   top: height / 2 + 'px', // 到页面顶部距离
-  maxCount: 3 // 最大显示数, 超过限制时，最早的消息会被自动关闭
+  maxCount: 2 // 最大显示数, 超过限制时，最早的消息会被自动关闭
 })
 
 Vue.config.productionTip = false

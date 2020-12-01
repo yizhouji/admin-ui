@@ -44,13 +44,19 @@
 
 <script>
   import {
+    ACCESS_TOKEN
+  } from '@/store/mutation-types'
+  import {
     price,
     wechatPay,
     aliPay,
     wechatPayResult,
     aliPayResult
   } from '@/api/price'
-import { setTimeout } from 'timers'
+  import {
+    updateUserInfo
+  } from '@/api/user'
+  import storage from 'store'
 
   export default {
     name: 'Price',
@@ -69,7 +75,7 @@ import { setTimeout } from 'timers'
       }
     },
     mounted () {
-
+      this.update()
     },
     methods: {
       select (key) {
@@ -149,15 +155,27 @@ import { setTimeout } from 'timers'
             })
         }
       },
+      update () {
+        const hide = this.$message.loading('正在更新用户信息', 0)
+        updateUserInfo().then(res => {
+          const result = res.result
+          this.$store.commit('SET_USER', result)
+          this.$store.commit('SET_TOKEN', result.userId)
+          storage.set(ACCESS_TOKEN, result.userId, 7 * 24 * 60 * 60 * 1000)
+          storage.set('USERINFO', result)
+          hide()
+          this.$router.push('/dashboard')
+        }).catch(() => {
+          hide()
+        })
+      },
       paySuccess () {
         this.$message.success('支付成功')
         this.step = 1
         this.selected = 0
         this.visible = false
         this.info = ''
-        setTimeout(() => {
-            this.$router.push('/dashboard')
-        }, 2000)
+        this.update()
       },
       show (info) {
         this.info = info

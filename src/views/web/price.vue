@@ -126,6 +126,7 @@
     price,
     wechatPay
   } from '@/api/price'
+
   export default {
     name: 'Price',
     components: {

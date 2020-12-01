@@ -12,7 +12,9 @@ const userApi = {
   GetMsgCode: '/warehouse/infos/code',
   BindMobile: '/warehouse/infos/tel',
   getQrCode: '/warehouse/infos/qrcode',
-  getBindStatus: '/warehouse/infos/bind'
+  getBindStatus: '/warehouse/infos/bind',
+  updateUserInfo: '/warehouse/infos'
+
 }
 
 export function updateHeadImage (parameter) {
@@ -58,5 +60,12 @@ export function updateHeadImage (parameter) {
       url: userApi.getBindStatus,
       method: 'get',
       params: parameter
+    })
+  }
+
+  export function updateUserInfo () {
+    return request({
+      url: userApi.updateUserInfo,
+      method: 'get'
     })
   }
