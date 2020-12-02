@@ -19,10 +19,10 @@
           <img src="@/assets/icon_user.png" alt="" />
           个人中心
         </a-menu-item>
-        <!-- <a-menu-item v-if="menu" key="center" @click="handleToCenter">
+        <a-menu-item v-if="menu" key="center" @click="chargeHandle">
           <img src="@/assets/icon_record.png" alt=""/>
           充值记录
-        </a-menu-item> -->
+        </a-menu-item>
         <a-menu-item v-if="menu" key="website" @click="handleToIndex">
           <img src="@/assets/icon_website.png" alt="" />
           官方网站
@@ -93,7 +93,11 @@
           path: '/price'
         })
       },
-
+      chargeHandle () {
+         this.$router.push({
+          path: '/account/history'
+        })
+      },
       handleToIndex () {
         this.$router.push({
           path: '/'

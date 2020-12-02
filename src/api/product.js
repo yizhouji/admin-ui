@@ -8,8 +8,9 @@ const productApi = {
   units: '/warehouse/products/units',
   productsInfo: '/warehouse/products/info',
   records: '/warehouse/products/records',
-  remark: '/warehouse/products/remark'
-
+  remark: '/warehouse/products/remark',
+  businessStatus: '/warehouse/products/businessStatus',
+  deletProduct: '/warehouse/products/'
 }
 
 /**
@@ -97,5 +98,19 @@ export function remark (parameter) {
     url: productApi.remark,
     method: 'put',
     data: parameter
+  })
+}
+
+export function businessStatus (parameter) {
+  return request({
+    url: productApi.businessStatus,
+    method: 'put',
+    data: parameter
+  })
+}
+export function deletProduct (id) {
+  return request({
+    url: productApi.deletProduct + id,
+    method: 'delete'
   })
 }

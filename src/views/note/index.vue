@@ -5,7 +5,7 @@
         <div class="table-title" slot="title">
           <div class="text">记事列表</div>
           <div class="operation">
-            <a-input-search placeholder="请输入查询条件" style="width: 200px" @search="onSearch" />
+            <!-- <a-input-search placeholder="请输入查询条件" style="width: 200px" @search="onSearch" /> -->
             <a class="item" @click="addHandle">新建文件</a>
             <a class="item" @click="addHandle">上传图片</a>
 
@@ -99,7 +99,7 @@
           pageNum: 1,
           pageSize: 10,
           total: 0,
-          hideOnSinglePage: true,
+          // hideOnSinglePage: true,
           showQuickJumper: true,
           showSizeChanger: true,
           onChange: page => {

@@ -1,9 +1,9 @@
 <template>
   <a-table
-    :data-source="dataSource.list"
-    @change="pageNumChange"
+    :data-source="list"
+    @change="pageChange"
     :loading="tableLoading"
-    @showSizeChange="pageSizeChange"
+    :pagination="pagination"
     :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
   >
     <slot />
@@ -19,12 +19,13 @@ export default {
       selectedRowKeys: [],
       columns: [],
       dataSource: [],
+      list: [],
       pagination: {
-        pageSize: 20,
+        pageSize: 10,
         total: 0,
+        current: 1,
         showQuickJumper: true,
         showSizeChanger: true
-
       }
     }
   },
@@ -39,21 +40,30 @@ export default {
       this.tableLoading = false
     },
 
-    getData (dataSource) {
-      if (dataSource && dataSource.list.length > 0) {
+    getData (dataSource, pageNum, pageSize) {
+      if (dataSource) {
         this.dataSource = dataSource
+        this.list = dataSource.list
+        let pagination = this.pagination
+        pagination.total = dataSource.total
+        pagination.current = pageNum
+        pagination.pageSize = pageSize
+        this.pagination = pagination
+        this.tableLoading = false
+      } else {
+        this.dataSource = []
+        this.list = []
+        let pagination = this.pagination
+        pagination.current = 1
+        pagination.pageSize = 10
+        pagination.total = 0
+        this.pagination = pagination
+        this.tableLoading = false
       }
-
-      let pagination = this.pagination
-      pagination.total = dataSource.total
-      this.pagination = pagination
-      this.tableLoading = false
     },
-    pageNumChange (e) {
-      this.$emit('pageNumChange')
-    },
-    pageSizeChange (e) {
-      this.$emit('pageSizeChange')
+    pageChange (e) {
+      this.pagination = e
+      this.$emit('pageChange', e)
     },
     onSelectChange (selectedRowKeys) {
       this.selectedRowKeys = selectedRowKeys
@@ -63,5 +73,4 @@ export default {
 }
 </script>
 
-<style>
-</style>
+<style></style>

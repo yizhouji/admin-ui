@@ -97,6 +97,13 @@ export const asyncRouterMap = [
         name: 'account',
         hidden: true,
         meta: { title: '个人中心', icon: 'user', keepAlive: false }
+      },
+      {
+        path: '/account/history',
+        component: () => import('@/views/account/history'),
+        name: 'history',
+        hidden: true,
+        meta: { title: '充值记录', icon: 'user', keepAlive: false }
       }
     ]
   },

@@ -14,7 +14,7 @@
           <a-input disabled placeholder="请输入类别" v-model="form.categoryName" allowClear />
         </a-form-model-item>
         <a-form-model-item label="商品名称" prop="productName">
-          <a-input disabled placeholder="请输入商品名称" v-model="form.productName" allowClear />
+          <a-input placeholder="请输入商品名称" v-model="form.productName" allowClear />
         </a-form-model-item>
         <a-form-model-item label="总库存" prop="productTotal">
           <a-input
@@ -96,11 +96,16 @@ export default {
       e.preventDefault()
       this.$refs.ruleForm.validate(valid => {
         if (valid) {
+          if (!this.form.productName) {
+            this.$message.error('请输入商品名称')
+            return
+          }
           //  console.log(this.form)
           this.iconLoading = true
 
           let obj = {
             productId: this.form.productId,
+            productName: this.form.productName,
             remark: this.form.remark
           }
 

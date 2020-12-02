@@ -13,7 +13,8 @@ const userApi = {
   BindMobile: '/warehouse/infos/tel',
   getQrCode: '/warehouse/infos/qrcode',
   getBindStatus: '/warehouse/infos/bind',
-  updateUserInfo: '/warehouse/infos'
+  updateUserInfo: '/warehouse/infos',
+  getHistory: '/warehouse/costs/orders'
 
 }
 
@@ -67,5 +68,13 @@ export function updateHeadImage (parameter) {
     return request({
       url: userApi.updateUserInfo,
       method: 'get'
+    })
+  }
+
+  export function getHistory (parameter) {
+    return request({
+      url: userApi.getHistory,
+      method: 'get',
+      params: parameter
     })
   }

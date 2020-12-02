@@ -85,8 +85,7 @@
         <BaseTable
           ref="BaseTable"
           @getList="getList"
-          @pageNumChange="pageNumChange"
-          @pageSizeChange="pageSizeChange"
+          @pageChange="pageChange"
           @onSelectChange="onSelectChange">
           <a-table-column key="customer" title="客户名字" data-index="customer" />
           <a-table-column key="customerPhone" title="客户联系方式" data-index="customerPhone" />
@@ -155,7 +154,7 @@
           endTime: '',
           groupName: '',
           pageNum: 1,
-          pageSize: 20,
+          pageSize: 10,
           payment: undefined,
           startAmount: '',
           startTime: ''
@@ -180,7 +179,7 @@
         getChecklists(getJson(this.form))
           .then((res) => {
             this.list = res.result.list
-            this.$refs.BaseTable.getData(res.result)
+            this.$refs.BaseTable.getData(res.result, this.form.pageNum, this.form.pageSize)
             this.tableLoading = false
           })
           .catch(() => {
@@ -200,7 +199,7 @@
       handleSearch (e) {
         e.preventDefault()
         this.form.pageNum = 1
-        this.form.pageSize = 20
+        this.form.pageSize = 10
         if (this.form.minStock > this.form.maxStock) {
           this.$message.error('库存量输入有误')
           return
@@ -215,7 +214,7 @@
           endTime: '',
           groupName: '',
           pageNum: 1,
-          pageSize: 20,
+          pageSize: 10,
           payment: undefined,
           startAmount: '',
           startTime: ''
@@ -241,16 +240,13 @@
         form.endTime = dateString[1]
         this.form = form
       },
-      pageNumChange (e) {
+      pageChange (e) {
         let form = this.form
         form.pageNum = e.current
-        this.form = form
-        this.getList()
-      },
-      pageSizeChange (e) {
-        let form = this.form
-        form.pageNum = 1
-        form.pageSize = e.pageSize
+        if (e.pageSize !== form.pageSize) {
+            form.pageSize = e.pageSize
+            form.pageNum = 1
+        }
         this.form = form
         this.getList()
       }
