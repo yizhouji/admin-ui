@@ -19,7 +19,7 @@
           <img src="@/assets/icon_user.png" alt="" />
           个人中心
         </a-menu-item>
-        <a-menu-item v-if="menu" key="center" @click="chargeHandle">
+        <a-menu-item v-if="menu" key="charge" @click="chargeHandle">
           <img src="@/assets/icon_record.png" alt=""/>
           充值记录
         </a-menu-item>

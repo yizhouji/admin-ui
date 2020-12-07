@@ -75,7 +75,6 @@
       }
     },
     mounted () {
-      this.update()
     },
     methods: {
       select (key) {
