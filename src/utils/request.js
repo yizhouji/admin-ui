@@ -10,11 +10,10 @@ import storage from 'store'
 import notification from 'ant-design-vue/es/notification'
 import { VueAxios } from './axios'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
-
 // 创建 axios 实例
 const axiosConfig = {
   // API 请求的默认前缀
-
+  withCredentials: true,
   timeout: 60000 // 请求超时时间
 }
 // if (process.env.NODE_ENV === 'production') {
@@ -74,6 +73,7 @@ const errorHandler = (error) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
+  console.log('config:', config.headers)
   const token = storage.get(ACCESS_TOKEN)
   // 如果 token 存在
   // 让每个请求携带自定义 token 请根据实际情况自行修改
@@ -85,6 +85,7 @@ request.interceptors.request.use(config => {
 
 // response interceptor
 request.interceptors.response.use((response) => {
+  console.log('response:', response)
   return response.data
 }, errorHandler)
 

@@ -175,6 +175,9 @@
       this.getSalerooms(this.type)
       this.getNoteList()
       this.getmarkets(this.marketType)
+
+      let allCookies = document.cookie
+      console.log(allCookies)
     },
     methods: {
       addNote () {
