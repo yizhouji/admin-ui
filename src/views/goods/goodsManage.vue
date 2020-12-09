@@ -96,6 +96,7 @@
 
         <BaseTable
           ref="BaseTable"
+          :select="false"
           @getList="getList"
           @pageChange="pageChange"
           @onSelectChange="onSelectChange"

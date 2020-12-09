@@ -265,6 +265,7 @@
         border: 1px dotted #dddddd;
         border-radius: 8px;
         padding: 30px;
+        text-align: center;
 
         p {
           font-size: 16px;
@@ -351,7 +352,7 @@
           width: 200px;
           height: 200px;
           display: block;
-          // margin: 0 auto;
+          margin: 0 auto;
         }
       }
 

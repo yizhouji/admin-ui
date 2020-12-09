@@ -4,7 +4,7 @@
     @change="pageChange"
     :loading="tableLoading"
     :pagination="pagination"
-    :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+    :row-selection="select?{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }: null"
   >
     <slot />
   </a-table>
@@ -13,6 +13,12 @@
 <script>
 export default {
   name: 'BaseTable',
+  props: {
+      select: {
+        type: Boolean,
+        default: true
+    }
+  },
   data () {
     return {
       tableLoading: false,

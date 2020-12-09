@@ -71,7 +71,7 @@
           :columns="columns"
           :data-source="list"
           :pagination="false"
-          :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }">
+          :row-selection="null">
           <template slot="productName" slot-scope="text, record, index">
             <template v-if="record.editable">
               <a-select
@@ -155,31 +155,34 @@
       </a-card>
       <a-modal v-model="visible" @ok="handleOk" width="800px" :footer="null">
         <div slot="title" class="modal-title text-center">销货清单</div>
-        <ul class="part">
-          <li>开票人：{{ form.drawer }}</li>
-          <li>开票人联系方式：{{ form.drawerPhone }}</li>
-          <li>客户联系方式：{{ form.customer }}</li>
-          <li>客户名字：{{ form.customerPhone }}</li>
-          <li>是否已付款：{{ form.payment ? '是' : '否' }}</li>
-          <li></li>
-        </ul>
-        <div class="table" style="max-height:400px;overflow-y: auto;">
-          <a-table :data-source="modelList" bordered :pagination="pagination">
-            <a-table-column key="index" title="序号">
-              <template slot-scope="text, record, index">{{ index + 1 }}</template>
-            </a-table-column>
-            <a-table-column key="productName" title="品名" data-index="productName">
-              <template slot-scope="text">
-                <a>{{ text }}</a>
-              </template>
-            </a-table-column>
-            <a-table-column key="productUnit" title="公司名字" data-index="productUnit" />
-            <a-table-column key="amount" title="数量" data-index="amount" />
-            <a-table-column key="unitPrice" title="单价" data-index="unitPrice" />
-            <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />
-          </a-table>
+        <div id="printMe" ref="printContent">
+
+          <ul class="part">
+            <li>开票人：{{ form.drawer }}</li>
+            <li>开票人联系方式：{{ form.drawerPhone }}</li>
+            <li>客户联系方式：{{ form.customer }}</li>
+            <li>客户名字：{{ form.customerPhone }}</li>
+            <li>是否已付款：{{ form.payment ? '是' : '否' }}</li>
+            <li></li>
+          </ul>
+          <div class="table" style="max-height:400px;overflow-y: auto;">
+            <a-table :data-source="modelList" bordered :pagination="pagination">
+              <a-table-column key="index" title="序号">
+                <template slot-scope="text, record, index">{{ index + 1 }}</template>
+              </a-table-column>
+              <a-table-column key="productName" title="品名" data-index="productName">
+                <template slot-scope="text">
+                  <a>{{ text }}</a>
+                </template>
+              </a-table-column>
+              <a-table-column key="productUnit" title="公司名字" data-index="productUnit" />
+              <a-table-column key="amount" title="数量" data-index="amount" />
+              <a-table-column key="unitPrice" title="单价" data-index="unitPrice" />
+              <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />
+            </a-table>
+          </div>
+          <div class="amount">总计：{{ amount }} 元</div>
         </div>
-        <div class="amount">总计：{{ amount }} 元</div>
         <div class="submit" v-if="showSubmit">
           <a-button type="primary" @click="confirmHandle">确定</a-button>
         </div>

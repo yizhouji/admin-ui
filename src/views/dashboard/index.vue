@@ -419,7 +419,7 @@
             timeArr.push(element.timeText)
           }
 
-          valArr.push(element.saleroom)
+          valArr.push(element.saleroom * 100)
         })
         let box = document.getElementById('marketChart')
         let myChart = echarts.init(box, 'light')
@@ -465,7 +465,8 @@
           series: [{
             data: valArr,
             type: 'line',
-            smooth: true
+            smooth: true,
+            areaStyle: {}
           }]
         })
       }

@@ -258,15 +258,16 @@
           align-items: center;
 
           .img {
-            width: 0.56rem;
-            height: 0.56rem;
+            width: 0.45rem;
+            height: 0.45rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 0.2rem;
+            margin-right: .4rem;
 
             img {
-              height: 0.56rem;
+              width: auto;
+              height: 0.45rem;
               display: block;
             }
           }

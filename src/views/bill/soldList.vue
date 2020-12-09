@@ -86,6 +86,7 @@
           ref="BaseTable"
           @getList="getList"
           @pageChange="pageChange"
+          :select="false"
           @onSelectChange="onSelectChange">
           <a-table-column key="customer" title="客户名字" data-index="customer" />
           <a-table-column key="customerPhone" title="客户联系方式" data-index="customerPhone" />

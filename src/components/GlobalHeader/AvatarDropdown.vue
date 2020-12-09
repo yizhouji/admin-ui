@@ -121,7 +121,9 @@
           onOk: () => {
             logout().then(() => {
               this.userInfo = ''
-              localStorage.clear()
+              localStorage.removeItem('USERINFO')
+              localStorage.removeItem('Access-Token')
+
               this.$router.push({
                 name: 'index'
               })
