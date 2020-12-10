@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <div class="content">
-      <div class="logo">
+      <div class="logo" @click="linkHandle('Index')">
         <img src="../static/img/logo_blue.png" alt />
       </div>
       <div class="text">
@@ -125,6 +125,7 @@ export default {
     align-items: center;
     justify-content: space-between;
     .logo {
+      cursor: pointer;
       img {
         height: 36px;
       }

@@ -23,6 +23,8 @@ import './global.less'
 import Print from 'vue-print-nb'
 // require('./utils/log')
 
+import VueCookie from 'vue-cookie'
+Vue.use(VueCookie)
 Vue.use(FormModel)
 Vue.use(VueAxios)
 Vue.use(Print)

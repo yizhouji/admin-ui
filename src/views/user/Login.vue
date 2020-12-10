@@ -160,6 +160,12 @@ export default {
           this.$message.error(error.data.message)
         })
     },
+    setCookie (name, value) {
+      var Days = 90
+      var exp = new Date()
+      exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000)
+      document.cookie = name + '=' + escape(value) + ';expires=' + exp.toGMTString() + ';path=/'
+    },
     getStatus () {
       this.isRequest = true
       checkLogin(this.sceneStr)
@@ -169,6 +175,9 @@ export default {
             clearInterval(timer)
             const result = res.result
             storage.set(ACCESS_TOKEN, result.userId, 7 * 24 * 60 * 60 * 1000)
+
+            this.$store.commit('SESSION', result.sessionId)
+            this.setCookie('SESSION', result.sessionId)
             this.$store.commit('SET_USER', result)
             this.$store.commit('SET_TOKEN', result.userId)
             this.$store.commit('SET_NAME', {
@@ -234,9 +243,9 @@ export default {
       state.loginBtn = true
 
       storage.set('autoLogin', {
-          checked: this.autoLogin,
-          phone: this.phone
-        })
+        checked: this.autoLogin,
+        phone: this.phone
+      })
 
       telLogin({
         telephone: this.phone,
@@ -245,6 +254,8 @@ export default {
         .then(res => {
           const result = res.result
           storage.set(ACCESS_TOKEN, result.userId, 7 * 24 * 60 * 60 * 1000)
+          this.$store.commit('SESSION', result.sessionId)
+            this.setCookie('SESSION', result.sessionId)
           this.$store.commit('SET_USER', result)
           this.$store.commit('SET_TOKEN', result.userId)
           this.$store.commit('SET_NAME', {
