@@ -14,15 +14,15 @@
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="开票人">
-              <a-input name="drawer" v-model="form.drawer" placeholder="请输入开票人" allow-clear :maxLength="10" />
+            <a-form-model-item label="开票人/单位">
+              <a-input name="drawer" v-model="form.drawer" placeholder="请输入开票人/单位" allow-clear :maxLength="10" />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-model-item label="开票人联系方式">
+            <a-form-model-item label="开票人/单位联系方式">
               <a-input
                 name="drawerPhone"
-                placeholder="请输入开票人联系方式"
+                placeholder="请输入开票人/单位联系方式"
                 v-model="form.drawerPhone"
                 allow-clear
                 :maxLength="11" />
