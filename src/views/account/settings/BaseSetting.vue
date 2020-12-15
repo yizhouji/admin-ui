@@ -37,7 +37,8 @@
             </a-col>
             <a-col :md="24" :lg="8" :style="{ minHeight: '180px' }">
               <div class="ant-upload-preview" @click="$refs.modal.edit(1)">
-                <a-icon type="cloud-upload-o" class="upload-icon" />
+                <!-- <a-icon type="cloud-upload-o" class="upload-icon" /> -->
+                <span class="upload-icon"><img src="@/assets/upload.png" alt=""></span>
                 <div class="mask">
                   <a-icon type="plus" />
                 </div>
@@ -299,8 +300,8 @@ export default {
 
   .upload-icon {
     position: absolute;
-    top: 0;
-    right: 10px;
+    top: -10px;
+    right: 0;
     font-size: 1.4rem;
     padding: 0.5rem;
     background: rgba(222, 221, 221, 0.7);
