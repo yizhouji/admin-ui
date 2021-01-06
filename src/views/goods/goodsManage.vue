@@ -113,7 +113,11 @@
           </a-table-column>
           <a-table-column key="hasSold" title="已卖出" data-index="hasSold" />
           <a-table-column key="saleCount" title="又卖出" data-index="saleCount" />
-          <a-table-column key="stock" title="剩余库存" data-index="stock" />
+          <a-table-column key="stock" title="剩余库存" data-index="stock" class="stockTitle">
+            <template slot-scope="text">
+              <span style="color:#1890ff">{{ text }}</span>
+            </template>
+          </a-table-column>
           <a-table-column key="remark" title="备注" data-index="remark">
             <template slot-scope="text, record">
               <span v-if="text" @click="showDialog(record)">{{ text | formatStr(8) }}</span>
@@ -471,5 +475,8 @@ export default {
     left: 80%;
     margin-right: -50%;
   }
+}
+.stockTitle{
+  color: #1890ff;
 }
 </style>

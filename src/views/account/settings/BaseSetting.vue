@@ -302,11 +302,18 @@ export default {
     position: absolute;
     top: -10px;
     right: 0;
-    font-size: 1.4rem;
-    padding: 0.5rem;
+    height: 50px;
+    width: 50px;
     background: rgba(222, 221, 221, 0.7);
     border-radius: 50%;
     border: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{
+      width: 30px;
+      height: 30px;
+    }
   }
 
   .mask {
