@@ -5,8 +5,8 @@
  * @LastEditTime: 2020-11-10 18:15:39
 -->
 <template>
-  <div class="cargoList" :style="{ minHeight: height + 'px' }">
-    <div class="canvasImg" v-show="isWeixin">
+  <div class="cargoList" >
+    <div class="canvasImg" v-show="isWeixin" :style="{ minHeight: height + 'px' }">
       <img :src="imgUrl" alt="" srcset="">
       <p v-if="load">长按保存图片到手机</p>
     </div>
@@ -122,7 +122,7 @@ export default {
         backgroundImage: 'url(' + require('../../assets/cargoList.png') + ')',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: '15px 0',
-        backgroundSize: '48% '
+        backgroundSize: '30% '
       },
       height: document.documentElement.clientHeight || 800,
       imgUrl: ''
@@ -231,7 +231,8 @@ export default {
     text-align: center;
     color: #333333;
     // background: #ffffff;
-    padding-top: 1.5rem;
+    padding-top: 1.2rem;
+    padding-bottom: 0.3rem;
     p {
       margin-bottom: 20px;
     }
@@ -298,7 +299,7 @@ export default {
         span {
           font-size: 0.45rem;
           color: #222222;
-          font-weight: bold;
+          // font-weight: bold;
         }
       }
 
@@ -384,7 +385,7 @@ export default {
         .name {
           font-size: 0.45rem;
           color: #222222;
-          font-weight: bold;
+          // font-weight: bold;
         }
 
         .price {
