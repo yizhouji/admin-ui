@@ -209,6 +209,10 @@ export default {
     }
     p{
       text-align: center;
+          margin-top: -1px;
+    position: relative;
+    z-index: 2;
+    background: #f4f5f9;
     }
   }
 
