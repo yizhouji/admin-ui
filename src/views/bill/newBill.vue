@@ -6,16 +6,29 @@
         :label-col="labelCol"
         :wrapper-col="wrapperCol"
         :model="form"
-        @submit="handleSearch">
+        @submit="handleSearch"
+      >
         <a-row :gutter="24">
           <a-col :md="8" :sm="24">
             <a-form-model-item label="公司名字">
-              <a-input placeholder="请输入公司名字" v-model="form.groupName" allow-clear name="groupName" :maxLength="20" />
+              <a-input
+                placeholder="请输入公司名字"
+                v-model="form.groupName"
+                allow-clear
+                name="groupName"
+                :maxLength="20"
+              />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="开票人/单位">
-              <a-input name="drawer" v-model="form.drawer" placeholder="请输入开票人/单位" allow-clear :maxLength="10" />
+              <a-input
+                name="drawer"
+                v-model="form.drawer"
+                placeholder="请输入开票人/单位"
+                allow-clear
+                :maxLength="10"
+              />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -25,12 +38,19 @@
                 placeholder="请输入开票人/单位联系方式"
                 v-model="form.drawerPhone"
                 allow-clear
-                :maxLength="11" />
+                :maxLength="11"
+              />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户名字">
-              <a-input name="customer" placeholder="请输入客户名字" v-model="form.customer" :maxLength="10" allow-clear />
+              <a-input
+                name="customer"
+                placeholder="请输入客户名字"
+                v-model="form.customer"
+                :maxLength="10"
+                allow-clear
+              />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -40,7 +60,8 @@
                 placeholder="请输入客户联系方式"
                 v-model="form.customerPhone"
                 allow-clear
-                :maxLength="11" />
+                :maxLength="11"
+              />
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -61,17 +82,13 @@
           <div class="operation">
             <!-- <a class="item" @click="showModal">发送</a>
             <a class="item">打印</a> -->
-            <div class="item-line">
+            <!-- <div class="item-line">
               <a-icon type="setting" />
               <span>操作</span>
-            </div>
+            </div> -->
           </div>
         </div>
-        <a-table
-          :columns="columns"
-          :data-source="list"
-          :pagination="false"
-          :row-selection="null">
+        <a-table :columns="columns" :data-source="list" :pagination="false" :row-selection="null">
           <template slot="productName" slot-scope="text, record, index">
             <template v-if="record.editable">
               <a-select
@@ -80,7 +97,8 @@
                 placeholder="请选择"
                 style="width:100%"
                 allow-clear
-                @change="productChange(record, index)">
+                @change="productChange(record, index)"
+              >
                 <a-select-option v-for="item in product" :key="item.productId" :value="item.productId">{{
                   item.productName
                 }}</a-select-option>
@@ -94,7 +112,8 @@
               style="margin: -5px 0"
               v-model="record.productUnit"
               disabled
-              @change="e => handleChange(e.target.value, record.key, 'productUnit')" />
+              @change="e => handleChange(e.target.value, record.key, 'productUnit')"
+            />
             <template v-else>{{ text }}</template>
           </template>
           <template slot="amount" slot-scope="text, record">
@@ -103,7 +122,8 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.amount"
-              @change="e => handleChange(e.target.value, record.key, 'amount')" />
+              @change="e => handleChange(e.target.value, record.key, 'amount')"
+            />
             <template v-else>{{ text }}</template>
           </template>
           <template slot="unitPrice" slot-scope="text, record">
@@ -112,7 +132,8 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.unitPrice"
-              @change="e => handleChange(e.target.value, record.key, 'unitPrice')" />
+              @change="e => handleChange(e.target.value, record.key, 'unitPrice')"
+            />
             <template v-else>{{ text }}</template>
           </template>
           <template slot="grossAmount" slot-scope="text, record">
@@ -121,7 +142,8 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.grossAmount"
-              @change="e => handleChange(e.target.value, record.key, 'grossAmount')" />
+              @change="e => handleChange(e.target.value, record.key, 'grossAmount')"
+            />
             <template v-else>{{ text }}</template>
           </template>
           <template slot="remark" slot-scope="text, record">
@@ -129,7 +151,8 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.remark"
-              @change="e => handleChange(e.target.value, record.key, 'remark')" />
+              @change="e => handleChange(e.target.value, record.key, 'remark')"
+            />
             <template v-else>{{ text }}</template>
           </template>
           <template slot="remove" slot-scope="text, record, index">
@@ -156,7 +179,6 @@
       <a-modal v-model="visible" @ok="handleOk" width="800px" :footer="null">
         <div slot="title" class="modal-title text-center">销货清单</div>
         <div id="printMe" ref="printContent">
-
           <ul class="part">
             <li>开票人：{{ form.drawer }}</li>
             <li>开票人联系方式：{{ form.drawerPhone }}</li>
@@ -236,336 +258,104 @@
 </template>
 
 <script>
-  import html2canvas from 'html2canvas'
-  import printJS from 'print-js'
-  import {
-    getProductsInfo
-  } from '@/api/product'
-  import {
-    downloadIamge
-  } from '@/utils/util'
+import html2canvas from 'html2canvas'
+import printJS from 'print-js'
+import { getProductsInfo } from '@/api/product'
+import { downloadIamge, regMobile } from '@/utils/util'
 
-  import {
-    addChecklists,
-    getCode
-  } from '@/api/bill'
-  import {
-    setTimeout
-  } from 'timers'
-  export default {
-    name: 'GoodManage',
-    components: {},
+import { addChecklists, getCode } from '@/api/bill'
+import { setTimeout } from 'timers'
+export default {
+  name: 'GoodManage',
+  components: {},
 
-    data () {
-      return {
-        showSubmit: true,
-        imgPreview: false,
-        btnLoading: false,
-        pagination: false,
-        visible: false,
-        showFooter: false,
-        columns: [{
-            title: '货名',
-            dataIndex: 'productName',
-            scopedSlots: {
-              customRender: 'productName'
-            }
-          },
-          {
-            title: '单位',
-            dataIndex: 'productUnit',
-            scopedSlots: {
-              customRender: 'productUnit'
-            }
-          },
-          {
-            title: '数量',
-            dataIndex: 'amount',
-            scopedSlots: {
-              customRender: 'amount'
-            }
-          },
-          {
-            title: '单价',
-            dataIndex: 'unitPrice',
-            scopedSlots: {
-              customRender: 'unitPrice'
-            }
-          },
-          {
-            title: '金额',
-            dataIndex: 'grossAmount',
-            scopedSlots: {
-              customRender: 'grossAmount'
-            }
-          },
-          {
-            title: '备注',
-            dataIndex: 'remark',
-            ellipsis: true,
-            scopedSlots: {
-              customRender: 'remark'
-            }
-          },
-          {
-            title: '操作',
-            dataIndex: '移除',
-            ellipsis: true,
-            scopedSlots: {
-              customRender: 'remove'
-            }
-          }
-        ],
-        list: [{
-            key: 0,
-            productId: null,
-            productName: '',
-            productUnit: '',
-            amount: '',
-            unitPrice: '',
-            grossAmount: '',
-            remark: '',
-            editable: true
-          },
-          {
-            key: 1,
-            productId: null,
-            productName: '',
-            productUnit: '',
-            amount: '',
-            unitPrice: '',
-            grossAmount: '',
-            remark: '',
-            editable: true
-          },
-          {
-            key: 2,
-            productId: null,
-            productName: '',
-            productUnit: '',
-            amount: '',
-            unitPrice: '',
-            grossAmount: '',
-            remark: '',
-            editable: true
-          }
-        ],
-        labelCol: {
-          xs: {
-            span: 24
-          },
-          sm: {
-            span: 10
+  data () {
+    return {
+      showSubmit: true,
+      imgPreview: false,
+      btnLoading: false,
+      pagination: false,
+      visible: false,
+      showFooter: false,
+      columns: [
+        {
+          title: '货名',
+          dataIndex: 'productName',
+          scopedSlots: {
+            customRender: 'productName'
           }
         },
-        wrapperCol: {
-          xs: {
-            span: 24
-          },
-          sm: {
-            span: 14
+        {
+          title: '单位',
+          dataIndex: 'productUnit',
+          scopedSlots: {
+            customRender: 'productUnit'
           }
         },
-        queryParam: {},
-        expand: false,
-        selectedRowKeys: [],
-        form: {
-          customer: '',
-          customerPhone: '',
-          drawer: '',
-          drawerPhone: '',
-          groupName: '',
-          payment: undefined
+        {
+          title: '数量',
+          dataIndex: 'amount',
+          scopedSlots: {
+            customRender: 'amount'
+          }
         },
-        noteList: [],
-        count: 3,
-        product: [],
-        modelList: [],
-        telephone: '',
-        codeImgUrl: ''
-      }
-    },
-    computed: {
-      amount () {
-        let amount = 0
-        if (this.modelList.length > 0) {
-          this.modelList.forEach(element => {
-            if (element.grossAmount) {
-              amount = amount + Number(element.grossAmount)
-            }
-          })
-        }
-        return amount
-      }
-    },
-    created () {
-      getProductsInfo().then(res => {
-        this.product = res.result
-      })
-    },
-    methods: {
-      confirmInfoHandle () {
-
-      },
-      // 放大二维码
-      zoom () {
-        this.imgPreview = true
-      },
-      // 下载二维码
-      download () {
-        downloadIamge(this.codeImgUrl, '销货清单')
-      },
-      submitInfo () {
-
-      },
-      toImg () {
-        html2canvas(this.$refs.printContent, {
-          backgroundColor: null,
-          useCORS: true,
-          windowHeight: document.body.scrollHeight
-        }).then(canvas => {
-          // let url = canvas.toDataURL('image/jpeg', 1.0)
-          let url = canvas.toDataURL()
-          this.img = url
-          printJS({
-            printable: url,
-            type: 'image',
-            documentTitle: '销货清单'
-          })
-        })
-      },
-      reset () {
-        this.form = {
-          customer: '',
-          customerPhone: '',
-          drawer: '',
-          drawerPhone: '',
-          groupName: '',
-          payment: undefined,
-          telephone: '',
-          wechatNo: ''
-        }
-        this.list = []
-      },
-      confirmHandle () {
-        // if (!(this.form.telephone || this.form.wechatNo)) {
-        //   this.$message.error('请输入手机号或微信号')
-        //   return
-        // }
-
-        let arr = []
-        this.modelList.forEach(element => {
-          let obj = {
-            amount: element.amount,
-            grossAmount: element.grossAmount,
-            productId: element.productId,
-            unitPrice: element.unitPrice
+        {
+          title: '单价',
+          dataIndex: 'unitPrice',
+          scopedSlots: {
+            customRender: 'unitPrice'
           }
-          arr.push(obj)
-        })
-        let parmas = {
-          ...this.form,
-          productChecklists: arr
-        }
-        //  console.log(arr)
-        this.btnLoading = true
-        let self = this
-        addChecklists(parmas)
-          .then(res => {
-            this.btnLoading = false
-            this.$message.success('添加清单成功')
-
-            self.form = {
-              customer: '',
-              customerPhone: '',
-              drawer: '',
-              drawerPhone: '',
-              groupName: '',
-              payment: undefined
-
-            }
-            self.telephone = ''
-            self.list = []
-            this.getQrcode(res.result)
-          })
-          .catch(error => {
-            this.btnLoading = false
-            this.$message.error(error.data.message || '添加清单失败')
-          })
-      },
-      getQrcode (id) {
-          getCode(id).then(res => {
-            this.codeImgUrl = res.result
-            this.showSubmit = false
-            this.showFooter = true
-          }).catch(error => {
-            this.$message.error(error.data.message || '获取二维码失败')
-          })
-      },
-      printHandle () {},
-      handleChange (value, key, column) {
-        const newData = [...this.list]
-
-        const target = newData.filter(item => key === item.key)[0]
-        if (target) {
-          target[column] = value
-          if (column === 'amount' || column === 'unitPrice') {
-              target['grossAmount'] = Number(target['amount']) * Number(target['unitPrice'])
+        },
+        {
+          title: '金额',
+          dataIndex: 'grossAmount',
+          scopedSlots: {
+            customRender: 'grossAmount'
           }
-          this.list = newData
+        },
+        {
+          title: '备注',
+          dataIndex: 'remark',
+          ellipsis: true,
+          scopedSlots: {
+            customRender: 'remark'
+          }
+        },
+        {
+          title: '操作',
+          dataIndex: '移除',
+          ellipsis: true,
+          scopedSlots: {
+            customRender: 'remove'
+          }
         }
-      },
-      productChange (value, tableIndex) {
-        if (value) {
-          let productId = value.productId
-          let currentData = ''
-          this.product.forEach((element, index) => {
-            if (element.productId === productId) {
-              currentData = element
-            }
-          })
-          let list = this.list
-          list.forEach((element, index) => {
-            if (element.productId === productId) {
-              element.productUnit = currentData.unitName
-              element.productName = currentData.productName
-            }
-          })
-          this.list = list
-        } else {
-          this.list.forEach((element, index) => {
-            if (tableIndex === index) {
-              element = {
-                key: element.key,
-                productId: null,
-                productName: '',
-                productUnit: '',
-                amount: '',
-                unitPrice: '',
-                grossAmount: '',
-                remark: '',
-                editable: true
-              }
-            }
-          })
-        }
-      },
-      addHandle () {
-        if (this.product.length === 0) {
-          this.$message.error('您尚未输入货物')
-          return
-        }
-        if (this.product.length > 100) {
-          this.$message.error('最多添加100条')
-          return
-        }
-        const {
-          count,
-          list
-        } = this
-        const newData = {
-          key: this.count,
-          productId: null,
+      ],
+      list: [
+        {
+          key: 0,
+          productId: undefined,
+          productName: '',
+          productUnit: '',
+          amount: '',
+          unitPrice: '',
+          grossAmount: '',
+          remark: '',
+          editable: true
+        },
+        {
+          key: 1,
+          productId: undefined,
+          productName: '',
+          productUnit: '',
+          amount: '',
+          unitPrice: '',
+          grossAmount: '',
+          remark: '',
+          editable: true
+        },
+        {
+          key: 2,
+          productId: undefined,
           productName: '',
           productUnit: '',
           amount: '',
@@ -574,306 +364,556 @@
           remark: '',
           editable: true
         }
-        this.list = [...list, newData]
-        this.count = count + 1
+      ],
+      labelCol: {
+        xs: {
+          span: 24
+        },
+        sm: {
+          span: 10
+        }
       },
-      removeHandle (index) {
-        this.list.splice(index, 1)
+      wrapperCol: {
+        xs: {
+          span: 24
+        },
+        sm: {
+          span: 14
+        }
       },
-      showModal () {
-        if (!this.form.groupName) {
-          this.$message.error('请输入公司名称')
-          return
-        }
-        if (!this.form.customer) {
-          this.$message.error('请输入客户名')
-          return
-        }
-        if (!this.form.customerPhone) {
-          this.$message.error('请输入客户联系方式')
-          return
-        }
-        if (!this.form.drawer) {
-          this.$message.error('请输入开票人')
-          return
-        }
-        if (!this.form.drawerPhone) {
-          this.$message.error('请输入开票人联系方式')
-          return
-        }
-        if (!this.form.payment && this.form.payment !== 0) {
-          this.$message.error('请选择是否已付款')
-          return
-        }
+      queryParam: {},
+      expand: false,
+      selectedRowKeys: [],
+      form: {
+        customer: '',
+        customerPhone: '',
+        drawer: '',
+        drawerPhone: '',
+        groupName: '',
+        payment: undefined
+      },
+      noteList: [],
+      count: 3,
+      product: [],
+      modelList: [],
+      telephone: '',
+      codeImgUrl: ''
+    }
+  },
+  computed: {
+    amount () {
+      let amount = 0
+      if (this.modelList.length > 0) {
+        this.modelList.forEach(element => {
+          if (element.grossAmount) {
+            amount = amount + Number(element.grossAmount)
+          }
+        })
+      }
+      return amount
+    }
+  },
+  created () {
+    getProductsInfo().then(res => {
+      this.product = res.result
+    })
+  },
+  methods: {
+    confirmInfoHandle () {},
+    // 放大二维码
+    zoom () {
+      this.imgPreview = true
+    },
+    // 下载二维码
+    download () {
+      downloadIamge(this.codeImgUrl, '销货清单')
+    },
+    submitInfo () {},
+    toImg () {
+      html2canvas(this.$refs.printContent, {
+        backgroundColor: null,
+        useCORS: true,
+        windowHeight: document.body.scrollHeight
+      }).then(canvas => {
+        // let url = canvas.toDataURL('image/jpeg', 1.0)
+        let url = canvas.toDataURL()
+        this.img = url
+        printJS({
+          printable: url,
+          type: 'image',
+          documentTitle: '销货清单'
+        })
+      })
+    },
+    reset () {
+      this.form = {
+        customer: '',
+        customerPhone: '',
+        drawer: '',
+        drawerPhone: '',
+        groupName: '',
+        payment: undefined,
+        telephone: '',
+        wechatNo: ''
+      }
+      this.list = []
+    },
+    confirmHandle () {
+      // if (!(this.form.telephone || this.form.wechatNo)) {
+      //   this.$message.error('请输入手机号或微信号')
+      //   return
+      // }
 
-        if (this.list.length === 0) {
-          this.$message.error('您尚未添加货物')
-          return
+      let arr = []
+      this.modelList.forEach(element => {
+        let obj = {
+          amount: element.amount,
+          grossAmount: element.grossAmount,
+          productId: element.productId,
+          unitPrice: element.unitPrice
         }
-        let bool = true
-        let arr = []
-        for (let index = 0; index < this.list.length; index++) {
-          const element = this.list[index]
-          if (
-            element.productId &&
-            element.productName &&
-            element.productUnit &&
-            element.amount &&
-            element.unitPrice &&
-            element.grossAmount
-          ) {
-            arr.push(element)
-            bool = true
-          } else if (
-            element.productId ||
-            element.productName ||
-            element.productUnit ||
-            element.amount ||
-            element.unitPrice ||
-            element.grossAmount
-          ) {
-            this.$message.error('第' + (index + 1) + '行数据请补充完整')
+        arr.push(obj)
+      })
+      let parmas = {
+        ...this.form,
+        productChecklists: arr
+      }
+      //  console.log(arr)
+      this.btnLoading = true
+      let self = this
+      addChecklists(parmas)
+        .then(res => {
+          this.btnLoading = false
+          this.$message.success('添加清单成功')
+
+          self.form = {
+            customer: '',
+            customerPhone: '',
+            drawer: '',
+            drawerPhone: '',
+            groupName: '',
+            payment: undefined
+          }
+          self.telephone = ''
+          self.list = []
+          this.getQrcode(res.result)
+        })
+        .catch(error => {
+          this.btnLoading = false
+          this.$message.error(error.data.message || '添加清单失败')
+        })
+    },
+    getQrcode (id) {
+      getCode(id)
+        .then(res => {
+          this.codeImgUrl = res.result
+          this.showSubmit = false
+          this.showFooter = true
+        })
+        .catch(error => {
+          this.$message.error(error.data.message || '获取二维码失败')
+        })
+    },
+    printHandle () {},
+    handleChange (value, key, column) {
+      const newData = [...this.list]
+
+      const target = newData.filter(item => key === item.key)[0]
+      if (target) {
+        target[column] = value
+        if (column === 'amount' || column === 'unitPrice') {
+          target['grossAmount'] = Number(target['amount']) * Number(target['unitPrice'])
+        }
+        this.list = newData
+      }
+    },
+    productChange (value, tableIndex) {
+      if (value) {
+        let productId = value.productId
+        let currentData = ''
+        this.product.forEach((element, index) => {
+          if (element.productId === productId) {
+            currentData = element
+          }
+        })
+        let list = this.list
+        list.forEach((element, index) => {
+          if (element.productId === productId) {
+            element.productUnit = currentData.unitName
+            element.productName = currentData.productName
+          }
+        })
+        this.list = list
+      } else {
+        this.list.forEach((element, index) => {
+          if (tableIndex === index) {
+            element = {
+              key: element.key,
+              productId: null,
+              productName: '',
+              productUnit: '',
+              amount: '',
+              unitPrice: '',
+              grossAmount: '',
+              remark: '',
+              editable: true
+            }
+          }
+        })
+      }
+    },
+    addHandle () {
+      if (this.product.length === 0) {
+        this.$message.error('您尚未输入货物')
+        return
+      }
+      if (this.product.length > 100) {
+        this.$message.error('最多添加100条')
+        return
+      }
+      const { count, list } = this
+      const newData = {
+        key: this.count,
+        productId: null,
+        productName: '',
+        productUnit: '',
+        amount: '',
+        unitPrice: '',
+        grossAmount: '',
+        remark: '',
+        editable: true
+      }
+      this.list = [...list, newData]
+      this.count = count + 1
+    },
+    removeHandle (index) {
+      this.list.splice(index, 1)
+    },
+    showModal () {
+      if (!this.form.groupName) {
+        this.$message.error('请输入公司名称')
+        return
+      }
+      if (!this.form.drawer) {
+        this.$message.error('请输入开票人')
+        return
+      }
+      if (!this.form.drawerPhone) {
+        this.$message.error('请输入开票人联系方式')
+        return
+      }
+      if (!regMobile(this.form.drawerPhone)) {
+        this.$message.error('请输入正确的开票人联系方式')
+        return
+      }
+
+      if (!this.form.customer) {
+        this.$message.error('请输入客户名')
+        return
+      }
+      if (!this.form.customerPhone) {
+        this.$message.error('请输入客户联系方式')
+        return
+      }
+      if (!regMobile(this.form.customerPhone)) {
+        this.$message.error('请输入正确的客户联系方式')
+        return
+      }
+
+      if (!this.form.payment && this.form.payment !== 0) {
+        this.$message.error('请选择是否已付款')
+        return
+      }
+
+      if (this.list.length === 0) {
+        this.$message.error('您尚未添加货物')
+        return
+      }
+      let bool = true
+      let arr = []
+      let reg = /^[1-9]+[0-9]*]*$/
+      for (let index = 0; index < this.list.length; index++) {
+        const element = this.list[index]
+        if (
+          element.productId &&
+          element.productName &&
+          element.productUnit &&
+          element.amount &&
+          element.unitPrice &&
+          element.grossAmount
+        ) {
+          console.log(element)
+          console.log(reg.test(element.amount))
+          console.log(reg.test(element.unitPrice))
+
+          console.log(reg.test(element.grossAmount))
+
+          if (!reg.test(element.amount)) {
+            this.$message.error('第' + (index + 1) + '行,输入商品数量必须为大于0的正整数')
             bool = false
             break
-          } else {
-            console.log(index)
           }
+          if (!reg.test(element.unitPrice)) {
+            this.$message.error('第' + (index + 1) + '行,输入商品单价必须为大于0的正整数')
+            bool = false
+            break
+          }
+          if (!reg.test(element.grossAmount)) {
+            this.$message.error('第' + (index + 1) + '行,输入商品总金额必须为大于0的正整数')
+            bool = false
+            break
+          }
+          arr.push(element)
+          bool = true
+        } else if (
+          element.productId ||
+          element.productName ||
+          element.productUnit ||
+          element.amount ||
+          element.unitPrice ||
+          element.grossAmount
+        ) {
+          this.$message.error('第' + (index + 1) + '行数据请补充完整')
+          bool = false
+          break
+        } else {
+          console.log(index)
         }
-        if (!bool) {
-          return
-        }
-        console.log(arr)
-        if (arr.length === 0) {
-          this.$message.error('请添加货物数据')
-          return
-        }
-        this.modelList = arr
-        this.visible = true
-      },
-
-      handleOk () {
-        this.visible = false
-      },
-      showDialog (id) {
-        //  console.log('id:', id)
-        this.visible = true
-      },
-      updated () {
-        //  console.log('updated')
-      },
-      handleSearch (e) {
-        e.preventDefault()
-        //  console.log(this.form)
-      },
-      handleReset () {
-        this.form = {
-          id: '',
-          type: '',
-          date: ''
-        }
-      },
-      toggle () {
-        this.expand = !this.expand
-      },
-      onSelectChange (selectedRowKeys) {
-        //  console.log('selectedRowKeys changed: ', selectedRowKeys)
-        this.selectedRowKeys = selectedRowKeys
-      },
-      onChange (pageNumber) {
-        //  console.log('Page: ', pageNumber)
       }
+      if (!bool) {
+        return
+      }
+      console.log(arr)
+      if (arr.length === 0) {
+        this.$message.error('请添加货物数据')
+        return
+      }
+      this.modelList = arr
+      this.visible = true
+    },
+
+    handleOk () {
+      this.visible = false
+    },
+    showDialog (id) {
+      //  console.log('id:', id)
+      this.visible = true
+    },
+    updated () {
+      //  console.log('updated')
+    },
+    handleSearch (e) {
+      e.preventDefault()
+      //  console.log(this.form)
+    },
+    handleReset () {
+      this.form = {
+        id: '',
+        type: '',
+        date: ''
+      }
+    },
+    toggle () {
+      this.expand = !this.expand
+    },
+    onSelectChange (selectedRowKeys) {
+      //  console.log('selectedRowKeys changed: ', selectedRowKeys)
+      this.selectedRowKeys = selectedRowKeys
+    },
+    onChange (pageNumber) {
+      //  console.log('Page: ', pageNumber)
     }
   }
+}
 </script>
 
 <style lang="less" scoped>
-  .print {
-    background: #1D18FF;
-    border-color: #1D18FF;
-    margin-left: 24px;
-  }
+.print {
+  background: #1d18ff;
+  border-color: #1d18ff;
+  margin-left: 24px;
+}
 
-  .input {
-    display: flex;
-    // align-items: center;
-    text-align: left;
+.input {
+  display: flex;
+  // align-items: center;
+  text-align: left;
 
-    .item {
-      margin-right: 20px;
-      width: 40%;
+  .item {
+    margin-right: 20px;
+    width: 40%;
 
-      p {
-        color: #f2637b;
+    p {
+      color: #f2637b;
+    }
+
+    .content {
+      margin-top: 18px;
+      display: flex;
+      align-items: center;
+
+      label {
+        width: 80px;
       }
 
-      .content {
-        margin-top: 18px;
-        display: flex;
-        align-items: center;
-
-        label {
-          width: 80px;
+      .img {
+        img {
+          display: block;
+          width: 136px;
+          height: 136px;
+          border-radius: 5px;
+          margin: 0 auto;
+          background: #d8d8d8;
         }
 
-        .img {
+        p {
+          text-align: center;
+          font-size: 12px;
+          color: #666666;
+          margin-top: 10px;
+        }
+      }
+    }
+  }
+
+  .sanCode {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;
+
+    .content {
+      margin-top: 0;
+      flex: 1;
+      justify-content: space-around;
+
+      .operation {
+        .box {
+          margin-bottom: 10px;
+          cursor: pointer;
+
           img {
+            width: 28px;
+            height: 28px;
             display: block;
-            width: 136px;
-            height: 136px;
-            border-radius: 5px;
             margin: 0 auto;
-            background: #d8d8d8;
           }
 
           p {
-            text-align: center;
-            font-size: 12px;
+            font-size: 14px;
             color: #666666;
-            margin-top: 10px;
+            text-align: center;
           }
         }
-      }
-    }
 
-    .sanCode {
-      display: flex;
-      justify-content: space-between;
-      flex: 1;
-
-      .content {
-        margin-top: 0;
-        flex: 1;
-        justify-content: space-around;
-
-        .operation {
-          .box {
-            margin-bottom: 10px;
-            cursor: pointer;
-
-            img {
-              width: 28px;
-              height: 28px;
-              display: block;
-              margin: 0 auto;
-            }
-
-            p {
-              font-size: 14px;
-              color: #666666;
-              text-align: center;
-            }
-          }
-
-          .box:last-child {
-            margin-bottom: 0;
-          }
+        .box:last-child {
+          margin-bottom: 0;
         }
       }
     }
   }
+}
 
-  .imgPreview {
-    width: 300px;
-    height: 300px;
-    display: block;
-    margin: 0 auto;
+.imgPreview {
+  width: 300px;
+  height: 300px;
+  display: block;
+  margin: 0 auto;
+}
+
+.footer {
+  position: relative;
+  border-top: 1px solid #e9e9e9;
+
+  .circle {
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    left: -10px;
+    top: -10px;
   }
+}
 
-  .footer {
-    position: relative;
-    border-top: 1px solid #e9e9e9;
+.submit {
+  text-align: center;
+  margin: 24px 0;
 
-    .circle {
-      height: 20px;
-      width: 20px;
-      border-radius: 10px;
-      background: rgba(0, 0, 0, 0.3);
-      position: absolute;
-      left: -10px;
-      top: -10px;
-    }
+  button {
+    width: 134px;
   }
+}
 
-  .submit {
-    text-align: center;
-    margin: 24px 0;
+.amount {
+  text-align: right;
+  color: #f2637b;
+  margin: 24px 0;
+}
 
-    button {
-      width: 134px;
+.bottom {
+  padding: 30px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+}
 
-    }
+// .input {
+//   display: flex;
+//   align-items: center;
+
+//   .item {
+//     margin-right: 20px;
+//     width: 40%;
+//     display: flex;
+//     align-items: center;
+
+//     label {
+//       width: 80px;
+//     }
+//   }
+// }
+
+.part {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 0;
+  padding: 0;
+
+  li {
+    width: 33.3%;
+    margin-bottom: 10px;
   }
+}
 
-  .amount {
-    text-align: right;
-    color: #f2637b;
-    margin: 24px 0;
-  }
+.add {
+  padding-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 
-  .bottom {
-    padding: 30px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 10px;
-  }
-
-  // .input {
-  //   display: flex;
-  //   align-items: center;
-
-  //   .item {
-  //     margin-right: 20px;
-  //     width: 40%;
-  //     display: flex;
-  //     align-items: center;
-
-  //     label {
-  //       width: 80px;
-  //     }
-  //   }
-  // }
-
-  .part {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    margin: 0;
-    padding: 0;
-
-    li {
-      width: 33.3%;
-      margin-bottom: 10px;
-    }
-  }
-
-  .add {
-    padding-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-
-    .addBtn {
-      padding: 0 50px;
-      cursor: pointer;
-    }
-
-    p {
-      margin-bottom: 0;
-    }
-  }
-
-  .operationBtn {
-    padding-top: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .remove {
+  .addBtn {
+    padding: 0 50px;
     cursor: pointer;
   }
+
+  p {
+    margin-bottom: 0;
+  }
+}
+
+.operationBtn {
+  padding-top: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.remove {
+  cursor: pointer;
+}
 </style>

@@ -103,19 +103,20 @@
         >
           <a-table-column key="categoryName" title="货物类型" data-index="categoryName" />
           <a-table-column key="productName" title="货物名称" data-index="productName" />
+
+          <a-table-column key="stock" title="剩余库存" data-index="stock" class="stockTitle">
+            <template slot-scope="text">
+              <span style="color:#1890ff">{{ text }}</span>
+            </template>
+          </a-table-column>
+          <a-table-column key="hasSold" title="已卖出" data-index="hasSold" />
+          <a-table-column key="saleCount" title="又卖出" data-index="saleCount" />
           <a-table-column key="productTotal" title="总库存" data-index="productTotal">
             <template slot-scope="text, record">
               <div class="count">
                 {{ text }}
                 <span class="bardge">{{ record.newlyIncreased | unit }}</span>
               </div>
-            </template>
-          </a-table-column>
-          <a-table-column key="hasSold" title="已卖出" data-index="hasSold" />
-          <a-table-column key="saleCount" title="又卖出" data-index="saleCount" />
-          <a-table-column key="stock" title="剩余库存" data-index="stock" class="stockTitle">
-            <template slot-scope="text">
-              <span style="color:#1890ff">{{ text }}</span>
             </template>
           </a-table-column>
           <a-table-column key="remark" title="备注" data-index="remark">
@@ -476,7 +477,7 @@ export default {
     margin-right: -50%;
   }
 }
-.stockTitle{
+/deep/ #table-container .ant-table-thead > tr > .stockTitle{
   color: #1890ff;
 }
 </style>
