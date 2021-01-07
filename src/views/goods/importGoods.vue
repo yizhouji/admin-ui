@@ -50,7 +50,7 @@
             <a-input placeholder="请输入商品名称" v-model="form.productName" :maxLength="15" allowClear />
           </a-form-model-item>
           <a-form-model-item label="商品数量" required prop="amount">
-            <a-input-number style="width:100%" placeholder="请输入商品数量" :min="1" allowClear v-model="form.amount" />
+            <a-input-number style="width:100%" placeholder="请输入商品数量" :min="1" allowClear v-model.number="form.amount" />
           </a-form-model-item>
           <a-form-model-item label="单位" required prop="productUnit">
             <a-dropdown>

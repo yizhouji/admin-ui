@@ -122,6 +122,8 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.amount"
+              class="amountInput"
+              :placeholder="record.stock ? '剩余' + record.stock : ''"
               @change="e => handleChange(e.target.value, record.key, 'amount')"
             />
             <template v-else>{{ text }}</template>
@@ -915,5 +917,20 @@ export default {
 
 .remove {
   cursor: pointer;
+}
+.amountInput::-webkit-input-placeholder {
+  color: #dddddd;
+}
+.amountInput::-moz-placeholder {
+  /* Mozilla Firefox 19+ */
+  color: #dddddd;
+}
+.amountInput:-moz-placeholder {
+  /* Mozilla Firefox 4 to 18 */
+  color: #dddddd;
+}
+.amountInput:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #dddddd;
 }
 </style>
