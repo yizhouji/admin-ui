@@ -31,7 +31,6 @@ const errorHandler = (error) => {
     // 从 localstorage 获取 token
     const token = storage.get(ACCESS_TOKEN)
     if (error.response.status === 500) {
-      console.log(error.response)
       let url = error.response.request.responseURL
       let bool = false
       list.forEach(element => {
@@ -73,7 +72,6 @@ const errorHandler = (error) => {
 
 // request interceptor
 request.interceptors.request.use(config => {
-  console.log('config:', config.headers)
   const token = storage.get(ACCESS_TOKEN)
   // 如果 token 存在
   // 让每个请求携带自定义 token 请根据实际情况自行修改

@@ -6,10 +6,7 @@
 -->
 <template>
   <div class="cargoList" >
-    <div class="canvasImg" v-show="isWeixin" :style="{ minHeight: height + 'px' }">
-      <img :src="imgUrl" alt="" srcset="">
-      <p v-if="load">长按保存图片到手机</p>
-    </div>
+
     <div class="canvas" :class="isWeixin ? 'leftCanvas' : ''" ref="canvas">
 
       <div class="mainBox" >
@@ -99,17 +96,17 @@
         </div>
       </div>
     </div>
-    <!-- <div class="save">
-      <button v-if="isWeixin">长按图片可保存到本地</button>
-      <button @click="save" v-else>点击保存图片到本地</button>
-
-    </div> -->
+    <div class="canvasImg" v-show="isWeixin" :style="{ minHeight: height + 'px' }">
+      <img :src="imgUrl" alt="" srcset="">
+      <p v-if="load">长按保存图片到手机</p>
+    </div>
   </div>
 </template>
 
 <script>
 import html2canvas from 'html2canvas'
 import { sceneStr } from '@/api/cargoList'
+require('@/utils/log')
 export default {
   name: 'CargoList',
   data () {
@@ -130,13 +127,7 @@ export default {
   },
   mounted () {
     let params = this.$route.query.sceneStr
-    let ua = window.navigator.userAgent.toLowerCase()
-    // eslint-disable-next-line eqeqeq
-    if (ua.match(/MicroMessenger/i) == 'micromessenger') {
-      this.isWeixin = true
-    } else {
-      this.isWeixin = true
-    }
+
     sceneStr({
       sceneStr: params
     })
@@ -153,9 +144,9 @@ export default {
           this.total = amount
         }
         this.$nextTick(() => {
-          // if (this.isWeixin) {
-          this.saveImg()
-          // }
+          setTimeout(() => {
+              this.saveImg()
+          }, 100)
         })
       })
       .catch(error => {
@@ -169,29 +160,7 @@ export default {
         let imgUrl = canvas.toDataURL('image/jpeg')
         this.imgUrl = imgUrl
         this.load = true
-        // var eleLink = document.createElement('a')
-        // eleLink.href = imgUrl // 转换后的图片地址
-        // eleLink.download = '壹周记-' + this.getNowFormatDate() + '.jpg'
-        // // 触发点击
-        // document.body.appendChild(eleLink)
-
-        // document.body.removeChild(eleLink)
       })
-    },
-    getNowFormatDate () {
-      var date = new Date()
-      var seperator1 = '-'
-      var year = date.getFullYear()
-      var month = date.getMonth() + 1
-      var strDate = date.getDate()
-      if (month >= 1 && month <= 9) {
-        month = '0' + month
-      }
-      if (strDate >= 0 && strDate <= 9) {
-        strDate = '0' + strDate
-      }
-      var currentdate = year + seperator1 + month + seperator1 + strDate
-      return currentdate
     }
   }
 }
@@ -220,7 +189,7 @@ export default {
     background-color: #f4f5f9;
   }
   .leftCanvas {
-    position: absolute;
+    // position: absolute;
     width: 100%;
     left: -100%;
   }
