@@ -106,7 +106,7 @@
 <script>
 import html2canvas from 'html2canvas'
 import { sceneStr } from '@/api/cargoList'
-require('@/utils/log')
+// require('@/utils/log')
 export default {
   name: 'CargoList',
   data () {
@@ -189,7 +189,7 @@ export default {
     background-color: #f4f5f9;
   }
   .leftCanvas {
-    // position: absolute;
+    position: absolute;
     width: 100%;
     left: -100%;
   }
