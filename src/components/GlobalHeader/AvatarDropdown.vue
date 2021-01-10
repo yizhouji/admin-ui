@@ -12,7 +12,9 @@
       <a-menu class="ant-pro-drop-down menu" :selected-keys="[]">
         <a-menu-item v-if="menu" key="date" @click="charge" class="charge">
           <div class="name">{{ currentUser.nickname }}</div>
-          <div class="time">VIP使用期限还有{{ expireDate }}天 <span>续费
+          <div class="time" v-if="expireDate">VIP使用期限还有{{ expireDate }}天 <span>续费
+            <a-icon type="right" /></span></div>
+          <div class="time" v-else>您的VIP已过期 <span>续费
             <a-icon type="right" /></span></div>
         </a-menu-item>
         <a-menu-item v-if="menu" key="center" @click="handleToCenter">
@@ -20,7 +22,7 @@
           个人中心
         </a-menu-item>
         <a-menu-item v-if="menu" key="charge" @click="chargeHandle">
-          <img src="@/assets/icon_record.png" alt=""/>
+          <img src="@/assets/icon_record.png" alt="" />
           充值记录
         </a-menu-item>
         <a-menu-item v-if="menu" key="website" @click="handleToIndex">
@@ -72,9 +74,15 @@
       expireDate () {
         let first = new Date(this.getDate())
         let second = new Date(this.currentUser.expirationDate)
-        let diff = Math.abs(first.getTime() - second.getTime())
-        let result = parseInt(diff / (1000 * 60 * 60 * 24))
-        return result
+        let diff = second.getTime() - first.getTime()
+        console.log(diff)
+        if (diff < 0) {
+          return ''
+        } else {
+          diff = Math.abs(diff)
+          let result = parseInt(diff / (1000 * 60 * 60 * 24))
+          return result
+        }
       }
     },
     methods: {
@@ -94,7 +102,7 @@
         })
       },
       chargeHandle () {
-         this.$router.push({
+        this.$router.push({
           path: '/account/history'
         })
       },

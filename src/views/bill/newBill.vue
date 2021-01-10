@@ -182,11 +182,11 @@
         <div slot="title" class="modal-title text-center">销货清单</div>
         <div id="printMe" ref="printContent">
           <ul class="part">
-            <li>开票人：{{ form.drawer }}</li>
-            <li>开票人联系方式：{{ form.drawerPhone }}</li>
-            <li>客户联系方式：{{ form.customer }}</li>
-            <li>客户名字：{{ form.customerPhone }}</li>
-            <li>是否已付款：{{ form.payment ? '是' : '否' }}</li>
+            <li>开票人：{{ dialogFrom.drawer }}</li>
+            <li>开票人联系方式：{{ dialogFrom.drawerPhone }}</li>
+            <li>客户联系方式：{{ dialogFrom.customerPhone }}</li>
+            <li>客户名字：{{ dialogFrom.customer }}</li>
+            <li>是否已付款：{{ dialogFrom.payment ? '是' : '否' }}</li>
             <li></li>
           </ul>
           <div class="table" style="max-height:400px;overflow-y: auto;">
@@ -199,7 +199,7 @@
                   <a>{{ text }}</a>
                 </template>
               </a-table-column>
-              <a-table-column key="productUnit" title="公司名字" data-index="productUnit" />
+              <a-table-column key="productUnit" title="" data-index="productUnit" />
               <a-table-column key="amount" title="数量" data-index="amount" />
               <a-table-column key="unitPrice" title="单价" data-index="unitPrice" />
               <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />
@@ -221,7 +221,7 @@
               <p>方案一:</p>
               <div class="content">
                 <label>手机号：</label>
-                <a-input v-model="telephone" placeholder="请输入手机号" />
+                <a-input disabled v-model="telephone" placeholder="请输入手机号" />
               </div>
             </div>
             <div class="item sanCode">
@@ -279,6 +279,7 @@ export default {
       pagination: false,
       visible: false,
       showFooter: false,
+      dialogFrom: '',
       columns: [
         {
           title: '货名',
@@ -421,7 +422,9 @@ export default {
     })
   },
   methods: {
-    confirmInfoHandle () {},
+    confirmInfoHandle () {
+        this.visible = false
+    },
     // 放大二维码
     zoom () {
       this.imgPreview = true
@@ -644,12 +647,6 @@ export default {
           element.unitPrice &&
           element.grossAmount
         ) {
-          console.log(element)
-          console.log(reg.test(element.amount))
-          console.log(reg.test(element.unitPrice))
-
-          console.log(reg.test(element.grossAmount))
-
           if (!reg.test(element.amount)) {
             this.$message.error('第' + (index + 1) + '行,输入商品数量必须为大于0的正整数')
             bool = false
@@ -691,6 +688,7 @@ export default {
         return
       }
       this.modelList = arr
+      this.dialogFrom = Object.assign(this.form)
       this.visible = true
     },
 
