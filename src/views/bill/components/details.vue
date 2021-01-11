@@ -5,8 +5,8 @@
       <ul class="part">
         <li>开票人：{{ Details.drawer }}</li>
         <li>开票人联系方式：{{ Details.drawerPhone }}</li>
-        <li>客户联系方式：{{ Details.customerPhone }}</li>
         <li>客户名字：{{ Details.customer }}</li>
+        <li>客户联系方式：{{ Details.customerPhone }}</li>
         <li>是否已付款：{{ Details.payment ? '是' : '否' }}</li>
         <li>创建时间：{{ createTime }}</li>
       </ul>

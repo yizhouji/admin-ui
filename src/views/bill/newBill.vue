@@ -123,8 +123,10 @@
               style="margin: -5px 0"
               v-model="record.amount"
               class="amountInput"
-              :placeholder="record.stock ? '剩余' + record.stock : ''"
-              @change="e => handleChange(e.target.value, record.key, 'amount')"
+              :max="record.stock"
+              :min="1"
+              :placeholder="record.stock ? '剩余'+ record.stock :''"
+              @change="e => handleChange(e.target.value, record.key, 'amount',record)"
             />
             <template v-else>{{ text }}</template>
           </template>
@@ -338,6 +340,7 @@ export default {
           key: 0,
           productId: undefined,
           productName: '',
+          stock: '',
           productUnit: '',
           amount: '',
           unitPrice: '',
@@ -349,6 +352,7 @@ export default {
           key: 1,
           productId: undefined,
           productName: '',
+          stock: '',
           productUnit: '',
           amount: '',
           unitPrice: '',
@@ -360,6 +364,7 @@ export default {
           key: 2,
           productId: undefined,
           productName: '',
+          stock: '',
           productUnit: '',
           amount: '',
           unitPrice: '',
@@ -520,12 +525,21 @@ export default {
         })
     },
     printHandle () {},
-    handleChange (value, key, column) {
+    handleChange (value, key, column, record) {
       const newData = [...this.list]
 
       const target = newData.filter(item => key === item.key)[0]
       if (target) {
+        console.log('amount:', value, column)
         target[column] = value
+        if (value) {
+            if (value > record.stock) {
+                target[column] = record.stock
+            } else {
+                target[column] = value
+            }
+            console.log(record)
+        }
         if (column === 'amount' || column === 'unitPrice') {
           target['grossAmount'] = Number(target['amount']) * Number(target['unitPrice'])
         }
@@ -546,6 +560,7 @@ export default {
           if (element.productId === productId) {
             element.productUnit = currentData.unitName
             element.productName = currentData.productName
+            element.stock = currentData.stock
           }
         })
         this.list = list
