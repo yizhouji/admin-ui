@@ -186,8 +186,8 @@
           <ul class="part">
             <li>开票人：{{ dialogFrom.drawer }}</li>
             <li>开票人联系方式：{{ dialogFrom.drawerPhone }}</li>
-            <li>客户联系方式：{{ dialogFrom.customerPhone }}</li>
             <li>客户名字：{{ dialogFrom.customer }}</li>
+            <li>客户联系方式：{{ dialogFrom.customerPhone }}</li>
             <li>是否已付款：{{ dialogFrom.payment ? '是' : '否' }}</li>
             <li></li>
           </ul>
@@ -201,7 +201,7 @@
                   <a>{{ text }}</a>
                 </template>
               </a-table-column>
-              <a-table-column key="productUnit" title="" data-index="productUnit" />
+              <a-table-column key="productUnit" title="单位" data-index="productUnit" />
               <a-table-column key="amount" title="数量" data-index="amount" />
               <a-table-column key="unitPrice" title="单价" data-index="unitPrice" />
               <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />
@@ -532,13 +532,12 @@ export default {
       if (target) {
         console.log('amount:', value, column)
         target[column] = value
-        if (value) {
+        if (value && column === 'stock') {
             if (value > record.stock) {
                 target[column] = record.stock
             } else {
                 target[column] = value
             }
-            console.log(record)
         }
         if (column === 'amount' || column === 'unitPrice') {
           target['grossAmount'] = Number(target['amount']) * Number(target['unitPrice'])
