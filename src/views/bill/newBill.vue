@@ -27,7 +27,7 @@
                 v-model="form.drawer"
                 placeholder="请输入开票人/单位"
                 allow-clear
-                :maxLength="10"
+                :maxLength="15"
               />
             </a-form-model-item>
           </a-col>
@@ -48,7 +48,7 @@
                 name="customer"
                 placeholder="请输入客户名字"
                 v-model="form.customer"
-                :maxLength="10"
+                :maxLength="15"
                 allow-clear
               />
             </a-form-model-item>
@@ -70,6 +70,11 @@
                 <a-select-option value="1">是</a-select-option>
                 <a-select-option value="0">否</a-select-option>
               </a-select>
+            </a-form-model-item>
+          </a-col>
+          <a-col :md="8" :sm="24">
+            <a-form-model-item label="备注">
+              <a-textarea name="remark" v-model="form.remark" placeholder="请输入备注"></a-textarea>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -378,7 +383,7 @@ export default {
           span: 24
         },
         sm: {
-          span: 10
+          span: 8
         }
       },
       wrapperCol: {
@@ -386,7 +391,7 @@ export default {
           span: 24
         },
         sm: {
-          span: 14
+          span: 16
         }
       },
       queryParam: {},
@@ -398,6 +403,7 @@ export default {
         drawer: '',
         drawerPhone: '',
         groupName: '',
+        remark: '',
         payment: undefined
       },
       noteList: [],
@@ -462,6 +468,7 @@ export default {
         drawer: '',
         drawerPhone: '',
         groupName: '',
+        remark: '',
         payment: undefined,
         telephone: '',
         wechatNo: ''
@@ -501,6 +508,7 @@ export default {
             customerPhone: '',
             drawer: '',
             drawerPhone: '',
+            remark: '',
             groupName: '',
             payment: undefined
           }

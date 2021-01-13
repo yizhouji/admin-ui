@@ -1,5 +1,5 @@
 <template>
-  <a-modal v-model="visible" width="800px">
+  <a-modal v-model="visible" width="800px" :footer="null">
     <div slot="title" class="modal-title text-center">销货清单</div>
     <div id="printMe" ref="printContent">
       <ul class="part">
@@ -28,7 +28,9 @@
       </div>
       <div class="amount">总计：{{ amount }} 元</div>
     </div>
-    <template slot="footer">
+    <div class="footer">
+      <div class="left circle"></div>
+      <div class="right circle"></div>
       <div class="tip" style="margin:20px 0;color:#F2637B;text-align:left;">
         提示：请选择以下任意一种方式把清单发送给客户。（如果不发送客户或者需要打印出来也可以不填信息）
       </div>
@@ -64,9 +66,9 @@
       <div class="bottom">
         <a-button type="primary" @click="confirmHandle" :loading="btnLoading">确定</a-button>
         <!-- <a-button type="danger" @click="printHandle" :loading="btnLoading">打印</a-button> -->
-        <a-button type="danger" @click="toImg">打印 </a-button>
+        <a-button type="danger" class="print" @click="toImg">打印 </a-button>
       </div>
-    </template>
+    </div>
     <a-modal centered v-model="imgPreview" title="二维码预览" :footer="null">
       <img :src="codeImgUrl" alt="" class="imgPreview" />
     </a-modal>
@@ -169,17 +171,37 @@ export default {
 </script>
 
 <style lang="less" scoped>
+.print {
+  background: #1d18ff;
+  border-color: #1d18ff;
+  margin-left: 24px;
+}
 .imgPreview {
   width: 300px;
   height: 300px;
   display: block;
   margin: 0 auto;
 }
+.footer {
+  position: relative;
+  border-top: 1px solid #e9e9e9;
+
+  .circle {
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    position: absolute;
+    left: -10px;
+    top: -10px;
+  }
+}
 .amount {
-  margin-top: 10px;
   text-align: right;
   color: #f2637b;
+  margin: 24px 0;
 }
+
 .part {
   display: flex;
   align-items: flex-start;

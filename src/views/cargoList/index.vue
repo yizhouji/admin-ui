@@ -5,17 +5,23 @@
  * @LastEditTime: 2020-11-10 18:15:39
 -->
 <template>
-  <div class="cargoList" >
-
+  <div class="cargoList">
     <div class="canvas" :class="isWeixin ? 'leftCanvas' : ''" ref="canvas">
-
-      <div class="mainBox" >
-
+      <div class="mainBox">
         <div class="mainInfo" :style="style">
           <div class="title">
             <p>销货清单</p>
             <div class="line"></div>
             <div class="line"></div>
+          </div>
+          <div class="item">
+            <div class="left">
+              <div class="img">
+                <img src="../../assets/groupName.png" alt="" />
+              </div>
+              <span>公司名字</span>
+            </div>
+            <div class="right">{{ info.groupName }}</div>
           </div>
           <div class="item">
             <div class="left">
@@ -71,6 +77,16 @@
             </div>
             <div class="right">{{ info.createTime }}</div>
           </div>
+          <div class="item" v-if="info.remark">
+            <div class="left">
+              <div class="img">
+                <img src="../../assets/kdate.png" alt="" />
+              </div>
+              <span>备注</span>
+            </div>
+            <div class="right remark">{{ info.remark }}</div>
+          </div>
+
         </div>
         <div class="detailTitle">
           <div class="left">
@@ -87,17 +103,21 @@
               <div class="name">{{ item.productName }}</div>
               <div class="price">￥{{ item.grossAmount }}</div>
             </div>
-            <div class="txt">
+            <div class="txt" :class="item.remark ? 'border' : ''">
               <div class="part">单价：￥{{ item.unitPrice }}</div>
               <div class="part">数量：{{ item.amount }}</div>
               <div class="part">单位：{{ item.unitName }}</div>
+            </div>
+            <div class="remark" v-if="item.remark">
+              <div class="name">备注：</div>
+              <div class="text">{{ item.remark }}</div>
             </div>
           </div>
         </div>
       </div>
     </div>
     <div class="canvasImg" v-show="isWeixin" :style="{ minHeight: height + 'px' }">
-      <img :src="imgUrl" alt="" srcset="">
+      <img :src="imgUrl" alt="" srcset="" />
       <p v-if="load">长按保存图片到手机</p>
     </div>
   </div>
@@ -145,7 +165,7 @@ export default {
         }
         this.$nextTick(() => {
           setTimeout(() => {
-              this.saveImg()
+            this.saveImg()
           }, 100)
         })
       })
@@ -176,12 +196,12 @@ export default {
     img {
       width: 100%;
     }
-    p{
+    p {
       text-align: center;
-          margin-top: -1px;
-    position: relative;
-    z-index: 2;
-    background: #f4f5f9;
+      margin-top: -1px;
+      position: relative;
+      z-index: 2;
+      background: #f4f5f9;
     }
   }
 
@@ -238,15 +258,15 @@ export default {
 
   .mainInfo {
     background: #ffffff;
-    border-radius: 0.3rem;
+    // border-radius: 0.3rem;
 
     .item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      height: 1.5rem;
-      line-height: 1.5rem;
-      padding: 0 15px;
+      // height: 1.5rem;
+      // line-height: 1.5rem;
+      padding: 0.45rem 15px;
       //   border-bottom: 1px solid #eeeeee;
       position: relative;
 
@@ -277,8 +297,13 @@ export default {
       }
 
       .right {
+        flex: 1;
+        text-align: right;
         font-size: 0.4rem;
         color: #666666;
+      }
+      .remark {
+        padding-left: 2rem;
       }
     }
 
@@ -345,7 +370,7 @@ export default {
     .item {
       background: #ffffff;
       margin-bottom: 0.4rem;
-      padding: 0 15px;
+      padding: 0 15px 15px;
 
       .itemTitle {
         display: flex;
@@ -383,6 +408,24 @@ export default {
 
         .part:nth-child(even) {
           text-align: right;
+        }
+      }
+      .border {
+        border-bottom: 1px solid #eeeeee;
+      }
+      .remark {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding-top: 0.4rem;
+        color: #666666;
+        font-size: 0.4rem;
+        .name {
+          color: #666666;
+          font-size: 0.4rem;
+        }
+        .text {
+          flex: 1;
         }
       }
     }
