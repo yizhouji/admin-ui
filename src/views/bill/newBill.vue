@@ -74,7 +74,7 @@
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="备注">
-              <a-textarea name="remark" v-model="form.remark" placeholder="请输入备注"></a-textarea>
+              <a-textarea name="remark" :maxLength="50" v-model="form.remark" placeholder="请输入备注"></a-textarea>
             </a-form-model-item>
           </a-col>
         </a-row>
@@ -160,6 +160,7 @@
               v-if="record.editable"
               style="margin: -5px 0"
               v-model="record.remark"
+              :max-length="50"
               @change="e => handleChange(e.target.value, record.key, 'remark')"
             />
             <template v-else>{{ text }}</template>
@@ -194,11 +195,12 @@
             <li>客户名字：{{ dialogFrom.customer }}</li>
             <li>客户联系方式：{{ dialogFrom.customerPhone }}</li>
             <li>是否已付款：{{ dialogFrom.payment ? '是' : '否' }}</li>
-            <li></li>
+            <li>公司名字：{{ dialogFrom.groupName }}</li>
+            <li style="width:100%" v-if="dialogFrom.remark">备注：{{ dialogFrom.remark }}</li>
           </ul>
           <div class="table" style="max-height:400px;overflow-y: auto;">
             <a-table :data-source="modelList" bordered :pagination="pagination">
-              <a-table-column key="index" title="序号">
+              <a-table-column key="index" title="序号" width="70px">
                 <template slot-scope="text, record, index">{{ index + 1 }}</template>
               </a-table-column>
               <a-table-column key="productName" title="品名" data-index="productName">
@@ -206,10 +208,12 @@
                   <a>{{ text }}</a>
                 </template>
               </a-table-column>
-              <a-table-column key="productUnit" title="单位" data-index="productUnit" />
-              <a-table-column key="amount" title="数量" data-index="amount" />
-              <a-table-column key="unitPrice" title="单价" data-index="unitPrice" />
-              <a-table-column key="grossAmount" title="金额" data-index="grossAmount" />
+              <a-table-column key="productUnit" title="单位" data-index="productUnit" width="70px"/>
+              <a-table-column key="amount" title="数量" data-index="amount" width="100px" />
+              <a-table-column key="unitPrice" title="单价" data-index="unitPrice" width="100px"/>
+              <a-table-column key="grossAmount" title="金额" data-index="grossAmount" width="100px"/>
+              <a-table-column key="remark" title="备注" data-index="remark" :ellipsis="true"/>
+
             </a-table>
           </div>
           <div class="amount">总计：{{ amount }} 元</div>
@@ -218,8 +222,8 @@
           <a-button type="primary" @click="confirmHandle">确定</a-button>
         </div>
         <div class="footer" v-if="showFooter">
-          <div class="left circle"></div>
-          <div class="left circle"></div>
+          <!-- <div class="left circle"></div>
+          <div class="left circle"></div> -->
           <div class="tip" style="margin:20px 0;color:#F2637B;text-align:left;">
             提示：请选择以下任意一种方式把清单发送给客户。（如果不发送客户或者需要打印出来也可以不填信息）
           </div>
@@ -383,7 +387,7 @@ export default {
           span: 24
         },
         sm: {
-          span: 8
+          span: 10
         }
       },
       wrapperCol: {
@@ -391,7 +395,7 @@ export default {
           span: 24
         },
         sm: {
-          span: 16
+          span: 14
         }
       },
       queryParam: {},
