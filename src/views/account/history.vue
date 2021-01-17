@@ -150,7 +150,6 @@
         e.preventDefault()
         this.form.pageNum = 1
         this.form.pageSize = 10
-        console.log(this.form)
         this.getList(this.form)
       },
       handleReset () {

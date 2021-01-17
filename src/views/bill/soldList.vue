@@ -8,11 +8,27 @@
         :wrapper-col="wrapperCol"
         :model="form"
         ref="ruleForm"
-        @submit="handleSearch">
+        @submit="handleSearch"
+      >
         <a-row :gutter="24">
           <a-col :md="8" :sm="24">
             <a-form-model-item label="公司名字" prop="groupName">
-              <a-input placeholder="请输入公司名字" v-model="form.groupName" allow-clear />
+              <a-dropdown :trigger="['click']">
+                <a-input
+                  placeholder="请输入公司名字"
+                  v-model="form.groupName"
+                  allow-clear
+                  name="groupName"
+                  @focus="dictFocus('groupName')"
+                  autocomplete="off"
+                  :maxLength="20"
+                />
+                <a-menu slot="overlay" v-if="groupNameList && groupNameList.length > 0">
+                  <a-menu-item v-for="item in groupNameList" :key="item" @click="dictChange(item, 'groupName')">
+                    <a>{{ item }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -23,23 +39,71 @@
 
           <a-col :md="8" :sm="24">
             <a-form-model-item label="数量">
-              <a-form-model-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }" prop="startAmount">
-                <a-input-number placeholder="最小数量" :min="1" allowClear v-model="form.startAmount" style="width:100%" />
+              <a-form-model-item
+                :style="{ display: 'inline-block', width: 'calc(50% - 12px)', marginBottom: 0 }"
+                prop="startAmount"
+              >
+                <a-input-number
+                  placeholder="最小数量"
+                  :min="1"
+                  allowClear
+                  v-model="form.startAmount"
+                  style="width:100%"
+                />
               </a-form-model-item>
               <span :style="{ display: 'inline-block', width: '24px', textAlign: 'center' }">-</span>
-              <a-form-model-item :style="{ display: 'inline-block', width: 'calc(50% - 12px)' }" prop="endAmount">
-                <a-input-number placeholder="最大数量" :min="1" allowClear v-model="form.endAmount" style="width:100%" />
+              <a-form-model-item
+                :style="{ display: 'inline-block', width: 'calc(50% - 12px)', marginBottom: 0 }"
+                prop="endAmount"
+              >
+                <a-input-number
+                  placeholder="最大数量"
+                  :min="1"
+                  allowClear
+                  v-model="form.endAmount"
+                  style="width:100%"
+                />
               </a-form-model-item>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户名字" prop="customer">
-              <a-input placeholder="请输入客户名字" v-model="form.customer" allow-clear />
+              <a-dropdown :trigger="['click']">
+                <a-input
+                  name="customer"
+                  placeholder="请输入客户名字"
+                  v-model="form.customer"
+                  :maxLength="15"
+                  allow-clear
+                  @focus="dictFocus('customer')"
+                  autocomplete="off"
+                />
+                <a-menu slot="overlay" v-if="customerList && customerList.length > 0">
+                  <a-menu-item v-for="item in customerList" :key="item" @click="dictChange(item, 'customer')">
+                    <a>{{ item }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户联系方式" prop="customerPhone">
-              <a-input placeholder="请输入客户联系方式" :maxLength="11" v-model="form.customerPhone" allow-clear />
+              <a-dropdown :trigger="['click']">
+                <a-input
+                  name="customerPhone"
+                  placeholder="请输入客户联系方式"
+                  v-model="form.customerPhone"
+                  allow-clear
+                  :maxLength="11"
+                  @focus="dictFocus('customerPhone')"
+                  autocomplete="off"
+                />
+                <a-menu slot="overlay" v-if="customerPhoneList && customerPhoneList.length > 0">
+                  <a-menu-item v-for="item in customerPhoneList" :key="item" @click="dictChange(item, 'customerPhone')">
+                    <a>{{ item }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -87,16 +151,17 @@
           @getList="getList"
           @pageChange="pageChange"
           :select="false"
-          @onSelectChange="onSelectChange">
+          @onSelectChange="onSelectChange"
+        >
           <a-table-column key="customer" title="客户名字" data-index="customer" />
           <a-table-column key="customerPhone" title="客户联系方式" data-index="customerPhone" />
           <a-table-column key="payment" title="是否已付款" data-index="payment">
-            <template slot-scope="text">{{ text ? '是':'否' }}</template>
+            <template slot-scope="text">{{ text ? '是' : '否' }}</template>
           </a-table-column>
           <a-table-column key="createTime" title="开票时间" data-index="createTime" />
           <a-table-column key="visitd" title="操作">
-            <template slot-scope="text,recored">
-              <a @click="detailHandle(recored,recored.checkId)">查看</a>
+            <template slot-scope="text, recored">
+              <a @click="detailHandle(recored, recored.checkId)">查看</a>
             </template>
           </a-table-column>
         </BaseTable>
@@ -107,153 +172,162 @@
 </template>
 
 <script>
-  import BaseTable from '@/components/BaseTable'
-  import Details from './components/details'
-  import {
-    getChecklists,
-    getCheckDetails
-  } from '@/api/bill'
-  import {
-    getJson
-  } from '@/utils/util'
+import BaseTable from '@/components/BaseTable'
+import Details from './components/details'
+import { getChecklists, getCheckDetails } from '@/api/bill'
+import { getJson, getDict } from '@/utils/util'
+import { login } from '@/api/login'
 
-  export default {
-    name: 'GoodManage',
-    components: {
-      BaseTable,
-      Details
-    },
-    data () {
-      return {
-        visible: false,
-        list: [],
-        labelCol: {
-          xs: {
-            span: 24
-          },
-          sm: {
-            span: 10
-          }
+export default {
+  name: 'GoodManage',
+  components: {
+    BaseTable,
+    Details
+  },
+  data () {
+    return {
+      visible: false,
+      list: [],
+      labelCol: {
+        xs: {
+          span: 24
         },
-        wrapperCol: {
-          xs: {
-            span: 24
-          },
-          sm: {
-            span: 14
-          }
+        sm: {
+          span: 10
+        }
+      },
+      wrapperCol: {
+        xs: {
+          span: 24
         },
-        queryParam: {},
-        expand: false,
-        selectedRowKeys: [],
-        tableLoading: false,
-        date: undefined,
-        form: {
-          customer: '',
-          customerPhone: '',
-          endAmount: '',
-          endTime: '',
-          groupName: '',
-          pageNum: 1,
-          pageSize: 10,
-          payment: undefined,
-          startAmount: '',
-          startTime: ''
-        },
-        noteList: []
-      }
+        sm: {
+          span: 14
+        }
+      },
+      queryParam: {},
+      expand: false,
+      selectedRowKeys: [],
+      tableLoading: false,
+      date: null,
+      form: {
+        customer: '',
+        customerPhone: '',
+        endAmount: '',
+        endTime: '',
+        groupName: '',
+        pageNum: 1,
+        pageSize: 10,
+        payment: undefined,
+        startAmount: '',
+        startTime: ''
+      },
+      noteList: [],
+      groupNameList: [],
+      customerList: [],
+      customerPhoneList: []
+    }
+  },
+  computed: {},
+  created () {},
+  methods: {
+    async dictFocus (name) {
+      getDict(name).then(res => {
+        this[name + 'List'] = res
+      })
     },
-    computed: {},
-    created () {
-
+    dictChange (val, name) {
+      let form = this.form
+      form[name] = val
+      this.form = { ...form }
     },
-    methods: {
-      detailHandle (data, checkId) {
-        getCheckDetails(checkId).then((res) => {
+    detailHandle (data, checkId) {
+      getCheckDetails(checkId)
+        .then(res => {
           this.$refs.Details.show(res.result, data.createTime)
-        }).catch(error => {
+        })
+        .catch(error => {
           this.$message.error(error.data.message || '获取清单信息失败')
         })
-      },
-      getList () {
-        this.tableLoading = true
-        getChecklists(getJson(this.form))
-          .then((res) => {
-            this.list = res.result.list
-            this.$refs.BaseTable.getData(res.result, this.form.pageNum, this.form.pageSize)
-            this.tableLoading = false
-          })
-          .catch(() => {
-            this.tableLoading = false
-          })
-      },
-      handleOk () {
-        this.visible = false
-      },
-      showDialog (id) {
-        //  console.log('id:', id)
-        this.visible = true
-      },
-      updated () {
-        //  console.log('updated')
-      },
-      handleSearch (e) {
-        e.preventDefault()
-        this.form.pageNum = 1
-        this.form.pageSize = 10
-        if (this.form.minStock > this.form.maxStock) {
-          this.$message.error('库存量输入有误')
-          return
-        }
-        this.getList(this.form)
-      },
-      handleReset () {
-        this.form = {
-          customer: '',
-          customerPhone: '',
-          endAmount: '',
-          endTime: '',
-          groupName: '',
-          pageNum: 1,
-          pageSize: 10,
-          payment: undefined,
-          startAmount: '',
-          startTime: ''
-        }
-        this.date = undefined
-        this.$refs.ruleForm.resetFields()
-
-        this.$nextTick(() => {
-          this.getList()
+    },
+    getList () {
+      this.tableLoading = true
+      getChecklists(getJson(this.form))
+        .then(res => {
+          this.list = res.result.list
+          this.$refs.BaseTable.getData(res.result, this.form.pageNum, this.form.pageSize)
+          this.tableLoading = false
         })
-      },
-      toggle () {
-        this.expand = !this.expand
-      },
-      onSelectChange (selectedRowKeys) {
-        //  console.log('selectedRowKeys changed: ', selectedRowKeys)
-        this.selectedRowKeys = selectedRowKeys
-      },
-      onChange (date, dateString) {
-        let form = this.form
-        this.date = dateString
-        form.startTime = dateString[0]
-        form.endTime = dateString[1]
-        this.form = form
-      },
-      pageChange (e) {
-        let form = this.form
-        form.pageNum = e.current
-        if (e.pageSize !== form.pageSize) {
-            form.pageSize = e.pageSize
-            form.pageNum = 1
-        }
-        this.form = form
-        this.getList()
+        .catch(() => {
+          this.tableLoading = false
+        })
+    },
+    handleOk () {
+      this.visible = false
+    },
+    showDialog (id) {
+      //  console.log('id:', id)
+      this.visible = true
+    },
+    updated () {
+      //  console.log('updated')
+    },
+    handleSearch (e) {
+      e.preventDefault()
+      this.form.pageNum = 1
+      this.form.pageSize = 10
+      if (this.form.minStock > this.form.maxStock) {
+        this.$message.error('库存量输入有误')
+        return
       }
+      this.getList(this.form)
+    },
+    handleReset () {
+      this.form = {
+        customer: '',
+        customerPhone: '',
+        endAmount: '',
+        endTime: '',
+        groupName: '',
+        pageNum: 1,
+        pageSize: 10,
+        payment: undefined,
+        startAmount: '',
+        startTime: ''
+      }
+
+      this.date = null
+      this.$refs.ruleForm.resetFields()
+
+      this.$nextTick(() => {
+        this.getList()
+      })
+    },
+    toggle () {
+      this.expand = !this.expand
+    },
+    onSelectChange (selectedRowKeys) {
+      //  console.log('selectedRowKeys changed: ', selectedRowKeys)
+      this.selectedRowKeys = selectedRowKeys
+    },
+    onChange (date, dateString) {
+      let form = this.form
+      this.date = dateString
+      form.startTime = dateString[0]
+      form.endTime = dateString[1]
+      this.form = form
+    },
+    pageChange (e) {
+      let form = this.form
+      form.pageNum = e.current
+      if (e.pageSize !== form.pageSize) {
+        form.pageSize = e.pageSize
+        form.pageNum = 1
+      }
+      this.form = form
+      this.getList()
     }
   }
+}
 </script>
 
-<style>
-</style>
+<style></style>

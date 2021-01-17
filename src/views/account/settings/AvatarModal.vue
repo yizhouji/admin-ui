@@ -118,7 +118,6 @@ export default {
       const _this = this
       // 输出
       this.$refs.cropper.getCropData(data => {
-        console.log(data)
         let str = data.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
         this.model = true
 

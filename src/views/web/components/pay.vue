@@ -178,17 +178,14 @@
       },
       show (info) {
         this.info = info
-        console.log(info)
         let user = localStorage.getItem('USERINFO')
         this.user = user ? JSON.parse(user) : ''
         this.$nextTick(() => {
-          console.log(this.user)
           this.visible = true
         })
       },
       handleOk () {},
       callback (key) {
-        console.log(key)
       }
     }
   }

@@ -276,7 +276,6 @@ export default {
         title: '提示',
         content: h => <div style="color:red;">确认删除此商品？</div>,
         onOk () {
-          console.log(self)
           self.deletloading = true
           deletProduct(data.productId)
             .then(res => {
@@ -285,13 +284,11 @@ export default {
               self.getList()
             })
             .catch(error => {
-              console.log(error)
               self.deletloading = false
               self.$message.error(error.data.message)
             })
         },
         onCancel () {
-          console.log('Cancel')
         },
         class: 'test'
       })

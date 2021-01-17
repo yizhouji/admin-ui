@@ -89,7 +89,6 @@ export default {
               this.hasSend = true
               this.txt = '重新发送'
               window.clearInterval(this.timer)
-              console.log(this.timer)
               this.timer = null
             }
           }, 1000)
@@ -115,7 +114,6 @@ export default {
           storage.set('USERINFO', user)
         })
         .catch((error) => {
-          console.log(error)
           this.$message.error(error.data.message)
         })
     }

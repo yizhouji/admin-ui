@@ -151,7 +151,6 @@ export default {
               this.hasSend = true
               this.txt = '重新发送'
               window.clearInterval(this.timer)
-              console.log(this.timer)
               this.timer = null
             }
           }, 1000)
@@ -297,7 +296,6 @@ export default {
       this.isLoginError = false
     },
     requestFailed (err) {
-      console.log(err)
       this.isLoginError = true
       this.$notification['error']({
         message: '错误',

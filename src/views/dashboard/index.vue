@@ -163,7 +163,6 @@
     computed: {
       amount () {
         let val = 0
-        console.log(this.saleList)
         this.saleList.forEach((element) => {
           val = Number(element.money) + val
         })
@@ -177,7 +176,6 @@
       this.getmarkets(this.marketType)
 
       let allCookies = document.cookie
-      console.log(allCookies)
     },
     methods: {
       addNote () {

@@ -11,57 +11,102 @@
         <a-row :gutter="24">
           <a-col :md="8" :sm="24">
             <a-form-model-item label="公司名字">
-              <a-input
-                placeholder="请输入公司名字"
-                v-model="form.groupName"
-                allow-clear
-                name="groupName"
-                :maxLength="20"
-              />
+              <a-dropdown :trigger="['click']">
+                <a-input
+                  placeholder="请输入公司名字"
+                  v-model="form.groupName"
+                  allow-clear
+                  name="groupName"
+                  @focus="dictFocus('groupName')"
+                  autocomplete="off"
+                  :maxLength="20"
+                />
+                <a-menu slot="overlay" v-if="groupNameList && groupNameList.length > 0">
+                  <a-menu-item v-for="item in groupNameList" :key="item" @click="dictChange(item, 'groupName')">
+                    <a>{{ item }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="开票人/单位">
-              <a-input
-                name="drawer"
-                v-model="form.drawer"
-                placeholder="请输入开票人/单位"
-                allow-clear
-                :maxLength="15"
-              />
+              <a-dropdown :trigger="['click']">
+                <a-input
+                  placeholder="请输入开票人/单位"
+                  v-model="form.drawer"
+                  allow-clear
+                  name="drawer"
+                  @focus="dictFocus('drawer')"
+                  autocomplete="off"
+                  :maxLength="15"
+                />
+                <a-menu slot="overlay" v-if="drawerList && drawerList.length > 0">
+                  <a-menu-item v-for="item in drawerList" :key="item" @click="dictChange(item, 'drawer')">
+                    <a>{{ item }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="开票人/单位联系方式">
-              <a-input
-                name="drawerPhone"
-                placeholder="请输入开票人/单位联系方式"
-                v-model="form.drawerPhone"
-                allow-clear
-                :maxLength="11"
-              />
+              <a-dropdown :trigger="['click']">
+                <a-input
+                  name="drawerPhone"
+                  placeholder="请输入开票人/单位联系方式"
+                  v-model="form.drawerPhone"
+                  allow-clear
+                  @focus="dictFocus('drawerPhone')"
+                  autocomplete="off"
+                  :maxLength="11"
+                />
+                <a-menu slot="overlay" v-if="drawerPhoneList && drawerPhoneList.length > 0">
+                  <a-menu-item v-for="item in drawerPhoneList" :key="item" @click="dictChange(item, 'drawerPhone')">
+                    <a>{{ item }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户名字">
-              <a-input
-                name="customer"
-                placeholder="请输入客户名字"
-                v-model="form.customer"
-                :maxLength="15"
-                allow-clear
-              />
+              <a-dropdown :trigger="['click']">
+                <a-input
+                  name="customer"
+                  placeholder="请输入客户名字"
+                  v-model="form.customer"
+                  :maxLength="15"
+                  allow-clear
+                  @focus="dictFocus('customer')"
+                  autocomplete="off"
+                />
+                <a-menu slot="overlay" v-if="customerList && customerList.length > 0">
+                  <a-menu-item v-for="item in customerList" :key="item" @click="dictChange(item, 'customer')">
+                    <a>{{ item }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
             <a-form-model-item label="客户联系方式">
-              <a-input
-                name="customerPhone"
-                placeholder="请输入客户联系方式"
-                v-model="form.customerPhone"
-                allow-clear
-                :maxLength="11"
-              />
+              <a-dropdown :trigger="['click']">
+                <a-input
+                  name="customerPhone"
+                  placeholder="请输入客户联系方式"
+                  v-model="form.customerPhone"
+                  allow-clear
+                  :maxLength="11"
+                  @focus="dictFocus('customerPhone')"
+                  autocomplete="off"
+                />
+                <a-menu slot="overlay" v-if="customerPhoneList && customerPhoneList.length > 0">
+                  <a-menu-item v-for="item in customerPhoneList" :key="item" @click="dictChange(item, 'customerPhone')">
+                    <a>{{ item }}</a>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
             </a-form-model-item>
           </a-col>
           <a-col :md="8" :sm="24">
@@ -100,7 +145,7 @@
                 name="payment"
                 v-model="record.productId"
                 placeholder="请选择"
-                style="width:100%"
+                style="width: 100%"
                 allow-clear
                 @change="productChange(record, index)"
               >
@@ -130,8 +175,8 @@
               class="amountInput"
               :max="record.stock"
               :min="1"
-              :placeholder="record.stock ? '剩余'+ record.stock :''"
-              @change="e => handleChange(e.target.value, record.key, 'amount',record)"
+              :placeholder="record.stock ? '剩余' + record.stock : ''"
+              @change="e => handleChange(e.target.value, record.key, 'amount', record)"
             />
             <template v-else>{{ text }}</template>
           </template>
@@ -181,9 +226,9 @@
         </div>
 
         <div class="operationBtn">
-          <a-button style="color:#ffffff;background-color:#1D18FF;" @click="showModal">发送客户</a-button>
+          <a-button style="color: #ffffff; background-color: #1d18ff" @click="showModal">发送客户</a-button>
           <!-- <a-button style="margin:0 20px;" type="primary">打印</a-button> -->
-          <a-button @click="reset" style="margin-left:20px;">重置</a-button>
+          <a-button @click="reset" style="margin-left: 20px">重置</a-button>
         </div>
       </a-card>
       <a-modal v-model="visible" @ok="handleOk" width="800px" :footer="null">
@@ -196,9 +241,9 @@
             <li>客户联系方式：{{ dialogFrom.customerPhone }}</li>
             <li>是否已付款：{{ dialogFrom.payment ? '是' : '否' }}</li>
             <li>公司名字：{{ dialogFrom.groupName }}</li>
-            <li style="width:100%" v-if="dialogFrom.remark">备注：{{ dialogFrom.remark }}</li>
+            <li style="width: 100%" v-if="dialogFrom.remark">备注：{{ dialogFrom.remark }}</li>
           </ul>
-          <div class="table" style="max-height:400px;overflow-y: auto;">
+          <div class="table" style="max-height: 400px; overflow-y: auto">
             <a-table :data-source="modelList" bordered :pagination="pagination">
               <a-table-column key="index" title="序号" width="70px">
                 <template slot-scope="text, record, index">{{ index + 1 }}</template>
@@ -208,12 +253,11 @@
                   <a>{{ text }}</a>
                 </template>
               </a-table-column>
-              <a-table-column key="productUnit" title="单位" data-index="productUnit" width="70px"/>
+              <a-table-column key="productUnit" title="单位" data-index="productUnit" width="70px" />
               <a-table-column key="amount" title="数量" data-index="amount" width="100px" />
-              <a-table-column key="unitPrice" title="单价" data-index="unitPrice" width="100px"/>
-              <a-table-column key="grossAmount" title="金额" data-index="grossAmount" width="100px"/>
-              <a-table-column key="remark" title="备注" data-index="remark" :ellipsis="true"/>
-
+              <a-table-column key="unitPrice" title="单价" data-index="unitPrice" width="100px" />
+              <a-table-column key="grossAmount" title="金额" data-index="grossAmount" width="100px" />
+              <a-table-column key="remark" title="备注" data-index="remark" :ellipsis="true" />
             </a-table>
           </div>
           <div class="amount">总计：{{ amount }} 元</div>
@@ -224,11 +268,11 @@
         <div class="footer" v-if="showFooter">
           <!-- <div class="left circle"></div>
           <div class="left circle"></div> -->
-          <div class="tip" style="margin:20px 0;color:#F2637B;text-align:left;">
+          <div class="tip" style="margin: 20px 0; color: #f2637b; text-align: left">
             提示：请选择以下任意一种方式把清单发送给客户。（如果不发送客户或者需要打印出来也可以不填信息）
           </div>
           <div class="input">
-            <div class="item ">
+            <div class="item">
               <p>方案一:</p>
               <div class="content">
                 <label>手机号：</label>
@@ -237,7 +281,7 @@
             </div>
             <div class="item sanCode">
               <p>方案二:</p>
-              <div class="content ">
+              <div class="content">
                 <div class="img">
                   <img :src="codeImgUrl" alt="" />
                   <p>客户扫描二维码</p>
@@ -274,7 +318,7 @@
 import html2canvas from 'html2canvas'
 import printJS from 'print-js'
 import { getProductsInfo } from '@/api/product'
-import { downloadIamge, regMobile } from '@/utils/util'
+import { downloadIamge, regMobile, setDict, getDict } from '@/utils/util'
 
 import { addChecklists, getCode } from '@/api/bill'
 import { setTimeout } from 'timers'
@@ -284,6 +328,12 @@ export default {
 
   data () {
     return {
+      groupNameList: [],
+      drawerList: [],
+      drawerPhoneList: [],
+      customerList: [],
+      customerPhoneList: [],
+
       showSubmit: true,
       imgPreview: false,
       btnLoading: false,
@@ -437,8 +487,19 @@ export default {
     })
   },
   methods: {
+    async dictFocus (name) {
+      getDict(name).then(res => {
+        // console.log('list：', res)
+        this[name + 'List'] = res
+      })
+    },
+    dictChange (val, name) {
+      let form = this.form
+      form[name] = val
+      this.form = form
+    },
     confirmInfoHandle () {
-        this.visible = false
+      this.visible = false
     },
     // 放大二维码
     zoom () {
@@ -504,6 +565,13 @@ export default {
       let self = this
       addChecklists(parmas)
         .then(res => {
+           setDict({
+            customer: this.form.customer,
+            customerPhone: this.form.customerPhone,
+            drawer: this.form.drawer,
+            drawerPhone: this.form.drawerPhone,
+            groupName: this.form.groupName
+          })
           this.btnLoading = false
           this.$message.success('添加清单成功')
 
@@ -545,11 +613,11 @@ export default {
         console.log('amount:', value, column)
         target[column] = value
         if (value && column === 'stock') {
-            if (value > record.stock) {
-                target[column] = record.stock
-            } else {
-                target[column] = value
-            }
+          if (value > record.stock) {
+            target[column] = record.stock
+          } else {
+            target[column] = value
+          }
         }
         if (column === 'amount' || column === 'unitPrice') {
           target['grossAmount'] = Number(target['amount']) * Number(target['unitPrice'])
@@ -633,7 +701,7 @@ export default {
         this.$message.error('请输入开票人联系方式')
         return
       }
-      if (!regMobile(this.form.drawerPhone)) {
+      if (!regMobile(this.form.drawerPhone) && this.form.drawerPhone !== '无') {
         this.$message.error('请输入正确的开票人联系方式')
         return
       }
@@ -646,7 +714,7 @@ export default {
         this.$message.error('请输入客户联系方式')
         return
       }
-      if (!regMobile(this.form.customerPhone)) {
+      if (!regMobile(this.form.customerPhone) && this.form.customerPhone !== '无') {
         this.$message.error('请输入正确的客户联系方式')
         return
       }
@@ -702,7 +770,6 @@ export default {
           bool = false
           break
         } else {
-          console.log(index)
         }
       }
       if (!bool) {

@@ -49,7 +49,6 @@ router.beforeEach((to, from, next) => {
     }
 } else {
   if (whiteList.includes(to.name)) {
-    console.log(to.name)
     next()
   } else {
     next({

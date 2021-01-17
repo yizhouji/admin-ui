@@ -53,7 +53,7 @@ export function handleScrollHeader (callback) {
 
 export function isIE () {
   const bw = window.navigator.userAgent
-  const compare = (s) => bw.indexOf(s) >= 0
+  const compare = s => bw.indexOf(s) >= 0
   const ie11 = (() => 'ActiveXObject' in window)()
   return compare('MSIE') || ie11
 }
@@ -98,7 +98,7 @@ export function getBase64 (file) {
     const reader = new FileReader()
     reader.readAsDataURL(file)
     reader.onload = () => resolve(reader.result)
-    reader.onerror = (error) => reject(error)
+    reader.onerror = error => reject(error)
   })
 }
 
@@ -143,4 +143,46 @@ export function downloadIamge (imgsrc, name) {
     a.dispatchEvent(event) // 触发a的单击事件
   }
   image.src = imgsrc
+}
+
+export function setDict (obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key) === true) {
+      let name = key + 'List'
+      let val = obj[key]
+      let list = localStorage.getItem(name)
+      list = JSON.parse(list)
+      if (list && list.length > 0) {
+        if (list.indexOf(val) > -1) {
+          let index = list.indexOf(val)
+          list.splice(index, 1)
+          list.splice(0, 1)
+          let newList = ['无', val].concat(list)
+          let sliceArr = newList.slice(0, 6)
+          localStorage.setItem(name, JSON.stringify(sliceArr))
+        } else {
+          list.splice(0, 1)
+          let arr = ['无', val]
+          let newList = arr.concat(list)
+          let sliceArr = newList.slice(0, 6)
+          localStorage.setItem(name, JSON.stringify(sliceArr))
+        }
+      } else {
+        localStorage.setItem(name, JSON.stringify(['无', val]))
+      }
+    }
+  }
+}
+
+export function getDict (name) {
+  return new Promise((resolve) => {
+    let listName = name + 'List'
+    let list = localStorage.getItem(listName)
+    if (list) {
+      list = JSON.parse(localStorage.getItem(listName))
+    } else {
+      list = ['无']
+    }
+    resolve(list)
+  })
 }
