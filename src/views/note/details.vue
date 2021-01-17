@@ -1,6 +1,12 @@
 <template>
   <div class="noteAdd">
-    <a-modal v-model="visible" width="734px" centered destroy-on-close @ok="handleOk">
+    <a-modal
+      v-model="visible"
+      :confirmLoading="confirmLoading"
+      width="734px"
+      centered
+      destroy-on-close
+      @ok="handleOk">
       <div slot="title" class="modal-title text-left">
         <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right:5px" />记事本详情
       </div>
@@ -78,7 +84,8 @@ export default {
       notepadId: '',
       deletePics: [],
       fileListUid: [],
-      loading: false
+      loading: false,
+      confirmLoading: false
     }
   },
   methods: {
@@ -175,7 +182,7 @@ export default {
       this.previewVisible = false
     },
     async handlePreview (file) {
-       console.log('handlePreview:', file)
+      console.log('handlePreview:', file)
       if (!file.url && !file.preview) {
         file.preview = await this.getBase64(file.originFileObj)
       }
@@ -206,19 +213,26 @@ export default {
         this.$message.error('请输入内容')
         return
       }
-      modifyNote(formData).then(res => {
-        this.$message.success('提交成功')
-        this.previewImage = ''
-        this.fileList = []
-        this.baseList = []
-        this.significance = 3
-        this.notepadTitle = ''
-        this.notepadContent = ''
-        setTimeout(() => {
-          this.visible = false
-          this.$emit('getList')
-        }, 2000)
-      })
+      this.confirmLoading = true
+      modifyNote(formData)
+        .then(res => {
+          this.$message.success('提交成功')
+          this.previewImage = ''
+          this.fileList = []
+          this.baseList = []
+          this.significance = 3
+          this.notepadTitle = ''
+          this.notepadContent = ''
+          this.confirmLoading = false
+
+          setTimeout(() => {
+            this.visible = false
+            this.$emit('getList')
+          }, 2000)
+        })
+        .catch(() => {
+          this.confirmLoading = false
+        })
     },
     deletHandle () {
       this.loading = true

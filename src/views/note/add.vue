@@ -6,6 +6,7 @@
       centered
       :destroyOnClose="true"
       @ok="handleOk"
+      :confirmLoading="loading"
       @cancel="cancel">
       <div slot="title" class="modal-title text-left">
         <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right: 5px" />新建文件
@@ -71,7 +72,8 @@ export default {
       previewVisible: false,
       previewImage: '',
       fileList: [],
-      baseList: []
+      baseList: [],
+      loading: false
     }
   },
   methods: {
@@ -86,14 +88,15 @@ export default {
       if (!isJpgOrPng) {
         this.$message.error('图片格式只能是image/jpeg或者image/png')
       }
-      const isLt2M = file.size / 1024 / 1024 < 1
+      const isLt2M = file.size / 1024 / 1024 < 2
       if (!isLt2M) {
         this.$message.error('图片大小不能超过2m')
+        return false
       }
 
       // return isJpgOrPng && isLt2M
 
-      this.fileList = [...this.fileList, file]
+      // this.fileList = [...this.fileList, file]
       return false
     },
     getBase64 (file) {
@@ -118,22 +121,32 @@ export default {
     },
     async handleChange ({ file, fileList }) {
       if (file.status === 'removed') {
-          this.fileList = fileList
-          let baseList = []
-          fileList.forEach(element => {
-            let reader = new FileReader()
-            reader.readAsDataURL(element.originFileObj)
-            reader.onload = () => {
-                let Base64 = reader.result
-                let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
-                baseList.push(a)
-            }
-          })
-          this.baseList = baseList
-          console.log(fileList)
-          console.log(baseList)
+        this.fileList = fileList
+        let baseList = []
+        fileList.forEach(element => {
+          let reader = new FileReader()
+          reader.readAsDataURL(element.originFileObj)
+          reader.onload = () => {
+            let Base64 = reader.result
+            let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
+            baseList.push(a)
+          }
+        })
+        this.baseList = baseList
+        console.log(fileList)
+        console.log(baseList)
       } else {
-        console.log('1111')
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+        if (!isJpgOrPng) {
+          this.$message.error('图片格式只能是image/jpeg或者image/png')
+          return false
+        }
+        const isLt2M = file.size / 1024 / 1024 < 2
+        console.log(isLt2M)
+        if (!isLt2M) {
+          this.$message.error('图片大小不能超过2m')
+          return false
+        }
         let baseList = this.baseList
         let Base64 = await this.getBase64(file)
         // console.log(Base64)
@@ -163,6 +176,7 @@ export default {
       } else {
         this.$message.error('请输入内容')
       }
+      this.loading = true
       addNote(formData).then(res => {
         this.$message.success('提交成功')
         this.previewImage = ''
@@ -172,9 +186,13 @@ export default {
         this.notepadTitle = ''
         this.notepadContent = ''
         this.visible = false
+      this.loading = false
+
         setTimeout(() => {
           this.$emit('getList')
         }, 2000)
+      }).catch(() => {
+      this.loading = false
       })
     },
     cancel () {
@@ -192,7 +210,7 @@ export default {
       })
     },
     remove (data) {
-        console.log(data)
+      console.log(data)
     }
   }
 }

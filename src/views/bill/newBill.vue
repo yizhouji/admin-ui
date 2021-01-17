@@ -239,7 +239,7 @@
             <li>开票人联系方式：{{ dialogFrom.drawerPhone }}</li>
             <li>客户名字：{{ dialogFrom.customer }}</li>
             <li>客户联系方式：{{ dialogFrom.customerPhone }}</li>
-            <li>是否已付款：{{ dialogFrom.payment ? '是' : '否' }}</li>
+            <li>是否已付款：{{ dialogFrom.payment === '1' ? '是' : '否' }}</li>
             <li>公司名字：{{ dialogFrom.groupName }}</li>
             <li style="width: 100%" v-if="dialogFrom.remark">备注：{{ dialogFrom.remark }}</li>
           </ul>
@@ -552,7 +552,8 @@ export default {
           amount: element.amount,
           grossAmount: element.grossAmount,
           productId: element.productId,
-          unitPrice: element.unitPrice
+          unitPrice: element.unitPrice,
+          remark: element.remark
         }
         arr.push(obj)
       })
@@ -782,6 +783,7 @@ export default {
       }
       this.modelList = arr
       this.dialogFrom = Object.assign(this.form)
+      console.log(this.dialogFrom)
       this.visible = true
     },
 

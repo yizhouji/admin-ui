@@ -125,6 +125,7 @@
               <span v-else @click="showDialog(record)">{{ '备注' }}</span>
             </template>
           </a-table-column>
+          <a-table-column key="createTime" title="创建时间" data-index="createTime" />
           <a-table-column key="operation" title="操作" data-index="operation">
             <template slot-scope="text, record">
               <a-button type="primary" size="small" @click="showDialog(record)">编辑</a-button>
