@@ -202,7 +202,9 @@ export default {
         })
     },
     setavatar (url) {
-      let user = this.user
+      console.log('setavatar:', url)
+      let user = this.info
+      console.log('user:', user)
       user.headImgUrl = url
       this.$store.commit('SET_USER', user)
       storage.set('USERINFO', user)
