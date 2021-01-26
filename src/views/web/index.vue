@@ -1,6 +1,6 @@
 <template>
   <div class="page">
-    <navBar></navBar>
+    <navbar></navbar>
     <div class="part_1">
       <div class="title">高效系统的商家货物后台管理系统</div>
       <p>货物管理，清单票据，销量分析，记事便签，货物状态</p>
@@ -79,13 +79,13 @@
 </template>
 
 <script>
-import navBar from './components/navbar'
+import navbar from './components/navbar'
 import baseFooter from './components/baseFooter'
 
 export default {
   name: 'Index',
   components: {
-    navBar,
+    navbar,
     baseFooter
   },
   data () {

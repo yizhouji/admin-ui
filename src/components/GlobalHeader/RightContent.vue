@@ -71,7 +71,7 @@ export default {
       } else {
         user = storage.get('USERINFO')
       }
-      return JSON.parse(JSON.stringify(user))
+      return user ? JSON.parse(JSON.stringify(user)) : ''
     },
 
     wrpCls () {
