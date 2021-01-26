@@ -132,37 +132,38 @@ export default {
       if (!isLt2M) {
         this.$message.error('图片大小不能超过5m')
       }
-
-      // return isJpgOrPng && isLt2M
-
-      this.fileList = [...this.fileList, file]
       return false
     },
     async handleChange ({ file, fileList }) {
-      this.fileList = fileList
       if (file.from) {
+         this.fileList = fileList
         this.deletePics.push(file.uid)
       } else {
         if (file.status === 'removed') {
+          this.fileList = fileList
           let index = this.fileListUid.indexOf(file.uid)
           this.fileListUid.splice(index, 1)
           this.baseList.splice(index, 1)
         } else {
+          const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+          if (!isJpgOrPng) {
+            this.$message.error('图片格式只能是image/jpeg或者image/png')
+            return false
+          }
+          const isLt2M = file.size / (1024 * 1024) < 5
+          console.log(isLt2M)
+          if (!isLt2M) {
+            this.$message.error('图片大小不能超过5m')
+            return false
+          }
           this.fileListUid.push(file.uid)
           let baseList = this.baseList
 
           let Base64 = await this.getBase64(file)
-          let a = ''
 
-          if (Base64.indexOf('data:image/png;base64,') > -1) {
-            a = Base64.replace('data:image/png;base64,', '')
-            baseList.push(a)
-          }
-          if (Base64.indexOf('data:image/jpeg;base64,') > -1) {
-            a = Base64.replace('data:image/jpeg;base64,', '')
-            baseList.push(a)
-          }
-
+          let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
+          baseList.push(a)
+          this.fileList = fileList
           this.baseList = baseList
         }
       }
@@ -224,9 +225,8 @@ export default {
           this.notepadTitle = ''
           this.notepadContent = ''
           this.confirmLoading = false
-
+this.visible = false
           setTimeout(() => {
-            this.visible = false
             this.$emit('getList')
           }, 2000)
         })

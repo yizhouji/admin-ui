@@ -7,8 +7,7 @@
       :destroyOnClose="true"
       @ok="handleOk"
       :confirmLoading="loading"
-      @cancel="cancel"
-    >
+      @cancel="cancel">
       <div slot="title" class="modal-title text-left">
         <a-icon type="snippets" theme="twoTone" twoToneColor="#1890FF" style="margin-right: 5px" />新建文件
       </div>
@@ -32,7 +31,8 @@
             multiple
             @preview="handlePreview"
             :before-upload="beforeUpload"
-            :remove="remove"
+            @change="handleChange"
+            @remove="remove"
           >
             <div v-if="fileList.length < 8">
               <a-icon type="plus" />
@@ -83,27 +83,15 @@ export default {
     show () {
       this.visible = true
     },
-    async beforeUpload (file) {
+    beforeUpload (file) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
-      const isLt2M = file.size / (1024 * 1024) < 2
       if (!isJpgOrPng) {
         this.$message.error('图片格式只能是image/jpeg或者image/png')
-      } else if (!isLt2M) {
-        this.$message.error('图片大小不能超过5m')
-      } else {
-        this.fileList = [...this.fileList, file]
-        // let baseList = this.baseList
-        let Base64 = await this.getBase64(file)
-        console.log(Base64)
-        let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
-        // baseList.push(a)
-        // console.log('baseList:', baseList)
-        this.baseList.push(a)
-        this.$nextTick(() => {
-            console.log('baseList:', this.baseList)
-        })
       }
-
+      const isLt2M = file.size / (1024 * 1024) < 5
+      if (!isLt2M) {
+        this.$message.error('图片大小不能超过5m')
+      }
       return false
     },
     getBase64 (file) {
@@ -126,7 +114,43 @@ export default {
       this.previewImage = file.url || file.preview
       this.previewVisible = true
     },
-
+    async handleChange ({ file, fileList }) {
+      if (file.status === 'removed') {
+        this.fileList = fileList
+        let baseList = []
+        fileList.forEach(element => {
+          let reader = new FileReader()
+          reader.readAsDataURL(element.originFileObj)
+          reader.onload = () => {
+            let Base64 = reader.result
+            let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
+            baseList.push(a)
+          }
+        })
+        this.baseList = baseList
+        console.log(fileList)
+        console.log(baseList)
+      } else {
+        const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+        if (!isJpgOrPng) {
+          this.$message.error('图片格式只能是image/jpeg或者image/png')
+          return false
+        }
+        const isLt2M = file.size / (1024 * 1024) < 5
+        console.log(isLt2M)
+        if (!isLt2M) {
+          this.$message.error('图片大小不能超过5m')
+          return false
+        }
+        let baseList = this.baseList
+        let Base64 = await this.getBase64(file)
+        // console.log(Base64)
+        let a = Base64.replace('data:image/png;base64,', '').replace('data:image/jpeg;base64,', '')
+        baseList.push(a)
+        this.baseList = baseList
+        this.fileList = fileList
+      }
+    },
     handleOk () {
       const { baseList, fileList, significance, notepadTitle, notepadContent } = this
 
@@ -148,25 +172,23 @@ export default {
         this.$message.error('请输入内容')
       }
       this.loading = true
-      addNote(formData)
-        .then(res => {
-          this.$message.success('提交成功')
-          this.previewImage = ''
-          this.fileList = []
-          this.baseList = []
-          this.significance = 3
-          this.notepadTitle = ''
-          this.notepadContent = ''
-          this.visible = false
-          this.loading = false
+      addNote(formData).then(res => {
+        this.$message.success('提交成功')
+        this.previewImage = ''
+        this.fileList = []
+        this.baseList = []
+        this.significance = 3
+        this.notepadTitle = ''
+        this.notepadContent = ''
+        this.visible = false
+      this.loading = false
 
-          setTimeout(() => {
-            this.$emit('getList')
-          }, 2000)
-        })
-        .catch(() => {
-          this.loading = false
-        })
+        setTimeout(() => {
+          this.$emit('getList')
+        }, 2000)
+      }).catch(() => {
+      this.loading = false
+      })
     },
     cancel () {
       this.radio = 3
@@ -182,14 +204,8 @@ export default {
         this.visible = false
       })
     },
-    remove (file) {
-      const index = this.fileList.indexOf(file)
-      const newFileList = this.fileList.slice()
-      newFileList.splice(index, 1)
-      let baseList = this.baseList
-      baseList.splice(index, 1)
-      this.fileList = newFileList
-      this.baseList = baseList
+    remove (data) {
+      console.log(data)
     }
   }
 }
