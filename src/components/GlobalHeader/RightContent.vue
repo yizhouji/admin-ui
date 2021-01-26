@@ -19,7 +19,7 @@
         </div>
       </a-badge>
     </div> -->
-    <avatar-dropdown :menu="showMenu" :current-user="currentUser" :class="prefixCls" />
+    <avatar-dropdown :menu="showMenu" :type="2" :current-user="currentUser" :class="prefixCls" />
     <!-- <select-lang :class="prefixCls" /> -->
   </div>
 </template>
@@ -120,5 +120,9 @@ export default {
 }
 .part:last-child {
   margin-right: 10px;
+}
+.ant-pro-global-header-index-right{
+  display: inline-flex;
+  align-items: center;
 }
 </style>

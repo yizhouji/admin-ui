@@ -25,7 +25,11 @@
           <img src="@/assets/icon_record.png" alt="" />
           充值记录
         </a-menu-item>
-        <a-menu-item v-if="menu" key="website" @click="handleToIndex">
+        <a-menu-item v-if="menu && type=== 1" key="website" @click="handleToAdmin">
+          <img src="@/assets/icon_website.png" alt="" />
+          管理系统
+        </a-menu-item>
+        <a-menu-item v-if="menu&& type=== 2" key="website" @click="handleToIndex">
           <img src="@/assets/icon_website.png" alt="" />
           官方网站
         </a-menu-item>
@@ -61,6 +65,10 @@
       currentUser: {
         type: Object,
         default: () => null
+      },
+      type: {
+        type: Number,
+        default: () => 1
       },
       menu: {
         type: Boolean,
@@ -109,6 +117,11 @@
       handleToIndex () {
         this.$router.push({
           path: '/'
+        })
+      },
+      handleToAdmin () {
+           this.$router.push({
+          path: '/dashboard/index'
         })
       },
       handleToCenter () {
@@ -189,6 +202,13 @@
           margin-left: 20px;
         }
       }
+    }
+  }
+  .ant-pro-account-avatar{
+    display: inline-flex;
+    align-items: center;
+    .antd-pro-global-header-index-avatar{
+      margin-right: 10px;
     }
   }
 </style>

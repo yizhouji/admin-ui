@@ -29,27 +29,9 @@
             </div>
             </a></a-dropdown>
         </div>
-        <template v-if="userInfo">
-          <div class="userInfo">
-            <a-dropdown>
-              <a class="ant-dropdown-link">
-                <div class="user">
-                  <img :src="userInfo.headImgUrl" />{{ userInfo.nickname }}
-                </div>
-                <a-icon type="down" />
-              </a>
-              <a-menu slot="overlay">
-                <a-menu-item key="0">
-                  <a target="_blank" @click="linkHandle('dashboard')" rel="noopener noreferrer">进入系统</a>
-                </a-menu-item>
-                <a-menu-divider />
-                <a-menu-item key="1">
-                  <a target="_blank" @click="logout" rel="noopener noreferrer">退出登录</a>
-                </a-menu-item>
-              </a-menu>
-            </a-dropdown>
-          </div>
-        </template>
+        <div class="item" v-if="currentUser">
+          <avatar-dropdown :menu="showMenu" :type="1" :current-user="currentUser" :class="prefixCls" />
+        </div>
         <template v-else>
           <div class="item">
             <a @click="linkHandle('Login')">登录</a>
@@ -67,20 +49,33 @@
 import { Modal } from 'ant-design-vue'
 import storage from 'store'
 import { logout } from '@/api/login'
+import AvatarDropdown from '../../../components/GlobalHeader/AvatarDropdown'
+
 export default {
   name: 'Navbar',
+  components: {
+    AvatarDropdown
+  },
+   props: {
+    prefixCls: {
+      type: String,
+      default: 'ant-pro-global-header-index-action'
+    }
+   },
   data () {
-    return {}
+    return {
+       showMenu: true
+    }
   },
   computed: {
-    userInfo () {
+   currentUser () {
       let user = ''
       if (this.$store.state.user.user) {
         user = this.$store.state.user.user
       } else {
         user = storage.get('USERINFO')
       }
-      return user
+      return JSON.parse(JSON.stringify(user))
     }
   },
   methods: {
@@ -142,6 +137,7 @@ export default {
         display: flex;
         align-items: center;
         font-weight: bold;
+        cursor: pointer;
         a {
           height: 36px;
           color: #0d0a0a;
