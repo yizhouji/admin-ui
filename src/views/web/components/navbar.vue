@@ -29,11 +29,13 @@
             </div>
             </a></a-dropdown>
         </div>
-        <!-- <template v-if="userInfo">
+        <template v-if="userInfo">
           <div class="userInfo">
             <a-dropdown>
               <a class="ant-dropdown-link">
-                {{ userInfo.userName }}
+                <div class="user">
+                  <img :src="userInfo.headImgUrl" />{{ userInfo.nickname }}
+                </div>
                 <a-icon type="down" />
               </a>
               <a-menu slot="overlay">
@@ -47,8 +49,8 @@
               </a-menu>
             </a-dropdown>
           </div>
-        </template> -->
-        <template>
+        </template>
+        <template v-else>
           <div class="item">
             <a @click="linkHandle('Login')">登录</a>
           </div>
@@ -120,7 +122,7 @@ export default {
     margin: 0 auto;
     width: 1200px;
     height: 80px;
-    line-height: 80px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -170,7 +172,26 @@ export default {
   .ant-dropdown-link {
     font-size: 16px;
     font-weight: bold;
+    display: flex;
+    height: 36px;
+    align-items: center;
+    color: #0d0a0a;
     // margin-left: 30px;
+  }
+  .userInfo{
+    height: 36px;
+  }
+  /deep/ .user{
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    img{
+      width: 36px;
+      height: 36px;
+      border-radius: 18px;
+      margin-right: 10px;
+
+    }
   }
 }
 </style>

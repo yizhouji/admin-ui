@@ -128,9 +128,9 @@ export default {
       if (!isJpgOrPng) {
         this.$message.error('图片格式只能是image/jpeg或者image/png')
       }
-      const isLt2M = file.size / 1024 / 1024 < 1
+      const isLt2M = file.size / (1024 * 1024) < 5
       if (!isLt2M) {
-        this.$message.error('图片大小不能超过2m')
+        this.$message.error('图片大小不能超过5m')
       }
 
       // return isJpgOrPng && isLt2M
