@@ -40,7 +40,7 @@
                 <!-- <a-icon type="cloud-upload-o" class="upload-icon" /> -->
                 <span class="upload-icon"><img src="@/assets/upload.png" alt=""></span>
                 <div class="mask">
-                  <a-icon type="plus" />
+                  <img src="@/assets/plus.png" alt="" style="width:36px;height:36px">
                 </div>
                 <img
                   :src="
@@ -324,7 +324,9 @@ export default {
     background: rgba(0, 0, 0, 0.4);
     cursor: pointer;
     transition: opacity 0.4s;
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &:hover {
       opacity: 1;
     }

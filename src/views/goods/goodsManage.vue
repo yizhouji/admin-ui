@@ -166,6 +166,8 @@
 </template>
 
 <script>
+import notification from 'ant-design-vue/es/notification'
+
 import BaseTable from '@/components/BaseTable'
 import EditRemark from './editRemark'
 import {
@@ -439,8 +441,14 @@ export default {
         if (file.response && file.response.result === '上传成功！') {
           // console.log(file.response)
           this.$message.success('上传成功！')
-        } else {
+          this.handleReset()
         }
+      } else {
+        this.showUploading = false
+        notification.error({
+          message: '请求失败',
+          description: file.response.message
+        })
       }
     }
   }

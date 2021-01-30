@@ -17,6 +17,10 @@
           <div class="time" v-else>您的VIP已过期 <span>续费
             <a-icon type="right" /></span></div>
         </a-menu-item>
+        <a-menu-item v-if="menu && type=== 1" key="website" @click="handleToAdmin">
+          <img src="@/assets/icon_website.png" alt="" />
+          管理系统
+        </a-menu-item>
         <a-menu-item v-if="menu" key="center" @click="handleToCenter">
           <img src="@/assets/icon_user.png" alt="" />
           个人中心
@@ -25,10 +29,7 @@
           <img src="@/assets/icon_record.png" alt="" />
           充值记录
         </a-menu-item>
-        <a-menu-item v-if="menu && type=== 1" key="website" @click="handleToAdmin">
-          <img src="@/assets/icon_website.png" alt="" />
-          管理系统
-        </a-menu-item>
+
         <a-menu-item v-if="menu&& type=== 2" key="website" @click="handleToIndex">
           <img src="@/assets/icon_website.png" alt="" />
           官方网站

@@ -25,7 +25,7 @@
             </a-dropdown>
           </div>
         </div>
-        <a-checkbox-group @change="onChange">
+        <a-checkbox-group @change="onChange" v-model="deletList">
           <a-list :grid="{ gutter: 16, column: 4,lg:4,md:3,sm:2 }" :data-source="list" :pagination="pagination">
             <a-list-item slot="renderItem" slot-scope="item">
 
