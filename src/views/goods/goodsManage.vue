@@ -72,10 +72,7 @@
             <a-upload
               name="file"
               accept="application/vnd.ms-excel"
-              :action="productsImportApi"
-              :headers="headers"
               :before-upload="beforeUpload"
-              @change="handleChange"
             >
               <a class="item"> <a-spin v-if="showUploading" />导入表格</a>
             </a-upload>
@@ -252,7 +249,6 @@ export default {
       productsImportApi: productsImportApi,
       loading: false,
       deletloading: false
-
     }
   },
   computed: {
@@ -291,8 +287,7 @@ export default {
               self.$message.error(error.data.message)
             })
         },
-        onCancel () {
-        },
+        onCancel () {},
         class: 'test'
       })
     },
@@ -311,15 +306,15 @@ export default {
         })
     },
     pageChange (e) {
-        let form = this.form
-        form.pageNum = e.current
-        if (e.pageSize !== form.pageSize) {
-            form.pageSize = e.pageSize
-            form.pageNum = 1
-        }
-        this.form = form
-        this.getList()
-      },
+      let form = this.form
+      form.pageNum = e.current
+      if (e.pageSize !== form.pageSize) {
+        form.pageSize = e.pageSize
+        form.pageNum = 1
+      }
+      this.form = form
+      this.getList()
+    },
     download () {
       productsDownload().then(res => {
         this.$message.success('下载成功')
@@ -427,29 +422,32 @@ export default {
         })
     },
     beforeUpload (file) {
+      let self = this
       this.fileList = [...this.fileList, file]
-      return true
+      this.$confirm({
+        title: '提示',
+        content: h => <div style="">确定导入文件？</div>,
+        onOk () {
+          self.upload(file)
+        },
+        onCancel () {},
+        class: 'test'
+      })
+      return false
     },
-    handleChange ({ file, fileList, event }) {
-      if (file.status === 'uploading') {
-        this.showUploading = true
-      }
-
-      if (file.status === 'done') {
-        this.showUploading = false
-
-        if (file.response && file.response.result === '上传成功！') {
-          // console.log(file.response)
-          this.$message.success('上传成功！')
-          this.handleReset()
-        }
-      } else {
-        this.showUploading = false
-        notification.error({
-          message: '请求失败',
-          description: file.response.message
+    upload (file) {
+      let param = new FormData()
+      param.append('file', file)
+      productsImport(
+       param
+      )
+        .then(res => {
+            this.$message.success('导入成功')
+            this.handleReset()
         })
-      }
+        .catch(error => {
+           this.$message.success(error)
+        })
     }
   }
 }
@@ -483,7 +481,7 @@ export default {
     margin-right: -50%;
   }
 }
-/deep/ #table-container .ant-table-thead > tr > .stockTitle{
+/deep/ #table-container .ant-table-thead > tr > .stockTitle {
   color: #1890ff;
 }
 </style>

@@ -57,11 +57,15 @@ export function productsCategories (parameter) {
   })
 }
 
-export function productsImport (parameter) {
+export function productsImport (parameter, headers) {
   return request({
     url: productApi.import,
     method: 'post',
-    data: parameter
+    data: parameter,
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      authorization: 'authorization-text'
+    }
   })
 }
 

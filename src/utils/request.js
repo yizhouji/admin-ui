@@ -25,7 +25,7 @@ const request = axios.create(axiosConfig)
 let list = ['/warehouse/infos/bind']
 
 // 异常拦截处理器
-const errorHandler = (error) => {
+const errorHandler = error => {
   if (error.response) {
     const data = error.response.data
     // 从 localstorage 获取 token
@@ -33,11 +33,10 @@ const errorHandler = (error) => {
     if (error.response.status === 500) {
       let url = error.response.request.responseURL
       let bool = false
-      list.forEach(element => {
-          if (url.indexOf(url) > -1) {
-            bool = true
-          }
-      })
+      if (list.indexOf(url) > -1) {
+        bool = true
+      }
+      console.log(bool)
       if (!bool) {
         notification.error({
           message: '请求失败',
@@ -46,6 +45,12 @@ const errorHandler = (error) => {
       } else {
         return Promise.reject(error.response)
       }
+    }
+    if (error.response.status === 400) {
+      notification.error({
+        message: '请求失败',
+        description: data.message
+      })
     }
     if (error.response.status === 403) {
       notification.error({
@@ -82,7 +87,7 @@ request.interceptors.request.use(config => {
 }, errorHandler)
 
 // response interceptor
-request.interceptors.response.use((response) => {
+request.interceptors.response.use(response => {
   console.log('response:', response)
   return response.data
 }, errorHandler)
@@ -96,7 +101,4 @@ const installer = {
 
 export default request
 
-export {
-  installer as VueAxios,
-  request as axios
-}
+export { installer as VueAxios, request as axios }
