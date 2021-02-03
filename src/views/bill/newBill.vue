@@ -171,11 +171,11 @@
               type="number"
               v-if="record.editable"
               style="margin: -5px 0"
-              v-model="record.amount"
+              v-model.trim="record.amount"
               class="amountInput"
               :max="record.stock"
               :min="1"
-              :placeholder="record.stock ? '剩余' + record.stock : ''"
+              :placeholder="record.stock | getPlaceholder"
               @change="e => handleChange(e.target.value, record.key, 'amount', record)"
             />
             <template v-else>{{ text }}</template>
@@ -185,7 +185,8 @@
               type="number"
               v-if="record.editable"
               style="margin: -5px 0"
-              v-model="record.unitPrice"
+              :min="0"
+              v-model.trim="record.unitPrice"
               @change="e => handleChange(e.target.value, record.key, 'unitPrice')"
             />
             <template v-else>{{ text }}</template>
@@ -193,9 +194,10 @@
           <template slot="grossAmount" slot-scope="text, record">
             <a-input
               type="number"
+              :min="0"
               v-if="record.editable"
               style="margin: -5px 0"
-              v-model="record.grossAmount"
+              v-model.trim="record.grossAmount"
               @change="e => handleChange(e.target.value, record.key, 'grossAmount')"
             />
             <template v-else>{{ text }}</template>
@@ -321,7 +323,7 @@ import { getProductsInfo } from '@/api/product'
 import { downloadIamge, regMobile, setDict, getDict } from '@/utils/util'
 
 import { addChecklists, getCode } from '@/api/bill'
-import { setTimeout } from 'timers'
+import num from '@/utils/num'
 export default {
   name: 'GoodManage',
   components: {},
@@ -468,6 +470,15 @@ export default {
       codeImgUrl: ''
     }
   },
+  filters: {
+    getPlaceholder (stock) {
+      if (stock) {
+        return '剩余' + stock
+      } else {
+        return ''
+      }
+    }
+  },
   computed: {
     amount () {
       let amount = 0
@@ -483,7 +494,14 @@ export default {
   },
   created () {
     getProductsInfo().then(res => {
-      this.product = res.result
+      let result = res.result
+      let arr = []
+      result.forEach(element => {
+        if (element.stock) {
+          arr.push(element)
+        }
+      })
+      this.product = arr
     })
   },
   methods: {
@@ -566,7 +584,7 @@ export default {
       let self = this
       addChecklists(parmas)
         .then(res => {
-           setDict({
+          setDict({
             customer: this.form.customer,
             customerPhone: this.form.customerPhone,
             drawer: this.form.drawer,
@@ -620,13 +638,20 @@ export default {
             target[column] = value
           }
         }
+        if (column === 'unitPrice' && target['unitPrice']) {
+          console.log(typeof target['unitPrice'])
+          if (target['unitPrice'].substring(0, 1) === '.') {
+            target['unitPrice'] = '0' + target['unitPrice']
+          }
+        }
         if (column === 'amount' || column === 'unitPrice') {
-          target['grossAmount'] = Number(target['amount']) * Number(target['unitPrice'])
+          target['grossAmount'] = num.multiply(Number(target['amount']), Number(target['unitPrice']))
         }
         this.list = newData
       }
     },
     productChange (value, tableIndex) {
+      console.log(value, tableIndex)
       if (value) {
         let productId = value.productId
         let currentData = ''
@@ -635,21 +660,22 @@ export default {
             currentData = element
           }
         })
-        let list = this.list
-        list.forEach((element, index) => {
-          if (element.productId === productId) {
+        let arr = []
+        this.list.forEach((element, index) => {
+          if (index === tableIndex) {
             element.productUnit = currentData.unitName
             element.productName = currentData.productName
             element.stock = currentData.stock
           }
+          arr.push(element)
         })
-        this.list = list
+        this.list = arr
       } else {
         this.list.forEach((element, index) => {
           if (tableIndex === index) {
             element = {
               key: element.key,
-              productId: null,
+              productId: undefined,
               productName: '',
               productUnit: '',
               amount: '',
@@ -674,7 +700,7 @@ export default {
       const { count, list } = this
       const newData = {
         key: this.count,
-        productId: null,
+        productId: undefined,
         productName: '',
         productUnit: '',
         amount: '',
@@ -747,16 +773,16 @@ export default {
             bool = false
             break
           }
-          if (!reg.test(element.unitPrice)) {
-            this.$message.error('第' + (index + 1) + '行,输入商品单价必须为大于0的正整数')
-            bool = false
-            break
-          }
-          if (!reg.test(element.grossAmount)) {
-            this.$message.error('第' + (index + 1) + '行,输入商品总金额必须为大于0的正整数')
-            bool = false
-            break
-          }
+          // if (!reg.test(element.unitPrice)) {
+          //   this.$message.error('第' + (index + 1) + '行,输入商品单价必须为大于0的正整数')
+          //   bool = false
+          //   break
+          // }
+          // if (!reg.test(element.grossAmount)) {
+          //   this.$message.error('第' + (index + 1) + '行,输入商品总金额必须为大于0的正整数')
+          //   bool = false
+          //   break
+          // }
           arr.push(element)
           bool = true
         } else if (
