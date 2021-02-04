@@ -7,7 +7,7 @@
       <p>简单明了，高效快捷的一体化货物管理系统</p>
       <button @click="linkHandle">立即使用</button>
       <div class="img">
-        <img src="./static/img/web_5.png" alt />
+        <img src="./static/img/web_1.png" alt />
       </div>
     </div>
     <div class="part_2">
@@ -21,7 +21,7 @@
           <p>对于商品的任意备注</p>
         </div>
         <div class="img">
-          <img src="./static/img/web_1.png" alt />
+          <img src="./static/img/web_2.png" alt />
         </div>
       </div>
     </div>
@@ -47,14 +47,14 @@
           <p>两类明细更加系统展示，让您清清楚楚</p>
         </div>
         <div class="img">
-          <img src="./static/img/web_1.png" alt />
+          <img src="./static/img/web_4.png" alt />
         </div>
       </div>
     </div>
     <div class="part_5">
       <div class="content">
         <div class="img">
-          <img src="./static/img/web_3.png" alt />
+          <img src="./static/img/web_5.png" alt />
         </div>
         <div class="text">
           <div class="title">货物积压</div>
