@@ -41,10 +41,10 @@
     <div class="part_4">
       <div class="content">
         <div class="text">
-          <div class="title">交易明细</div>
+          <div class="title">售出记录</div>
           <p>货物交易一键查询</p>
-          <p>往期记录一键掌握</p>
-          <p>两类明细更加系统展示，让您清清楚楚</p>
+          <p>往期记录一键掌握，扫码发送二维码查看货物清单</p>
+          <p>再也不用担心因为时间长而丢失交易清单</p>
         </div>
         <div class="img">
           <img src="./static/img/web_4.png" alt />
@@ -57,10 +57,10 @@
           <img src="./static/img/web_5.png" alt />
         </div>
         <div class="text">
-          <div class="title">货物积压</div>
-          <p>货物交易一键查询</p>
-          <p>往期记录一键掌握</p>
-          <p>两类明细更加系统展示，让您清清楚楚</p>
+          <div class="title">积压货物</div>
+          <p>货物无操作两个月后自动归类到积压货物，</p>
+          <p>避免塞到角落的货物长时间而造成遗忘，货物有售出</p>
+          <p>之后则自动跳出列表，不在列表中展示</p>
         </div>
       </div>
     </div>
