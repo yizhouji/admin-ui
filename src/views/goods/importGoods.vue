@@ -46,13 +46,13 @@
               </a-menu>
             </a-dropdown>
           </a-form-model-item>
-          <a-form-model-item label="商品名称" required prop="productName">
+          <a-form-model-item label="商品名称" prop="productName">
             <a-input placeholder="请输入商品名称" v-model="form.productName" :maxLength="15" allowClear />
           </a-form-model-item>
-          <a-form-model-item label="商品数量" required prop="amount">
+          <a-form-model-item label="商品数量" prop="amount">
             <a-input-number style="width:100%" placeholder="请输入商品数量" :min="1" allowClear v-model.number="form.amount" />
           </a-form-model-item>
-          <a-form-model-item label="单位" required prop="productUnit">
+          <a-form-model-item label="单位" prop="productUnit">
             <a-dropdown>
               <a-input placeholder="请输入单位" v-model="form.productUnit" maxlenth="3" autocomplete="off" allowClear />
               <a-menu slot="overlay" v-if="units && units.length>0">
