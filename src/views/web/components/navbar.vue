@@ -42,6 +42,7 @@
         </template>
       </div>
     </div>
+    <advertisement ref="advertisement"></advertisement>
   </div>
 </template>
 
@@ -50,11 +51,12 @@ import { Modal } from 'ant-design-vue'
 import storage from 'store'
 import { logout } from '@/api/login'
 import AvatarDropdown from '../../../components/GlobalHeader/AvatarDropdown'
-
+import advertisement from './advertisement'
 export default {
   name: 'Navbar',
   components: {
-    AvatarDropdown
+    AvatarDropdown,
+    advertisement
   },
    props: {
     prefixCls: {
@@ -75,7 +77,7 @@ export default {
       } else {
         user = storage.get('USERINFO')
       }
-           return user ? JSON.parse(JSON.stringify(user)) : ''
+      return user ? JSON.parse(JSON.stringify(user)) : ''
     }
   },
   methods: {

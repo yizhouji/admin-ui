@@ -92,6 +92,12 @@ export const asyncRouterMap = [
         meta: { title: '记事本/图片', keepAlive: true, icon: 'profile' }
       },
       {
+        path: '/note/index',
+        name: 'note',
+        component: () => import('@/views/note/index'),
+        meta: { title: '记事本/图片', keepAlive: true, icon: 'profile' }
+      },
+      {
         path: '/account/center',
         component: () => import('@/views/account/settings/BaseSetting'),
         name: 'account',
